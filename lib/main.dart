@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:window_manager/window_manager.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   // Init ffi loader if needed.
@@ -32,7 +32,6 @@ void main() async{
   runApp(ProviderScope(child: App()));
 }
 
-
 class App extends ConsumerWidget {
   const App({super.key});
 
@@ -45,7 +44,9 @@ class App extends ConsumerWidget {
       theme: ThemeData(
         colorScheme: ColorSchemes.lightBlue(),
 
-        typography: Typography.geist(base: TextStyle(fontWeight: FontWeight.normal, fontFamily: 'Arial')),
+        typography: Typography.geist(base: TextStyle(fontWeight: FontWeight.normal, fontFamily: 'Arial'),medium: TextStyle(
+          fontSize: 13,fontWeight: FontWeight.w500
+        )),
         radius: .2,
         platform: TargetPlatform.windows,
       ),

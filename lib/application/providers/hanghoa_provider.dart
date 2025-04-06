@@ -8,7 +8,16 @@ final hangHoaProvider = StateNotifierProvider.autoDispose<HangHoaNotifier, List<
   (ref) => HangHoaNotifier(),
 ); //Provider chính của hàng hóa
 
+final hangHoaGetListProvider = FutureProvider.autoDispose<List<HangHoaModel>>((ref) async {
+  final sqlRepository = SqlRepository(tableName: ViewName.hangHoa);
+  final data = await sqlRepository.getData(where: '${HangHoaString.theoDoi} = ?',whereArgs: [1]);
+  return data.map((e)=>HangHoaModel.fromMap(e)).toList();
+  // ref.read(lstHangHoaProvider.notifier).state = data.map((e)=>HangHoaModel.fromMap(e)).toList();
+});
 
+// final lstHangHoaProvider = StateProvider<List<HangHoaModel>>((ref) {
+//   return [];
+// });
 
 
 final lstLoaiHangProvider = FutureProvider.autoDispose<List<LoaiHangModel>>((ref) async {

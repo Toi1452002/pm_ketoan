@@ -18,11 +18,14 @@ class LabelTextfield extends StatelessWidget {
   final bool readOnly;
   final void Function()? onTap;
   final Widget? trailing;
+  final FocusNode? focusNode;
+  final bool isDouble;
   const LabelTextfield({
     super.key,
     this.label,
     this.spacing = 10,
     this.isNumber = false,
+    this.isDouble = false,
     this.isUpperCase = false,
     this.enabled = true,
     this.maxLines = 1,
@@ -31,6 +34,7 @@ class LabelTextfield extends StatelessWidget {
     this.controller,
     this.obscureText = false,
     this.onSubmitted,this.hintText,
+    this.focusNode,
     this.textAlign = TextAlign.start, this.readOnly = false, this.onTap, this.trailing
   });
 
@@ -39,7 +43,7 @@ class LabelTextfield extends StatelessWidget {
     return Row(
       spacing: spacing,
       children: [
-        if (label != null) Text(label ?? '', style: TextStyle(fontSize: 13)).medium(),
+        if (label != null) Text(label ?? '', style: TextStyle(fontSize: 13,color: !enabled?Colors.gray.shade400:null)).medium(),
         Expanded(
           child: TextField(
             readOnly: readOnly,
@@ -50,15 +54,16 @@ class LabelTextfield extends StatelessWidget {
             controller: controller,
             obscureText: obscureText,
             onSubmitted: onSubmitted,
-
+            focusNode: focusNode,
             onTap: onTap,
             trailing: trailing,
-            textAlign: isNumber? TextAlign.end : textAlign,
+            textAlign: isNumber || isDouble ? TextAlign.end : textAlign,
             autofocus: autofocus,
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             inputFormatters: [
               if(isUpperCase)TextInputFormatters.toUpperCase,
               if (isNumber) FilteringTextInputFormatter.allow(RegExp(r'[\d\,]')),
+              if (isDouble) FilteringTextInputFormatter.allow(RegExp(r'[\d\.]')),
             ],
           ),
         ),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as ma;
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
 import 'combobox.dart';
@@ -14,7 +14,7 @@ class LabelCombobox extends StatelessWidget {
         this.columnWidth,
         this.readOnly,
         this.selected,this.menuWidth,
-        this.enabled, this.iconColor, this.onLongPress});
+        this.enabled = true, this.iconColor, this.onLongPress});
 
   final String label;
   final double? width;
@@ -24,7 +24,7 @@ class LabelCombobox extends StatelessWidget {
   final void Function(String?)? onLongPress;
   final List<double>? columnWidth;
   final bool? readOnly;
-  final bool? enabled;
+  final bool enabled;
   final String? selected;
   final double? menuWidth;
   final Color? iconColor;
@@ -37,7 +37,7 @@ class LabelCombobox extends StatelessWidget {
         if (label != '')
           Text(
             label,
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(fontSize: 13,color: !enabled?Colors.gray.shade400:null),
           ).medium(),
         if (width == null) Expanded(child: combobox()),
         if (width != null) SizedBox(width: width, child: combobox()),

@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:app_ketoan/application/application.dart';
 import 'package:app_ketoan/core/core.dart';
-import 'package:app_ketoan/views/views.dart';
-import 'package:app_ketoan/widgets/dialog_windows/dialog_funtion.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
@@ -116,6 +114,15 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           break;
                         case MenuString.maNghiepVu:
                           showMaNghiepVu(context);
+                          break;
+
+                        ///************************************
+                        //MUA BAN
+                        case MenuString.muaHang:
+                          showMuaHang(context);
+                          break;
+                        case MenuString.banHang:
+                          showBanHang(context);
                           break;
 
                         ///************************************

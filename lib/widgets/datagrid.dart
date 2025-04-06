@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 import 'package:trina_grid/trina_grid.dart';
 
 class DataGrid extends StatelessWidget {
@@ -29,8 +30,8 @@ class DataGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return TrinaGrid(
       columns: columns,
-
       rows: rows,
+
       onLoaded: onLoaded,
       mode: mode,
       onChanged: onChanged,
@@ -40,7 +41,7 @@ class DataGrid extends StatelessWidget {
       configuration: TrinaGridConfiguration(
         tabKeyAction: TrinaGridTabKeyAction.moveToNextOnEdge,
         enterKeyAction: TrinaGridEnterKeyAction.editingAndMoveRight,
-
+        scrollbar: TrinaGridScrollbarConfig(showHorizontal: false, thickness: 5, isAlwaysShown: true),
         columnSize: const TrinaGridColumnSizeConfig(autoSizeMode: TrinaAutoSizeMode.none),
         shortcut: TrinaGridShortcut(
           actions: {
@@ -49,20 +50,24 @@ class DataGrid extends StatelessWidget {
             // LogicalKeySet(LogicalKeyboardKey.keyN,LogicalKeyboardKey.control): CustomEnterKeyAction(),
           },
         ),
-        localeText: const TrinaGridLocaleText(),
+        localeText: const TrinaGridLocaleText(
+          filterContains: 'Search'
+        ),
         style: TrinaGridStyleConfig(
-          borderColor: Colors.grey,
+          columnFilterHeight: 25,
+          defaultColumnFilterPadding: EdgeInsets.all(.2),
+          borderColor: context.theme.colorScheme.mutedForeground,
           gridBorderRadius: BorderRadius.circular(2),
-          gridBackgroundColor: Colors.grey.shade100,
-
-          enableRowHoverColor: true,
-          rowHoveredColor: Colors.grey.shade100,
+          gridBackgroundColor: context.theme.colorScheme.muted,
+          activatedBorderColor: context.theme.colorScheme.primary,
+          // rowHoveredColor: context.theme.colorScheme.border,
           columnHeight: 25,
+          activatedColor: context.theme.colorScheme.primary.withValues(alpha: .1),
           rowHeight: 25,
           columnTextStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.black),
-          rowColor: Colors.white,
+          rowColor: context.theme.colorScheme.popover,
 
-          cellTextStyle: const TextStyle(fontSize: 13, color: Colors.black),
+          cellTextStyle: TextStyle(fontSize: 13, color: context.theme.colorScheme.foreground),
           defaultCellPadding: const EdgeInsets.only(left: 2, right: 4),
         ),
       ),
@@ -91,13 +96,16 @@ TrinaColumn DataGridColumn({
   bool enableDropToResize = false,
   bool enableContextMenu = false,
   bool enableSorting = false,
+  Widget Function(TrinaColumnTitleRendererContext)? titleRenderer,
   Widget Function(TrinaColumnFooterRendererContext)? footerRenderer,
   Widget Function(Widget, TrinaCell, TextEditingController, FocusNode, dynamic Function(dynamic)?)? editCellRenderer,
+  bool enableFilterMenuItem = true
 }) {
   return TrinaColumn(
     title: title,
     field: field,
 
+    titleRenderer: titleRenderer,
     backgroundColor: Colors.blue.shade100,
     type: type,
     renderer: renderer,
@@ -112,7 +120,7 @@ TrinaColumn DataGridColumn({
     minWidth: 10,
     enableAutoEditing: true,
     enableSorting: enableSorting,
-    enableFilterMenuItem: false,
+    enableFilterMenuItem: enableFilterMenuItem,
     cellPadding: cellPadding,
     readOnly: false,
     enableDropToResize: enableDropToResize,
@@ -132,7 +140,7 @@ class DataGridContainer extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.shade200.withValues(alpha: .5),
 
-        border: const Border(right: BorderSide(color: Colors.grey)),
+        border: Border(right: BorderSide(color: context.theme.colorScheme.mutedForeground)),
       ),
       child: Text(text ?? '', style: const TextStyle(fontSize: 13)),
     );

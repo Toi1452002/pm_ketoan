@@ -2,8 +2,9 @@ import 'package:intl/intl.dart';
 
 class Helper{
   static String? numFormat(dynamic number){
-    if(number==null) return null;
-    else{
+    if(number==null) {
+      return null;
+    } else{
       try{
 
         String strNum = number.toString();
@@ -17,9 +18,15 @@ class Helper{
 
   }
 
-  static double numFormatToDouble(String value){
+  static double numFormatToDouble(String value, {bool keepChar = false}){
     if(value.isNotEmpty){
-      value = value.replaceAll(',', '');
+
+      if(keepChar){
+        value = value.replaceAll(',', '.');
+      }else{
+        value = value.replaceAll(',', '');
+      }
+
       return double.parse(value);
     }
     return 0;

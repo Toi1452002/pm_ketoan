@@ -16,10 +16,16 @@ abstract class TableName{
   static const phieuChi = "TTC_PhieuChi";
   static const phieuThuCT = "TTC_PhieuThuCT";
   static const phieuChiCT = "TTC_PhieuChiCT";
+  static const phieuXuat = "TNX_PhieuXuat";
+  static const phieuXuatCT = "TNX_PhieuXuatCT";
+  static const phieuNhap = "TNX_PhieuNhap";
+  static const phieuNhapCT = "TNX_PhieuNhapCT";
 }
 
 class ViewName {
   static const hangHoa = "V_HangHoa";
   static const phieuThu = "V_PhieuThu";
   static const phieuChi = "V_PhieuChi";
+  static const phieuXuat = "V_PhieuXuat";
+  static const phieuXuatCT = "V_PhieuXuatCT";
 }

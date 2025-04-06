@@ -3,9 +3,22 @@ import 'package:app_ketoan/views/views.dart';
 import 'package:app_ketoan/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../../data/data.dart';
+
 //DANH MỤC
 void showHangHoa(BuildContext context) {
   showCustomDialog(context, title: MenuString.hangHoa, width: 1220, height: 600, child: HangHoaView(), onClose: () {});
+}
+
+void showThongTinHangHoa(BuildContext context, {HangHoaModel? hangHoa}){
+  showCustomDialog(
+    context,
+    title: 'THÔNG TIN HÀNG HÓA',
+    width: 600,
+    height: 390,
+    child: ThongTinHangHoaView(hangHoa: hangHoa),
+    onClose: () {},
+  );
 }
 
 void showKhachHang(BuildContext context) {
@@ -63,6 +76,14 @@ void showDSNguoiDung(BuildContext context) {
     child: UserView(),
     onClose: () {},
   );
+}
+
+//MUA BAN
+void showMuaHang(BuildContext context) {
+  showCustomDialog(context, title: MenuString.muaHang, width: 1100, height: 700, child: MuaHangView(), onClose: (){});
+}
+void showBanHang(BuildContext context) {
+  showCustomDialog(context, title: MenuString.banHang, width: 1100, height: 700, child: BanHangView(), onClose: (){});
 }
 
 //THU CHI

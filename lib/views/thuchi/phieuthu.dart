@@ -1,5 +1,6 @@
 import 'package:app_ketoan/widgets/combobox/combobox.dart';
 import 'package:app_ketoan/widgets/date_textbox.dart';
+import 'package:app_ketoan/widgets/group_button_number_page.dart';
 import 'package:app_ketoan/widgets/icon_button.dart';
 import 'package:app_ketoan/widgets/label_textfield.dart';
 import 'package:flutter_platform_alert/flutter_platform_alert.dart';
@@ -113,7 +114,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                                       wPhieuThu.phieu,
                                     );
                                   },
-                                  openDialog: !wPhieuThu.khoa,
+                                  enabled: !wPhieuThu.khoa,
                                   label: 'Ngày thu',
                                   spacing: 47,
                                   initialDate: Helper.stringToDate(wPhieuThu.ngay),
@@ -333,46 +334,24 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                     Row(
                       spacing: 5,
                       children: [
-                        iconFirst(
-                          onPressed: () {
-                            if (wPhieuThu.stt != 1) {
-                              rPhieuThu.onMovePhieuThu(1, ref: ref);
-                            }
-                          },
-                        ),
+                        GroupButtonNumberPage(text: "${wPhieuThu.stt}/${wPhieuThu.countRow}", first: (){
+                          if (wPhieuThu.stt != 1) {
+                            rPhieuThu.onMovePhieuThu(1, ref: ref);
+                          }
+                        }, last: (){
+                          if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
+                            rPhieuThu.getLastPhieuThu(ref: ref);
+                          }
+                        }, back: (){
+                          if (wPhieuThu.stt != 1) {
+                            rPhieuThu.onMovePhieuThu(wPhieuThu.stt! - 1, ref: ref);
+                          }
+                        }, next: (){
+                          if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
+                            rPhieuThu.onMovePhieuThu(wPhieuThu.stt! + 1, ref: ref);
+                          }
+                        }),
 
-                        iconBack(
-                          onPressed: () {
-                            if (wPhieuThu.stt != 1) {
-                              rPhieuThu.onMovePhieuThu(wPhieuThu.stt! - 1, ref: ref);
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          width: 100,
-                          child: ColoredBox(
-                            color: Colors.white,
-                            child: LabelTextfield(
-                              readOnly: true,
-                              textAlign: TextAlign.center,
-                              controller: TextEditingController(text: "${wPhieuThu.stt}/${wPhieuThu.countRow}" ?? ''),
-                            ),
-                          ),
-                        ),
-                        iconNext(
-                          onPressed: () {
-                            if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
-                              rPhieuThu.onMovePhieuThu(wPhieuThu.stt! + 1, ref: ref);
-                            }
-                          },
-                        ),
-                        iconLast(
-                          onPressed: () {
-                            if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
-                              rPhieuThu.getLastPhieuThu(ref: ref);
-                            }
-                          },
-                        ),
                         Spacer(),
                         TextButton(size: ButtonSize(.8), onPressed: () {}, child: Text('Hiện chi tiết')),
                       ],

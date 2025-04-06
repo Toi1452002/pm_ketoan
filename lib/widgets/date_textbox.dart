@@ -5,13 +5,13 @@ import 'package:shadcn_flutter/shadcn_flutter.dart' as sh;
 import '../core/utils/helper.dart';
 
 class DateTextbox extends StatefulWidget {
-  DateTextbox({super.key, required this.onChanged, this.initialDate, this.label = '', this.openDialog = true, this.showClear = true, this.spacing = 5});
+  DateTextbox({super.key, required this.onChanged, this.enabled = true, this.initialDate, this.label = '', this.showClear = true, this.spacing = 5});
   final bool  showClear;
   final String label;
   final ValueChanged<DateTime?> onChanged;
   DateTime? initialDate;
   final double spacing;
-  final bool openDialog;
+  final bool enabled;
   @override
   State<DateTextbox> createState() => _DateTextboxState();
 }
@@ -29,6 +29,7 @@ class _DateTextboxState extends State<DateTextbox> {
       label: widget.label,
       controller: controller,
       spacing: widget.spacing,
+      enabled: widget.enabled,
       hintText: 'dd/mm/yyyy',
       readOnly: true,
 
@@ -46,7 +47,7 @@ class _DateTextboxState extends State<DateTextbox> {
           });
         },
       ),
-      onTap: !widget.openDialog ? null :  () async {
+      onTap: !widget.enabled ? null :  () async {
 
         final date = await showDatePicker(
           builder: (context, child){

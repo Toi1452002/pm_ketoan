@@ -10,6 +10,8 @@ import 'package:trina_grid/trina_grid.dart';
 
 import 'component/thongtinhanghoa.dart';
 
+export 'component/thongtinhanghoa.dart';
+
 class HangHoaView extends ConsumerWidget {
   HangHoaView({super.key});
 
@@ -127,119 +129,73 @@ class HangHoaView extends ConsumerWidget {
       ],
       child: Padding(
         padding: const EdgeInsets.all(5),
-        child: Stack(
-          children: [
-            Positioned(
-              child: DataGrid(
-                onLoaded: (e) => _stateManager = e.stateManager,
-                onRowDoubleTap: (event) {
-                  if (event.cell.column.field == HangHoaString.maHH) {
-                    final hh = lstHangHoa.firstWhere((e) => e.maHH == event.cell.value);
-                    _showThongTinHangHoa(context, hangHoa: hh);
-                  }
-                },
-                rows: [],
-                columns: [
-                  DataGridColumn(
-                    title: '',
-                    field: 'null',
-                    cellPadding: EdgeInsets.zero,
-                    type: TrinaColumnTypeText(),
-                    width: 20,
-                  ),
-                  DataGridColumn(
-                    title: '',
-                    field: 'delete',
-                    cellPadding: EdgeInsets.zero,
-                    type: TrinaColumnTypeText(),
-                    width: 25,
-                    renderer:
-                        (re) => DataGridDelete(
-                          onTap: () {
-                            _onDelete(re, ref);
-                          },
-                        ),
-                  ),
-                  DataGridColumn(title: 'Mã', field: HangHoaString.maHH, type: TrinaColumnTypeText(), width: 150),
-                  DataGridColumn(
-                    title: 'Tên vật tư-hàng hóa',
-                    field: HangHoaString.tenHH,
-                    type: TrinaColumnTypeText(),
-                    width: 300,
-                  ),
-                  DataGridColumn(title: 'Đơn vị tính', field: DVTString.dvt, type: TrinaColumnTypeText(), width: 100),
-                  DataGridColumn(
-                    title: 'Giá mua',
-                    field: HangHoaString.giaMua,
-                    type: TrinaColumnType.number(),
-                    textAlign: TrinaColumnTextAlign.end,
-                    enableSorting: true,
-                    width: 150,
-                  ),
-                  DataGridColumn(
-                    title: 'Giá bán',
-                    field: HangHoaString.giaBan,
-                    type: TrinaColumnType.number(),
-                    textAlign: TrinaColumnTextAlign.end,
-                    enableSorting: true,
-                    width: 150,
-                  ),
-                  DataGridColumn(
-                    title: 'Loại hàng',
-                    field: LoaiHangString.loaiHang,
-                    type: TrinaColumnTypeText(),
-                    width: 100,
-                  ),
-                  DataGridColumn(
-                    title: 'Nhóm hàng',
-                    field: NhomHangString.nhomHang,
-                    type: TrinaColumnTypeText(),
-                    width: 100,
-                  ),
-                  DataGridColumn(title: 'Nhà cung', field: HangHoaString.maNC, type: TrinaColumnTypeText(), width: 100),
-                ],
-              ),
+        child: DataGrid(
+          onLoaded: (e) => _stateManager = e.stateManager,
+          onRowDoubleTap: (event) {
+            if (event.cell.column.field == HangHoaString.maHH) {
+              final hh = lstHangHoa.firstWhere((e) => e.maHH == event.cell.value);
+              _showThongTinHangHoa(context, hangHoa: hh);
+            }
+          },
+          rows: [],
+          columns: [
+            DataGridColumn(
+              title: '',
+              field: 'null',
+              cellPadding: EdgeInsets.zero,
+              type: TrinaColumnTypeText(),
+              width: 20,
             ),
-            Positioned(
-              child: Row(
-                children: [
-                  Gap(170),
-                  IconButton.secondary(
-                    icon: Icon(Icons.arrow_drop_down),
-                    size: ButtonSize(.7),
-                    onPressed: () {
-                      showPopover(
-                        context: context,
-                        alignment: Alignment.bottomLeft,
-                        offset: const Offset(0, 8),
-                        // Unless you have full opacity surface,
-                        // you should explicitly set the overlay barrier.
-                        // overlayBarrier: OverlayBarrier(
-                        //   borderRadius: theme.borderRadiusLg,
-                        // ),
-                        builder: (context) {
-                          return ModalContainer(child: SizedBox(width: 300, height: 400));
-                        },
-                      );
+            DataGridColumn(
+              title: '',
+              field: 'delete',
+              cellPadding: EdgeInsets.zero,
+              type: TrinaColumnTypeText(),
+              width: 25,
+              renderer:
+                  (re) => DataGridDelete(
+                    onTap: () {
+                      _onDelete(re, ref);
                     },
                   ),
-                  Gap(275),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                  Gap(70),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                  Gap(130),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                  Gap(120),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                  Gap(70),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                  Gap(80),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                  Gap(70),
-                  IconButton.secondary(icon: Icon(Icons.arrow_drop_down, size: 10)),
-                ],
-              ),
             ),
+            DataGridColumn(title: 'Mã', field: HangHoaString.maHH, type: TrinaColumnTypeText(), width: 150),
+            DataGridColumn(
+              title: 'Tên vật tư-hàng hóa',
+              field: HangHoaString.tenHH,
+              type: TrinaColumnTypeText(),
+              width: 300,
+            ),
+            DataGridColumn(title: 'Đơn vị tính', field: DVTString.dvt, type: TrinaColumnTypeText(), width: 100),
+            DataGridColumn(
+              title: 'Giá mua',
+              field: HangHoaString.giaMua,
+              type: TrinaColumnType.number(),
+              textAlign: TrinaColumnTextAlign.end,
+              enableSorting: true,
+              width: 150,
+            ),
+            DataGridColumn(
+              title: 'Giá bán',
+              field: HangHoaString.giaBan,
+              type: TrinaColumnType.number(),
+              textAlign: TrinaColumnTextAlign.end,
+              enableSorting: true,
+              width: 150,
+            ),
+            DataGridColumn(
+              title: 'Loại hàng',
+              field: LoaiHangString.loaiHang,
+              type: TrinaColumnTypeText(),
+              width: 100,
+            ),
+            DataGridColumn(
+              title: 'Nhóm hàng',
+              field: NhomHangString.nhomHang,
+              type: TrinaColumnTypeText(),
+              width: 100,
+            ),
+            DataGridColumn(title: 'Nhà cung', field: HangHoaString.maNC, type: TrinaColumnTypeText(), width: 100),
           ],
         ),
       ),

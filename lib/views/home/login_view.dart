@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
+import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 
 import '../../application/application.dart';
 import '../../core/constants/app_string.dart';
@@ -56,20 +57,21 @@ class LoginViewState extends ConsumerState<LoginView> {
     return Scaffold(
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.gray, Colors.white],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+          color: Colors.slate[600]
+          // gradient: LinearGradient(
+          //   colors: [context.theme.colorScheme.secondaryForeground, Colors.white],
+          //   begin: Alignment.topLeft,
+          //   end: Alignment.bottomRight,
+          // ),
         ),
         child: Center(
           child: Container(
             width: 400,
             decoration: BoxDecoration(
-              color: Colors.gray.shade300,
+              color: context.theme.colorScheme.border,
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
-                BoxShadow(color: Colors.gray.shade600, blurRadius: 10, spreadRadius: 2, offset: const Offset(-5, 5)),
+                BoxShadow(color: Colors.gray[700], blurRadius: 10, spreadRadius: 2, offset: const Offset(-5, 5)),
               ],
             ),
             child: Padding(
@@ -129,12 +131,12 @@ class LoginViewState extends ConsumerState<LoginView> {
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(3),
-                            color: Colors.gray.shade300,
+                            color: context.theme.colorScheme.border,
                           ),
                           child: SelectableText(
                             GetStorage().read(GetKeyStorage.dataPath) ?? '',
                             style: TextStyle(
-                              color: Colors.blue.shade900
+                              color: context.theme.colorScheme.primary
                             ),
                             ),
                           ),

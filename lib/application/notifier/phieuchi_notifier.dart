@@ -146,13 +146,14 @@ class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
     }
 
   }
-  Future<void> deletePhieuChi(int id, {WidgetRef? ref}) async {
+  Future<int> deletePhieuChi(int id, {WidgetRef? ref}) async {
     try {
-      await _sqlRepository.delete(where: "ID = $id").whenComplete(() {
+      return await _sqlRepository.delete(where: "ID = $id").whenComplete(() {
         getLastPhieuChi(ref: ref);
       });
     } catch (e) {
       errorSql(e);
+      return 0;
     }
   }
   void formatSoTien(dynamic value) {

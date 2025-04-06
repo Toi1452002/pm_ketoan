@@ -5,9 +5,8 @@ import 'package:shadcn_flutter/shadcn_flutter.dart' as sh;
 import 'package:flutter/material.dart';
 import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 
-export 'label_combobox.dart';
-class Combobox extends StatefulWidget {
-  final List<ComboboxItem> items;
+class DataGridCombobox extends StatefulWidget {
+  final List<DataGridComboboxItem> items;
   final bool? readOnly;
   final bool? enabled;
   final List<double>? columnWidth;
@@ -16,9 +15,9 @@ class Combobox extends StatefulWidget {
   final bool isChangeEmpty;
   final double? menuWidth;
 
-  final TextEditingController? controller;
-  final FocusNode? focusNode;
-  const Combobox(
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  const DataGridCombobox(
       {super.key,
         required this.items,
         this.readOnly,
@@ -27,16 +26,16 @@ class Combobox extends StatefulWidget {
         required this.onChanged,
         this.columnWidth,
         this.menuWidth,
-        this.isChangeEmpty = true, this.controller, this.focusNode});
+        this.isChangeEmpty = true, required this.controller, required this.focusNode});
   @override
-  State<Combobox> createState() => _ComboboxState();
+  State<DataGridCombobox> createState() => _DataGridComboboxState();
 }
 
-class _ComboboxState extends State<Combobox> {
+class _DataGridComboboxState extends State<DataGridCombobox> {
   late OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
-  final _textFocus = FocusNode();
-  final _txtController = TextEditingController();
+  // final widget.focusNode = FocusNode();
+  // final widget.controller = TextEditingController();
 
   ScrollController _scrollController = ScrollController();
   bool _isOpen = false;
@@ -49,39 +48,39 @@ class _ComboboxState extends State<Combobox> {
   void initState() {
     // TODO: implement initState
     if (widget.selected != null) {
-      _txtController.text = widget.selected!;
+      widget.controller.text = widget.selected!;
       _selectValue.value = widget.selected!;
     }
 
-    _textFocus.addListener(() {
-      if (_textFocus.hasFocus) {
+    widget.focusNode.addListener(() {
+      if (widget.focusNode.hasFocus) {
         _open();
-      } else if (!_textFocus.hasFocus && !_onTapList) {
+      } else if (!widget.focusNode.hasFocus && !_onTapList) {
         if (_indexSearch != null) {
           // Có tìm kiếm
           if (_indexSearch != -1) {
             // Có giá trị
             final item = widget.items[_indexSearch!];
-            _txtController.text = item.title.first;
+            widget.controller.text = item.title.first;
             widget.onChanged!(item.value, item.valueOther);
             _saveOffset();
           }
         } else if (_indexSearch == null) {
           // Không có giá trị tìm kiếm
           if (_selectValue.value == null) {
-            if (widget.selected != null && widget.selected!.isNotEmpty && _txtController.text.isNotEmpty) {
-              _txtController.text = widget.items.firstWhere((e) => e.value == widget.selected, orElse: () => ComboboxItem(value: '', title: [''])).title.first;
+            if (widget.selected != null && widget.selected!.isNotEmpty && widget.controller.text.isNotEmpty) {
+              widget.controller.text = widget.items.firstWhere((e) => e.value == widget.selected, orElse: () => DataGridComboboxItem(value: '', title: [''])).title.first;
               _selectValue.value = widget.selected;
             } else {
-              _txtController.clear();
+              widget.controller.clear();
               _saveOffset(value: 0);
               _indexSearch = null;
             }
           } else if (_selectValue.value != null) {
             // widget.onChanged!('');
-            _txtController.text = widget.items
+            widget.controller.text = widget.items
                 .firstWhere((e) => e.value == _selectValue.value,
-                orElse: () => ComboboxItem(value: '', title: ['']))
+                orElse: () => DataGridComboboxItem(value: '', title: ['']))
                 .title
                 .first;
             _indexSearch = null;
@@ -117,7 +116,7 @@ class _ComboboxState extends State<Combobox> {
   void _close() {
     if (_isOpen) {
       _overlayEntry?.remove();
-      _textFocus.unfocus();
+      widget.focusNode.unfocus();
 
       setState(() {
         _isOpen = false;
@@ -125,9 +124,9 @@ class _ComboboxState extends State<Combobox> {
     }
   }
 
-  void _onTapItem(ComboboxItem item) {
+  void _onTapItem(DataGridComboboxItem item) {
     _close();
-    _txtController.text = item.title.first;
+    widget.controller.text = item.title.first;
     _selectValue.value = item.value;
     // _indexSearchNotifier.value = _searchItem(item.value);
     widget.onChanged!(item.value,item.valueOther);
@@ -197,7 +196,7 @@ class _ComboboxState extends State<Combobox> {
                 }
               },
               onPointerUp: (e) {
-                _textFocus.requestFocus();
+                widget.focusNode.requestFocus();
                 if (e.kind == PointerDeviceKind.mouse) {
                   _onTapList = false;
                 }
@@ -269,11 +268,11 @@ class _ComboboxState extends State<Combobox> {
   Widget build(BuildContext context) {
     if (widget.selected == null) {
       _selectValue.value = null;
-      _txtController.clear();
+      widget.controller.clear();
     }
     if(widget.selected != null  && widget.selected!=''){
       _selectValue.value  = widget.selected;
-      _txtController.text = widget.selected!;
+      widget.controller.text = widget.selected!;
     }
 
     return CompositedTransformTarget(
@@ -282,17 +281,18 @@ class _ComboboxState extends State<Combobox> {
         focusNode: FocusNode(),
         onKeyEvent: (event){
           if (event is KeyDownEvent && event.logicalKey == LogicalKeyboardKey.escape) {
-            if (_textFocus.hasFocus) {
+            if (widget.focusNode.hasFocus) {
               _close();
             }
           }
         },
         child: sh.TextField(
-          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2.5),
           enabled: widget.enabled ?? true,
           readOnly: widget.readOnly??false,
-          focusNode: _textFocus,
-          controller: _txtController,
+          focusNode: widget.focusNode,
+          controller: widget.controller,
+          border: false,
           onChanged: (val) => _onChangeText(val),
           trailing: SizedBox(),
           features: [
@@ -300,7 +300,7 @@ class _ComboboxState extends State<Combobox> {
               GestureDetector(
                 child: Icon(sh.RadixIcons.chevronDown),
                 onTap: () {
-                  _isOpen ? _textFocus.unfocus() : _textFocus.requestFocus();
+                  _isOpen ? widget.focusNode.unfocus() : widget.focusNode.requestFocus();
 
                 },
               ),
@@ -313,10 +313,10 @@ class _ComboboxState extends State<Combobox> {
 }
 
 
-class ComboboxItem {
+class DataGridComboboxItem {
   String value;
   List<String> title;
   final dynamic valueOther;
 
-  ComboboxItem({required this.value, required this.title, this.valueOther});
+  DataGridComboboxItem({required this.value, required this.title, this.valueOther});
 }
