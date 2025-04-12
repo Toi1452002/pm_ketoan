@@ -1,16 +1,21 @@
 import 'package:app_ketoan/application/application.dart';
 import 'package:app_ketoan/core/core.dart';
 import 'package:app_ketoan/views/muaban/banhang/component/banhangct.dart';
+import 'package:app_ketoan/views/muaban/banhang/component/pdf_banhang.dart';
 import 'package:app_ketoan/widgets/widgets.dart';
 import 'package:flutter_platform_alert/flutter_platform_alert.dart';
+import 'package:pdf/pdf.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 
 import '../../../data/data.dart';
 
+export 'baocao_banhang.dart';
+
 class BanHangView extends ConsumerStatefulWidget {
   final int? stt;
+
   const BanHangView({super.key, this.stt});
 
   @override
@@ -20,10 +25,9 @@ class BanHangView extends ConsumerStatefulWidget {
 class _BanHangViewState extends ConsumerState<BanHangView> {
   @override
   void initState() {
-    ref.read(hangHoaGetListProvider.future);
-    if(widget.stt==null){
+    if (widget.stt == null) {
       ref.read(phieuXuatProvider.notifier).getLastPhieuXuat(ref: ref);
-    }else{
+    } else {
       ref.read(phieuXuatProvider.notifier).onMovePhieuXuat(widget.stt!, ref: ref);
     }
     super.initState();
@@ -38,6 +42,11 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
     final wPhieuXuat = ref.watch(phieuXuatProvider);
     final rPhieuXuat = ref.read(phieuXuatProvider.notifier);
     final userName = ref.read(userInfoProvider)!.userName;
+
+    final qlXBC =
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlXBC).giaTri == 1; //Nếu bằng 1 thi xem bc truoc khi in
+    final qlKPC =
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlKPC).giaTri == 1;
     return Scaffold(
       backgroundColor: context.theme.colorScheme.border,
       headers: [
@@ -46,7 +55,10 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
           leading: [
             iconAdd(
               onPressed: () {
-                rPhieuXuat.addPhieuXuat(userName,ref);
+                if (qlKPC && !wPhieuXuat!.khoa) {
+                  rPhieuXuat.updatePhieuXuat(PhieuXuatString.khoa, 1, wPhieuXuat.phieu, userName: userName);
+                }
+                rPhieuXuat.addPhieuXuat(userName, ref);
               },
             ),
             iconDelete(
@@ -54,11 +66,54 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
               onPressed: () async {
                 final btn = await CustomAlert().warning(AppString.delete, title: 'PHIẾU XUẤT');
                 if (btn == AlertButton.okButton) {
-                  rPhieuXuat.deletePhieuXuat(wPhieuXuat!.id!, context);
+                  rPhieuXuat.deletePhieuXuat(wPhieuXuat!.id!, ref: ref);
                 }
               },
             ),
-            iconPrinter(onPressed: () {}),
+            iconPrinter(
+              onPressed: () async {
+                if (!wPhieuXuat!.khoa) {
+                  rPhieuXuat.updatePhieuXuat(PhieuXuatString.khoa, 1, wPhieuXuat.phieu, userName: userName);
+                }
+                String tenKH = '';
+                String diaChi = '';
+                if (wPhieuXuat.maKhach != null) {
+                  final kh = lstKhach.value?.firstWhere((e) => e.maKhach == wPhieuXuat.maKhach);
+                  tenKH = kh!.tenKH;
+                  diaChi = kh.diaChi;
+                }
+
+                final sql = SqlRepository(tableName: TableName.phieuXuatCT);
+                final data = await sql.getData(where: "${PhieuXuatCTString.maID} = ?", whereArgs: [wPhieuXuat.id]);
+                final lst = data.map((e) => PhieuXuatCTModel.fromMap(e)).toList();
+                if (qlXBC) {
+                  showViewPrinter(context, PdfBanHang(
+                    dateNow: Helper.dateNowDMY(),
+                    congTien: Helper.numFormat(wPhieuXuat.congTien).toString(),
+                    diaChi: diaChi,
+                    lstPhieuXuatCT: lst,
+                    tenKH: tenKH,
+                    lyDo: wPhieuXuat.dienGiai,
+                    ngayBan: DateTime.parse(wPhieuXuat.ngay),
+                    soPhieu: wPhieuXuat.phieu,
+                  ));
+                } else {
+                  PdfWidget().onPrint(
+                    onLayout: pdfBanHang(
+                      dateNow: Helper.dateNowDMY(),
+                      date: DateTime.parse(wPhieuXuat.ngay),
+                      tenKH: tenKH,
+                      diaChi: diaChi,
+                      lyDo: wPhieuXuat.dienGiai,
+                      soPhieu: wPhieuXuat.phieu,
+                      congTien: Helper.numFormat(wPhieuXuat.congTien).toString(),
+                      pxct: lst,
+                    ),
+                    format: PdfPageFormat.a4.portrait,
+                  );
+                }
+              },
+            ),
           ],
           trailing: [
             SizedBox(
@@ -220,9 +275,10 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                               .toList()
                                           : [],
                                   spacing: 8,
+                                  // isChangeEmpty: false,
                                   label: 'Mã khách',
                                   onChanged: (val, o) {
-                                    rPhieuXuat.updateMaKhach(val!, wPhieuXuat.phieu, userName: userName);
+                                    rPhieuXuat.updateMaKhach(val, wPhieuXuat.phieu, userName: userName);
                                   },
                                 ),
                               ),
@@ -232,7 +288,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   readOnly: true,
                                   controller: TextEditingController(
                                     text:
-                                        wPhieuXuat.maKhach == null
+                                        wPhieuXuat.maKhach == null ||  wPhieuXuat.maKhach!.isEmpty
                                             ? ''
                                             : lstKhach.value!.firstWhere((e) => e.maKhach == wPhieuXuat.maKhach).tenKH,
                                   ),
@@ -302,7 +358,14 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                           ),
 
                           /// Table chi tiết
-                          SizedBox(height: 300, child: BanHangCT(maID: wPhieuXuat.id!,khoa: wPhieuXuat.khoa,)),
+                          SizedBox(
+                            height: 300,
+                            child: BanHangCT(
+                              phieuXuatNotifier: rPhieuXuat,
+                              userName: userName,
+                              phieuXuatModel: wPhieuXuat,
+                            ),
+                          ),
                           SizedBox(
                             width: 868,
                             child: Row(
@@ -314,6 +377,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   child: LabelCombobox(
                                     menuWidth: 410,
                                     columnWidth: [80, 320],
+                                    // isChangeEmpty: false,
                                     enabled: !wPhieuXuat.khoa,
                                     selected: wPhieuXuat.tkNo,
                                     items:
@@ -337,6 +401,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   width: 85,
                                   child: Combobox(
                                     selected: wPhieuXuat.tkCo,
+                                    // isChangeEmpty: false,
                                     enabled: !wPhieuXuat.khoa,
                                     menuWidth: 410,
                                     columnWidth: [80, 320],
@@ -373,7 +438,12 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                 Spacer(),
                                 SizedBox(
                                   width: 226,
-                                  child: LabelTextfield(label: 'Cộng tiền hàng', readOnly: true, isNumber: true),
+                                  child: LabelTextfield(
+                                    label: 'Cộng tiền hàng',
+                                    controller: TextEditingController(text: Helper.numFormat(wPhieuXuat.congTien)),
+                                    readOnly: true,
+                                    isNumber: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -447,28 +517,61 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   child:
                                       wPhieuXuat.kChiuThue
                                           ? null
-                                          : LabelTextfield(
-                                            label: 'Thuế suất(%)',
-                                            controller: TextEditingController(text: wPhieuXuat.thueSuat.toString()),
-                                            onChanged: (val) {
-                                              rPhieuXuat.updatePhieuXuat(
-                                                PhieuXuatString.thueSuat,
-                                                val,
-                                                wPhieuXuat.phieu,
-                                                userName: userName,
-                                              );
+                                          : Focus(
+                                            onFocusChange: (b) {
+                                              if (!b) {
+                                                final value = (wPhieuXuat.congTien * wPhieuXuat.thueSuat) / 100;
+                                                rPhieuXuat.updatePhieuXuat(
+                                                  PhieuXuatString.tienThue,
+                                                  value,
+                                                  wPhieuXuat.phieu,
+                                                  userName: userName,
+                                                );
+                                              }
                                             },
-                                            enabled: !wPhieuXuat.khoa,
-                                            isDouble: true,
+                                            child: LabelTextfield(
+                                              label: 'Thuế suất(%)',
+                                              controller: TextEditingController(text: wPhieuXuat.thueSuat.toString()),
+                                              onChanged: (val) {
+                                                rPhieuXuat.updatePhieuXuat(
+                                                  PhieuXuatString.thueSuat,
+                                                  val,
+                                                  wPhieuXuat.phieu,
+                                                  userName: userName,
+                                                );
+                                              },
+                                              enabled: !wPhieuXuat.khoa,
+                                              isDouble: true,
+                                            ),
                                           ),
                                 ),
                                 Spacer(),
                                 SizedBox(
                                   width: 225,
-                                  child: LabelTextfield(
-                                    enabled: !wPhieuXuat.khoa && !wPhieuXuat.kChiuThue,
-                                    label: 'Tiền thuế GTGT',
-                                    isNumber: true,
+                                  child: Focus(
+                                    onFocusChange: (b) {
+                                      if (!b) {
+                                        rPhieuXuat.updatePhieuXuat(
+                                          PhieuXuatString.tienThue,
+                                          wPhieuXuat.tienThue,
+                                          wPhieuXuat.phieu,
+                                          userName: userName,
+                                        );
+                                      }
+                                    },
+                                    child: LabelTextfield(
+                                      enabled: !wPhieuXuat.khoa && !wPhieuXuat.kChiuThue,
+                                      label: 'Tiền thuế GTGT',
+                                      controller: TextEditingController(text: Helper.numFormat(wPhieuXuat.tienThue)),
+                                      onChanged: (val) {
+                                        rPhieuXuat.updateTienThueGTGT(
+                                          Helper.numFormatToDouble(val),
+                                          wPhieuXuat.phieu,
+                                          userName: userName,
+                                        );
+                                      },
+                                      isNumber: true,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -481,7 +584,14 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                 Spacer(),
                                 SizedBox(
                                   width: 260,
-                                  child: LabelTextfield(isNumber: true, label: 'Tổng tiền thanh toán', readOnly: true),
+                                  child: LabelTextfield(
+                                    isNumber: true,
+                                    label: 'Tổng tiền thanh toán',
+                                    controller: TextEditingController(
+                                      text: Helper.numFormat(wPhieuXuat.congTien + wPhieuXuat.tienThue),
+                                    ),
+                                    readOnly: true,
+                                  ),
                                 ),
                               ],
                             ),

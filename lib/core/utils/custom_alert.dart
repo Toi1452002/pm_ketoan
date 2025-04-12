@@ -71,3 +71,28 @@ void showDeleteSuccess(BuildContext context) async{
   }, location: ToastLocation.topRight);
 
 }
+
+void showWarning(BuildContext context, String text) async{
+  showToast(context: context, builder: (context, overlay){
+    return SurfaceCard(
+      fillColor: Colors.orange,
+      filled: true,
+      // borderColor: Colors.green,
+
+      child: Basic(
+
+        mainAxisAlignment: MainAxisAlignment.center,
+        leading: Icon(PhosphorIcons.warning(PhosphorIconsStyle.fill),color: Colors.white,),
+        title: Text(text,style: TextStyle(color: Colors.white),),
+        trailingAlignment: Alignment.center,
+
+        // content: Icon(PhosphorIcons.checkCircle(PhosphorIconsStyle.fill),color: Colors.white,),
+        leadingAlignment: Alignment.center,
+        trailing: IconButton.ghost(icon: Icon(Icons.close,color: Colors.white,), onPressed: () {
+          overlay.close();
+        }, size: ButtonSize.small),
+      ),
+    );
+  }, location: ToastLocation.topRight);
+
+}

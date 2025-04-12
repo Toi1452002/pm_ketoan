@@ -2,6 +2,7 @@ import 'package:app_ketoan/data/data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
+import '../providers/tuychon_provider.dart';
 class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
   PhieuchiNotifier() : super(null);
 
@@ -47,11 +48,13 @@ class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
       String phieu = 'C000000';
       final lastPhieu =
       await _sqlRepository.getCellValue(field: PhieuChiString.phieu, where: '''ID = (SELECT MAX(ID) FROM ${TableName.phieuChi})''');
+
       if (lastPhieu != null) {
         final num = int.parse(lastPhieu.substring(1)) + 1;
         phieu = 'C${'0' * (6 - num.toString().length)}$num';
       }
-
+      final pCC = ref.read(tuyChonProvider).firstWhere((e)=>e.nhom=='PCc').giaTri.toString();
+      final pCN = ref.read(tuyChonProvider).firstWhere((e)=>e.nhom=='PCn').giaTri.toString();
       await _sqlRepository
           .addRow(PhieuChiModel(
           phieu: phieu,
@@ -70,8 +73,8 @@ class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
           updatedBy: null,
           createdBy: user.userName,
           soCT: '',
-          tkNo: '331',
-          tkCo: '1111')
+          tkNo: pCN,
+          tkCo: pCC)
           .toMap())
           .whenComplete(() async {
         getLastPhieuChi(ref: ref);
@@ -167,9 +170,16 @@ class BangKePhieuChiNotifier extends StateNotifier<List<PhieuChiModel>> {
   }
   final _sqlRepository = const SqlRepository(tableName: ViewName.phieuChi);
 
-  Future<void> getBangKePhieuChi() async {
+  Future<void> getBangKePhieuChi({String? tN, String? dN}) async {
     try {
-      final data = await _sqlRepository.getData();
+      String tuNgay = Helper.dateFormatYMD(DateTime.now().copyWith(day: 1));
+      String denNgay = Helper.sqlDateTimeNow();
+
+      if(tN!=null && dN!=null){
+        tuNgay = tN;
+        denNgay = dN;
+      }
+      final data = await _sqlRepository.getData(where: "${PhieuThuString.ngay} BETWEEN ? AND ? ",whereArgs: [tuNgay,denNgay]);
       state = data.map((e) => PhieuChiModel.fromMap(e)).toList();
     } catch (e) {
       errorSql(e);

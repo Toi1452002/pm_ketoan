@@ -14,21 +14,21 @@ class LabelCombobox extends StatelessWidget {
         this.columnWidth,
         this.readOnly,
         this.selected,this.menuWidth,
-        this.enabled = true, this.iconColor, this.onLongPress});
+        this.enabled = true, this.iconColor, this.isChangeEmpty = true});
 
   final String label;
   final double? width;
   final double spacing;
   final List<ComboboxItem> items;
   final void Function(String? val, dynamic o)? onChanged;
-  final void Function(String?)? onLongPress;
+  // final void Function(String?)? onLongPress;
   final List<double>? columnWidth;
   final bool? readOnly;
   final bool enabled;
   final String? selected;
   final double? menuWidth;
   final Color? iconColor;
-
+  final bool isChangeEmpty;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -53,5 +53,6 @@ class LabelCombobox extends StatelessWidget {
     readOnly: readOnly,
     selected: selected,
     enabled: enabled,
+    isChangeEmpty: isChangeEmpty,
   );
 }

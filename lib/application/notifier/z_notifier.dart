@@ -8,3 +8,4 @@ export 'phieuthu_notifier.dart';
 export 'phieuchi_notifier.dart';
 export 'phieuxuat_notifier.dart';
 export 'phieunhap_notifier.dart';
+export 'tuychon_notifier.dart';

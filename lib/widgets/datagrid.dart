@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:shadcn_flutter/shadcn_flutter.dart' as sh;
 import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 import 'package:trina_grid/trina_grid.dart';
 
@@ -50,15 +51,13 @@ class DataGrid extends StatelessWidget {
             // LogicalKeySet(LogicalKeyboardKey.keyN,LogicalKeyboardKey.control): CustomEnterKeyAction(),
           },
         ),
-        localeText: const TrinaGridLocaleText(
-          filterContains: 'Search'
-        ),
+        localeText: const TrinaGridLocaleText(filterContains: 'Search'),
         style: TrinaGridStyleConfig(
           columnFilterHeight: 25,
           defaultColumnFilterPadding: EdgeInsets.all(.2),
           borderColor: context.theme.colorScheme.mutedForeground,
           gridBorderRadius: BorderRadius.circular(2),
-          gridBackgroundColor: context.theme.colorScheme.muted,
+          // gridBackgroundColor: context.theme.colorScheme.muted,
           activatedBorderColor: context.theme.colorScheme.primary,
           // rowHoveredColor: context.theme.colorScheme.border,
           columnHeight: 25,
@@ -99,14 +98,14 @@ TrinaColumn DataGridColumn({
   Widget Function(TrinaColumnTitleRendererContext)? titleRenderer,
   Widget Function(TrinaColumnFooterRendererContext)? footerRenderer,
   Widget Function(Widget, TrinaCell, TextEditingController, FocusNode, dynamic Function(dynamic)?)? editCellRenderer,
-  bool enableFilterMenuItem = true
+  bool enableFilterMenuItem = true,
 }) {
   return TrinaColumn(
     title: title,
     field: field,
 
     titleRenderer: titleRenderer,
-    backgroundColor: Colors.blue.shade100,
+    // backgroundColor: Colors.white,
     type: type,
     renderer: renderer,
     enableEditingMode: enableEditingMode,
@@ -148,22 +147,109 @@ class DataGridContainer extends StatelessWidget {
 }
 
 class DataGridDelete extends StatelessWidget {
-  const DataGridDelete({super.key, this.onTap});
+  final bool enabled;
+
+  const DataGridDelete({super.key, this.onTap, this.enabled = true});
 
   final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: enabled ? onTap : null,
       child: ColoredBox(
         color: Colors.transparent,
-        child: Icon(
-          PhosphorIcons.trash(),
-          size: 20,
-          color: onTap == null ? Colors.grey : Colors.red.withValues(alpha: .8),
-        ),
+        child: Icon(PhosphorIcons.trash(), size: 20, color: !enabled ? Colors.grey : Colors.red.withValues(alpha: .8)),
       ),
+    );
+  }
+}
+
+class DataGridShowSelect extends StatelessWidget {
+  final String? text;
+  final void Function()? onTap;
+  final void Function()? onClear;
+  final bool showClear;
+  final bool enabled;
+
+  const DataGridShowSelect({
+    super.key,
+    this.text,
+    this.enabled = true,
+    required this.onTap,
+    this.showClear = false,
+    this.onClear,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: InkWell(
+            onTap: enabled ? onTap : null,
+            child: Text(
+              text ?? '',
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+              style: TextStyle(color: showClear ? null : Colors.red),
+            ),
+          ),
+        ),
+        if (!showClear)
+          InkWell(onTap: enabled ? onTap : null, child: Icon(PhosphorIcons.caretRight(), color: Colors.red, size: 15)),
+        if (showClear && text != null && text != '')
+          InkWell(
+            onTap: enabled ? onClear : null,
+            child: !enabled ? SizedBox() : Icon(PhosphorIcons.xCircle(), color: Colors.grey, size: 15),
+          ),
+      ],
+    );
+  }
+}
+
+class DataGridTitleFilter extends StatelessWidget {
+  final String title;
+  final void Function()? onPressed;
+  final bool isFilter;
+
+  const DataGridTitleFilter({super.key, required this.title, this.onPressed, this.isFilter = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 2),
+      decoration: BoxDecoration(
+        color: isFilter ? Colors.green.shade100 : Colors.blue.shade100,
+        border: Border(right: BorderSide(width: .5)),
+      ),
+      child: Row(
+        children: [
+          sh.Text(title, style: TextStyle(fontWeight: sh.FontWeight.w500, fontSize: 13)),
+          Spacer(),
+          sh.IconButton.text(
+            size: sh.ButtonSize.small,
+            onPressed: onPressed,
+            icon: Icon(PhosphorIcons.funnel(), color: isFilter ? sh.Colors.green.shade500 : null),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DataGridTitle extends StatelessWidget {
+  final String title;
+
+  const DataGridTitle({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: 2),
+      decoration: BoxDecoration(color: Colors.blue.shade100, border: Border(right: BorderSide(width: .5))),
+      child: sh.Text(title, style: TextStyle(fontWeight: sh.FontWeight.w500, fontSize: 13)),
     );
   }
 }

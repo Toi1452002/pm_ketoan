@@ -1,2 +1,2 @@
-export 'muahang.dart';
+export 'muahang/muahang.dart';
 export 'banhang/banhang.dart';

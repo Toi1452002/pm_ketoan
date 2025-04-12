@@ -2,6 +2,7 @@ import 'package:app_ketoan/data/data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
+import '../providers/tuychon_provider.dart';
 
 class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
   PhieuThuNotifier() : super(null);
@@ -32,6 +33,9 @@ class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
       String phieu = 'T000000';
       final lastPhieu =
       await _sqlRepository.getCellValue(field: 'Phieu', where: '''ID = (SELECT MAX(ID) FROM TTC_PhieuThu)''');
+      final pTN = ref.read(tuyChonProvider).firstWhere((e)=>e.nhom=='PTn').giaTri.toString();
+      final pTC = ref.read(tuyChonProvider).firstWhere((e)=>e.nhom=='PTc').giaTri.toString();
+
       if (lastPhieu != null) {
         final num = int.parse(lastPhieu.substring(1)) + 1;
         phieu = 'T${'0' * (6 - num.toString().length)}$num';
@@ -55,8 +59,8 @@ class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
           updatedBy: null,
           createdBy: user.userName,
           soCT: '',
-          tkNo: '1121',
-          tkCo: '131')
+          tkNo: pTN,
+          tkCo: pTC)
           .toMap())
           .whenComplete(() async {
         getLastPhieuThu(ref: ref);
@@ -137,9 +141,17 @@ class BangKePhieuThuNotifier extends StateNotifier<List<PhieuThuModel>> {
   }
   final _sqlRepository = const SqlRepository(tableName: ViewName.phieuThu);
 
-  Future<void> getBangKePhieuThu() async {
+  Future<void> getBangKePhieuThu({String? tN, String? dN}) async {
     try {
-      final data = await _sqlRepository.getData();
+      String tuNgay = Helper.dateFormatYMD(DateTime.now().copyWith(day: 1));
+      String denNgay = Helper.sqlDateTimeNow();
+
+      if(tN!=null && dN!=null){
+        tuNgay = tN;
+        denNgay = dN;
+      }
+
+      final data = await _sqlRepository.getData(where: "${PhieuThuString.ngay} BETWEEN ? AND ? ",whereArgs: [tuNgay,denNgay]);
       state = data.map((e) => PhieuThuModel.fromMap(e)).toList();
     } catch (e) {
       errorSql(e);

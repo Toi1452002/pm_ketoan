@@ -67,7 +67,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
     ),
     TreeItem(
       data: MenuString.heThong,
-      children: [TreeItem(data: MenuString.thongTinDoanhNghiep), TreeItem(data: MenuString.danhSachNguoiDung)],
+      children: [
+        TreeItem(data: MenuString.thongTinDoanhNghiep),
+        TreeItem(data: MenuString.danhSachNguoiDung),
+        TreeItem(data: MenuString.tuyChon),
+      ],
     ),
     // Tree Root acts as a parent node with no data,
     // it will flatten the children into the parent node
@@ -124,6 +128,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.banHang:
                           showBanHang(context);
                           break;
+                        case MenuString.bangKeHoaDonBanRa:
+                          showBaoCaoBanHang(context);
+                          break;
+                        case MenuString.bangKeHoaDonMuaVao:
+                          showBaoCaoMuaHang(context);
+                          break;
 
                         ///************************************
                         //THU CHI
@@ -147,6 +157,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           break;
                         case MenuString.danhSachNguoiDung:
                           showDSNguoiDung(context);
+                          break;
+                        case MenuString.tuyChon:
+                          showTuyChon(context);
                           break;
                       }
                     },

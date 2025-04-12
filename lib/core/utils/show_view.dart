@@ -10,7 +10,7 @@ void showHangHoa(BuildContext context) {
   showCustomDialog(context, title: MenuString.hangHoa, width: 1220, height: 600, child: HangHoaView(), onClose: () {});
 }
 
-void showThongTinHangHoa(BuildContext context, {HangHoaModel? hangHoa}){
+void showThongTinHangHoa(BuildContext context, {HangHoaModel? hangHoa}) {
   showCustomDialog(
     context,
     title: 'THÔNG TIN HÀNG HÓA',
@@ -54,7 +54,6 @@ void showMaNghiepVu(BuildContext context) {
   );
 }
 
-
 //HỆ THỐNG
 void showThongTinDoanhNghiep(BuildContext context) {
   showCustomDialog(
@@ -77,30 +76,107 @@ void showDSNguoiDung(BuildContext context) {
     onClose: () {},
   );
 }
+void showTuyChon(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.tuyChon,
+    width: 500,
+    height: 390,
+    child: TuyChonView(),
+    onClose: () {},
+  );
+}
 
 //MUA BAN
-void showMuaHang(BuildContext context) {
-  showCustomDialog(context, title: MenuString.muaHang, width: 1100, height: 700, child: MuaHangView(), onClose: (){});
+void showMuaHang(BuildContext context, {int? stt}) {
+  showCustomDialog(
+    context,
+    title: 'NHẬP MUA HÀNG HÓA',
+    width: 1100,
+    height: 680,
+    child: MuaHangView(stt: stt),
+    onClose: () {},
+  );
 }
-void showBanHang(BuildContext context) {
-  showCustomDialog(context, title: MenuString.banHang, width: 1100, height: 700, child: BanHangView(), onClose: (){});
+
+void showBaoCaoMuaHang(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: 'BẢNG KÊ HÓA ĐƠN HÀNG HÓA DICH VỤ MUA VÀO',
+    width: 1210,
+    height: 603,
+    child: BaoCaoMuaHangView(),
+    onClose: () {},
+  );
+}
+
+void showBanHang(BuildContext context, {int? stt}) {
+  showCustomDialog(
+    context,
+    title: 'XUẤT BÁN HÀNG HÓA',
+    width: 1100,
+    height: 680,
+    child: BanHangView(stt: stt),
+    onClose: () {},
+  );
+}
+
+void showBaoCaoBanHang(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: 'BẢNG KÊ HÓA ĐƠN HÀNG HÓA DICH VỤ BÁN RA',
+    width: 1210,
+    height: 603,
+    child: BaoCaoBanHangView(),
+    onClose: () {},
+  );
 }
 
 //THU CHI
-void showPhieuThu(BuildContext context,{int? stt}) {
-  showCustomDialog(context, title: MenuString.phieuThu, width: 550, height: 490, child: PhieuThuView(stt: stt,), onClose: () {});
+void showPhieuThu(BuildContext context, {int? stt}) {
+  showCustomDialog(
+    context,
+    title: MenuString.phieuThu,
+    width: 550,
+    height: 490,
+    child: PhieuThuView(stt: stt),
+    onClose: () {},
+  );
 }
 
-void showPhieuChi(BuildContext context,{int? stt}) {
-  showCustomDialog(context, title: MenuString.phieuChi, width: 550, height: 490, child: PhieuChiView(stt: stt,), onClose: () {});
+void showPhieuChi(BuildContext context, {int? stt}) {
+  showCustomDialog(
+    context,
+    title: MenuString.phieuChi,
+    width: 550,
+    height: 490,
+    child: PhieuChiView(stt: stt),
+    onClose: () {},
+  );
 }
+
 void showBangKePhieuThu(BuildContext context) {
-  showCustomDialog(context, title: MenuString.bangkePhieuThu, width: 1275, height: 600, child: BangKePhieuThuView(), onClose: () {});
+  showCustomDialog(
+    context,
+    title: MenuString.bangkePhieuThu,
+    width: 1275,
+    height: 600,
+    child: BangKePhieuThuView(),
+    onClose: () {},
+  );
 }
+
 void showBangKePhieuChi(BuildContext context) {
-  showCustomDialog(context, title: MenuString.bangkePhieuChi, width: 1275, height: 600, child: BangKePhieuChiView(), onClose: () {});
+  showCustomDialog(
+    context,
+    title: MenuString.bangkePhieuChi,
+    width: 1275,
+    height: 600,
+    child: BangKePhieuChiView(),
+    onClose: () {},
+  );
 }
 
-
-
-
+void showViewPrinter(BuildContext context, Widget widget, {bool isPortrait = true}) {
+  showCustomDialog(context, title: 'PRINT', width: isPortrait ? 600 : 900, height: 700,barrierDismissible: true, child: widget, onClose: () {});
+}

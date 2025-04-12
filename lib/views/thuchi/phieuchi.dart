@@ -7,6 +7,7 @@ import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 import '../../application/application.dart';
 import '../../data/data.dart';
 import '../../widgets/widgets.dart';
+import 'component/pdf_phieuchi.dart';
 
 class PhieuChiView extends ConsumerStatefulWidget {
   final int? stt;
@@ -40,6 +41,10 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
 
     final wPhieuChi = ref.watch(phieuChiProvider);
     final rPhieuChi = ref.read(phieuChiProvider.notifier);
+    final qlXBC =
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlXBC).giaTri == 1; //Nếu bằng 1 thi xem bc truoc khi in
+    final qlKPC =
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlKPC).giaTri == 1;
 
     List<ComboboxItem> lstComboboxItem = [];
 
@@ -62,6 +67,9 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
             iconAdd(
               onPressed: () {
                 final user = ref.read(userInfoProvider);
+                if (qlKPC && !wPhieuChi!.khoa) {
+                  rPhieuChi.updatePhieuChi(PhieuThuString.khoa, 1, wPhieuChi.phieu);
+                }
                 rPhieuChi.addPhieuChi(user!, ref);
               },
             ),
@@ -74,7 +82,30 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
                 }
               },
             ),
-            iconPrinter(onPressed: () {}),
+            iconPrinter(onPressed: ()  async{
+
+              if (!wPhieuChi!.khoa) {
+                rPhieuChi.updatePhieuChi(PhieuThuString.khoa, 1, wPhieuChi.phieu);
+              }
+              final sqlRepository = SqlRepository(tableName: TableName.ttdn);
+              final diaChiCTY = await sqlRepository.getCellValue(field: TTDNString.noiDung, where: "${TTDNString.ma} = 'DC'") ?? '';
+              final tenCTY = await sqlRepository.getCellValue(field: TTDNString.noiDung, where: "${TTDNString.ma} = 'TCT'") ?? '';
+              if (qlXBC) {
+                showViewPrinter(
+                  context,
+                  PdfPhieuChiView(diaChi: diaChiCTY, tenCTY: tenCTY, phieuChi: wPhieuChi),
+                );
+              } else {
+                PdfWidget().onPrint(
+                  onLayout: pdfPhieuChi(
+                    dateNow: Helper.dateNowDMY(),
+                    tenCTy: tenCTY,
+                    diaChi: diaChiCTY,
+                    phieuChi: wPhieuChi,
+                  ),
+                );
+              }
+            }),
           ],
           trailing: [
             SizedBox(
@@ -166,6 +197,7 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
                             orElse: () => const MaNghiepVuModel(maNghiepVu: '', moTa: null),
                           )
                               .moTa,
+                          // isChangeEmpty: false,
                           label: 'Kiểu chi',
                           spacing: 61,
                         ),
@@ -179,7 +211,7 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
                           enabled: !wPhieuChi.khoa,
                           columnWidth: const [90, 200],
                           selected: wPhieuChi.maTC == 'CNC' ? wPhieuChi.maNV : wPhieuChi.maKhach,
-
+                          // isChangeEmpty: false,
                           items: lstComboboxItem,
                           onChanged: (val, o) {
                             if (wPhieuChi.maTC == 'CNC') {

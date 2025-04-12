@@ -53,40 +53,58 @@ class DanhsachHanghoa extends ConsumerWidget {
           field: 'null',
           enableFilterMenuItem: false,
           type: TrinaColumnType.text(),
+          titleRenderer: (re) => DataGridTitle(title: ''),
           width: 20,
           renderer: (re) => DataGridContainer(),
           cellPadding: EdgeInsets.zero,
         ),
-        DataGridColumn(title: 'Mã',renderer: (re){
-          return Row(
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: (){
-                    final data = ref.read(hangHoaProvider).firstWhere((e) => e.maHH == re.cell.value);
-                    onChanged?.call(data);
-                    Navigator.pop(context);
-                  },
-                  child: Text(re.cell.value,style: TextStyle(color: Colors.red),),
+        DataGridColumn(
+          title: 'Mã',
+          titleRenderer: (re) => DataGridTitle(title: re.column.title),
+          renderer: (re) {
+            return Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      final data = ref.read(hangHoaProvider).firstWhere((e) => e.maHH == re.cell.value);
+                      onChanged?.call(data);
+                      Navigator.pop(context);
+                    },
+                    child: Text(re.cell.value, style: TextStyle(color: Colors.red)),
+                  ),
                 ),
-              ),
-              InkWell(child: Icon(Icons.info_outline_rounded,size: 15,color: Colors.grey,),onTap: (){
-                final data = ref.read(hangHoaProvider).firstWhere((e) => e.maHH == re.cell.value);
-                showThongTinHangHoa(context,hangHoa: data);
-              },)
-            ],
-          );
-        }, field: HangHoaString.maHH, type: TrinaColumnTypeText(), width: 150),
+                InkWell(
+                  child: Icon(Icons.info_outline_rounded, size: 15, color: Colors.grey),
+                  onTap: () {
+                    final data = ref.read(hangHoaProvider).firstWhere((e) => e.maHH == re.cell.value);
+                    showThongTinHangHoa(context, hangHoa: data);
+                  },
+                ),
+              ],
+            );
+          },
+          field: HangHoaString.maHH,
+          type: TrinaColumnTypeText(),
+          width: 150,
+        ),
         DataGridColumn(
           title: 'Tên vật tư-hàng hóa',
+          titleRenderer: (re) => DataGridTitle(title: re.column.title),
           field: HangHoaString.tenHH,
-
           type: TrinaColumnTypeText(),
           width: 300,
         ),
-        DataGridColumn(title: 'Đơn vị tính', field: DVTString.dvt, type: TrinaColumnTypeText(), width: 100),
+        DataGridColumn(
+          title: 'Đơn vị tính',
+          titleRenderer: (re) => DataGridTitle(title: re.column.title),
+          field: DVTString.dvt,
+          type: TrinaColumnTypeText(),
+          width: 100,
+        ),
         DataGridColumn(
           title: 'Giá bán',
+          titleRenderer: (re)=>DataGridTitle(title:re.column.title),
           field: HangHoaString.giaBan,
           type: TrinaColumnType.number(),
           textAlign: TrinaColumnTextAlign.end,

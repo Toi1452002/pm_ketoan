@@ -15,15 +15,18 @@ class UserView extends ConsumerWidget {
   List<UserModel> _lstUser = [];
 
   late TrinaGridStateManager _stateManager;
-  
+
   void _showThongTinUser(BuildContext context, {UserModel? user}) {
-    showCustomDialog(context,
-        title: 'THÔNG TIN NGƯỜI DÙNG',
-        width: 500,
-        height: 490,
-        child: ThongTinUser(user: user,),
-        onClose: () {});
+    showCustomDialog(
+      context,
+      title: 'THÔNG TIN NGƯỜI DÙNG',
+      width: 500,
+      height: 490,
+      child: ThongTinUser(user: user),
+      onClose: () {},
+    );
   }
+
   Future<void> _onDelete(TrinaColumnRendererContext re, WidgetRef ref) async {
     _stateManager.setCurrentCell(re.cell, re.rowIdx);
     if (re.cell.value == 1) {
@@ -38,25 +41,33 @@ class UserView extends ConsumerWidget {
       }
     }
   }
+
   void _showThayDoiTaiKhoan(BuildContext context) {
-    showCustomDialog(context, title: 'THAY ĐỔI TÀI KHOẢN NGƯỜI DÙNG',
-        width: 500,
-        height: 350,
-        child: ThayDoiTaiKhoan(),
-        onClose: (){});
+    showCustomDialog(
+      context,
+      title: 'THAY ĐỔI TÀI KHOẢN NGƯỜI DÙNG',
+      width: 500,
+      height: 350,
+      child: ThayDoiTaiKhoan(),
+      onClose: () {},
+    );
   }
-  void _onDoubleTapUsername(TrinaGridOnRowDoubleTapEvent event, WidgetRef ref, BuildContext context){
+
+  void _onDoubleTapUsername(TrinaGridOnRowDoubleTapEvent event, WidgetRef ref, BuildContext context) {
     final userLogin = ref.read(userInfoProvider);
     if (event.cell.column.field == UserString.userName) {
       final user = _lstUser.firstWhere((e) => e.userName == event.cell.value);
-      if(userLogin?.id==1){//  cho phép chỉnh sửa thông tin user
+      if (userLogin?.id == 1) {
+        //  cho phép chỉnh sửa thông tin user
         _showThongTinUser(context, user: user);
       }
-      if(userLogin?.id!=1 && userLogin?.id == user.id){// chỉ chỉnh sửa thông tin của bản thân
+      if (userLogin?.id != 1 && userLogin?.id == user.id) {
+        // chỉ chỉnh sửa thông tin của bản thân
         _showThayDoiTaiKhoan(context);
       }
     }
   }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userLogin = ref.read(userInfoProvider);
@@ -72,7 +83,10 @@ class UserView extends ConsumerWidget {
               cells: {
                 'null': TrinaCell(value: "", renderer: (context) => DataGridContainer()),
                 'delete': TrinaCell(value: user.id),
-                UserString.userName: TrinaCell(value: user.userName,renderer: (context)=>Text(context.cell.value,style: TextStyle(color: Colors.red),).small()),
+                UserString.userName: TrinaCell(
+                  value: user.userName,
+                  renderer: (context) => Text(context.cell.value, style: TextStyle(color: Colors.red)).small(),
+                ),
                 UserString.hoTen: TrinaCell(value: user.hoTen),
                 UserString.email: TrinaCell(value: user.email),
                 UserString.dienThoai: TrinaCell(value: user.dienThoai),
@@ -86,9 +100,7 @@ class UserView extends ConsumerWidget {
       headers: [
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
-          leading: [
-            IconButton.outline(icon: Icon(Icons.add), onPressed: () =>_showThongTinUser(context), size: ButtonSize.normal, enabled: ref.read(userInfoProvider)?.id == 1),
-          ],
+          leading: [iconAdd(onPressed: () => _showThongTinUser(context), enabled: ref.read(userInfoProvider)?.id == 1)],
         ),
       ],
       child: Padding(
@@ -103,29 +115,53 @@ class UserView extends ConsumerWidget {
               field: 'null',
               type: TrinaColumnTypeText(),
               width: 20,
+              titleRenderer: (re) => DataGridTitle(title: ''),
               cellPadding: EdgeInsets.zero,
             ),
             DataGridColumn(
               title: '',
               field: 'delete',
+              titleRenderer: (re) => DataGridTitle(title: ''),
               renderer: (re) {
                 return DataGridDelete(
-                  onTap:
-                      ref.read(userInfoProvider)?.id == 1
-                          ? () {
-                            _onDelete(re, ref);
-                          }
-                          : null,
+                  enabled: ref.read(userInfoProvider)?.id == 1,
+                  onTap: () {
+                    _onDelete(re, ref);
+                  },
                 );
               },
               type: TrinaColumnTypeText(),
               width: 25,
               cellPadding: EdgeInsets.zero,
             ),
-            DataGridColumn(title: 'Username', field: UserString.userName, type: TrinaColumnTypeText(), width: 150),
-            DataGridColumn(title: 'Họ và tên', field: UserString.hoTen, type: TrinaColumnTypeText(), width: 200),
-            DataGridColumn(title: 'Email', field: UserString.email, type: TrinaColumnTypeText(), width: 200),
-            DataGridColumn(title: 'Điện thoại', field: UserString.dienThoai, type: TrinaColumnTypeText(), width: 200),
+            DataGridColumn(
+              title: 'Username',
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
+              field: UserString.userName,
+              type: TrinaColumnTypeText(),
+              width: 150,
+            ),
+            DataGridColumn(
+              title: 'Họ và tên',
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
+              field: UserString.hoTen,
+              type: TrinaColumnTypeText(),
+              width: 200,
+            ),
+            DataGridColumn(
+              title: 'Email',
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
+              field: UserString.email,
+              type: TrinaColumnTypeText(),
+              width: 200,
+            ),
+            DataGridColumn(
+              title: 'Điện thoại',
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
+              field: UserString.dienThoai,
+              type: TrinaColumnTypeText(),
+              width: 200,
+            ),
           ],
         ),
       ),

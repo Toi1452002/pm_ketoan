@@ -41,6 +41,8 @@ class Helper{
     }
   }
 
+  static String dateNowDMY()=>DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now());
+
   static String dateFormatDMY(DateTime date)=>DateFormat('dd/MM/yyyy').format(date);
   static String stringFormatDMY(String? date){
     if(date==''  || date == null){
@@ -58,11 +60,17 @@ class Helper{
   }
 
   static DateTime? stringToDate(String? date){
-    if(date == null || date == ''){
-      return null;
-    }else{
-      return DateTime.parse(date);
+    try{
+      if(date == null || date == ''){
+        return null;
+      }else{
+        return DateTime.parse(date);
+      }
+    }catch(e){
+      final tmp = DateTime.parse(stringDateFormatYMD(date));
+      return tmp;
     }
+
   }
 
   static String stringDateFormatYMD(String? date){
@@ -73,5 +81,18 @@ class Helper{
     }else{
       return '';
     }
+  }
+  static String getQuarterNow() {
+    int month = DateTime.now().month;
+    int quarter = ((month - 1) ~/ 3) + 1;
+    return '$quarter';
+  }
+
+  static String getLastDateInMonth(String month, String year){
+    return DateTime(int.parse(year), int.parse(month)+1, 0).day.toString();
+  }
+
+  static String formatMonth(dynamic month){
+    return month.toString().length==1? "0$month": month;
   }
 }

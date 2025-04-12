@@ -16,8 +16,8 @@ class Combobox extends StatefulWidget {
   final bool isChangeEmpty;
   final double? menuWidth;
 
-  final TextEditingController? controller;
-  final FocusNode? focusNode;
+  // final TextEditingController? controller;
+  // final FocusNode? focusNode;
   const Combobox(
       {super.key,
         required this.items,
@@ -27,7 +27,7 @@ class Combobox extends StatefulWidget {
         required this.onChanged,
         this.columnWidth,
         this.menuWidth,
-        this.isChangeEmpty = true, this.controller, this.focusNode});
+        this.isChangeEmpty = true,});
   @override
   State<Combobox> createState() => _ComboboxState();
 }
@@ -296,15 +296,26 @@ class _ComboboxState extends State<Combobox> {
           onChanged: (val) => _onChangeText(val),
           trailing: SizedBox(),
           features: [
+            // sh.InputFeature.leading(GestureDetector(
+            //   onTap: (){},
+            //   child: Icon(Icons.info_outline_rounded, size: 15, color: Colors.grey),
+            // )),
             sh.InputFeature.trailing(
               GestureDetector(
-                child: Icon(sh.RadixIcons.chevronDown),
+                child: Icon(sh.RadixIcons.chevronDown,size: 15,),
                 onTap: () {
                   _isOpen ? _textFocus.unfocus() : _textFocus.requestFocus();
-
                 },
               ),
             ),
+            // sh.InputFeature.trailing(
+            //   GestureDetector(
+            //     child: Icon(sh.RadixIcons.infoCircled,size: 13,),
+            //     onTap: () {
+            //       _isOpen ? _textFocus.unfocus() : _textFocus.requestFocus();
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ),

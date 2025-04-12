@@ -24,4 +24,5 @@ class ThongTinDoanhNghiepNotifier extends StateNotifier<List<TTDNModel>> {
       errorSql(e);
     }
   }
+
 }

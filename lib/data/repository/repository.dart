@@ -25,9 +25,9 @@ class SqlRepository {
     return await cnn!.insert(tableName, map);
   }
 
-  Future<int> updateRow(Map<String, dynamic> map, {String? where}) async {
+  Future<int> updateRow(Map<String, dynamic> map, {String? where, String? tableNameOther }) async {
     final cnn = await connectData();
-    return await cnn!.update(tableName, map, where: where);
+    return await cnn!.update(tableNameOther??tableName, map, where: where);
   }
 
   Future<int> addCell({required String field, required String value}) async {
@@ -64,6 +64,7 @@ class SqlRepository {
     }
     await bacth.commit(noResult: true);
   }
+
 }
 
 errorSql(Object e) {

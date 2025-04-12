@@ -100,7 +100,7 @@ class HangHoaView extends ConsumerWidget {
               width: 300,
               child: Combobox(
                 selected: ref.watch(hangHoaTheoiDoiProvider).value,
-
+                isChangeEmpty: false,
                 items: [
                   ComboboxItem(
                     value: 'Danh sách hàng hóa đang theo dõi',
@@ -145,12 +145,14 @@ class HangHoaView extends ConsumerWidget {
               cellPadding: EdgeInsets.zero,
               type: TrinaColumnTypeText(),
               width: 20,
+              titleRenderer: (re) => DataGridTitle(title: ''),
             ),
             DataGridColumn(
               title: '',
               field: 'delete',
               cellPadding: EdgeInsets.zero,
               type: TrinaColumnTypeText(),
+              titleRenderer: (re) => DataGridTitle(title: ''),
               width: 25,
               renderer:
                   (re) => DataGridDelete(
@@ -159,17 +161,20 @@ class HangHoaView extends ConsumerWidget {
                     },
                   ),
             ),
-            DataGridColumn(title: 'Mã', field: HangHoaString.maHH, type: TrinaColumnTypeText(), width: 150),
+            DataGridColumn(title: 'Mã',titleRenderer: (re)=>DataGridTitle(title: re.column.title), field: HangHoaString.maHH, type: TrinaColumnTypeText(), width: 150),
             DataGridColumn(
               title: 'Tên vật tư-hàng hóa',
+
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
               field: HangHoaString.tenHH,
               type: TrinaColumnTypeText(),
               width: 300,
             ),
-            DataGridColumn(title: 'Đơn vị tính', field: DVTString.dvt, type: TrinaColumnTypeText(), width: 100),
+            DataGridColumn(title: 'Đơn vị tính',titleRenderer: (re)=>DataGridTitle(title: re.column.title), field: DVTString.dvt, type: TrinaColumnTypeText(), width: 100),
             DataGridColumn(
               title: 'Giá mua',
               field: HangHoaString.giaMua,
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
               type: TrinaColumnType.number(),
               textAlign: TrinaColumnTextAlign.end,
               enableSorting: true,
@@ -178,6 +183,7 @@ class HangHoaView extends ConsumerWidget {
             DataGridColumn(
               title: 'Giá bán',
               field: HangHoaString.giaBan,
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
               type: TrinaColumnType.number(),
               textAlign: TrinaColumnTextAlign.end,
               enableSorting: true,
@@ -187,15 +193,23 @@ class HangHoaView extends ConsumerWidget {
               title: 'Loại hàng',
               field: LoaiHangString.loaiHang,
               type: TrinaColumnTypeText(),
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
               width: 100,
             ),
             DataGridColumn(
               title: 'Nhóm hàng',
               field: NhomHangString.nhomHang,
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
               type: TrinaColumnTypeText(),
               width: 100,
             ),
-            DataGridColumn(title: 'Nhà cung', field: HangHoaString.maNC, type: TrinaColumnTypeText(), width: 100),
+            DataGridColumn(
+              title: 'Nhà cung',
+              titleRenderer: (re) => DataGridTitle(title: re.column.title),
+              field: HangHoaString.maNC,
+              type: TrinaColumnTypeText(),
+              width: 100,
+            ),
           ],
         ),
       ),

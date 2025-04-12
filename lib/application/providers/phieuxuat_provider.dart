@@ -11,3 +11,10 @@ final phieuXuatProvider = StateNotifierProvider.autoDispose<PhieuXuatNotifier, P
 final phieuXuatCTProvider = StateNotifierProvider<PhieuXuatCTNotifier, List<PhieuXuatCTModel>>((ref) {
   return PhieuXuatCTNotifier();
 });
+
+
+final bcPhieuXuatProvider = StateNotifierProvider.autoDispose<BCPhieuXuatNotifier, List<VBCPhieuXuatModel>>((ref) {
+  return BCPhieuXuatNotifier();
+});
+
+

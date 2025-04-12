@@ -6,6 +6,11 @@ abstract class AppString {
   static const delete = "Có chắc muốn xóa?";
 }
 
+abstract class MaTuyChon{
+  static const qlXBC = "qlXBC";
+  static const qlKPC = "qlKPC";
+}
+
 abstract class MenuString {
   static const danhMuc = "DANH MỤC";
   static const hangHoa = "Hàng hóa";
@@ -40,4 +45,5 @@ abstract class MenuString {
    static const heThong = 'HỆ THỐNG';
    static const thongTinDoanhNghiep = 'Thông tin doanh nghiệp';
    static const danhSachNguoiDung = 'Danh sách người dùng';
+   static const tuyChon = 'Tùy chọn';
 }

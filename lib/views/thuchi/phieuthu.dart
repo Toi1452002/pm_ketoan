@@ -1,8 +1,10 @@
+import 'package:app_ketoan/views/thuchi/component/pdf_phieuthu.dart';
 import 'package:app_ketoan/widgets/combobox/combobox.dart';
 import 'package:app_ketoan/widgets/date_textbox.dart';
 import 'package:app_ketoan/widgets/group_button_number_page.dart';
 import 'package:app_ketoan/widgets/icon_button.dart';
 import 'package:app_ketoan/widgets/label_textfield.dart';
+import 'package:app_ketoan/widgets/pdf_widget.dart';
 import 'package:flutter_platform_alert/flutter_platform_alert.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,8 +32,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
     // TODO: implement initState
     if (widget.stt == null) {
       ref.read(phieuThuProvider.notifier).getLastPhieuThu(ref: ref);
-    }
-    else {
+    } else {
       ref.read(phieuThuProvider.notifier).onMovePhieuThu(widget.stt!, ref: ref);
     }
     super.initState();
@@ -39,6 +40,8 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
 
   @override
   Widget build(BuildContext context) {
+
+
     final lstKhach = ref.watch(lstKhachProvider);
     final lstMaNghiepVu = ref.watch(mnvLstThuProvider);
     final lstBangTaiKhoan = ref.watch(btkListAllProvider);
@@ -47,6 +50,10 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
     final rPhieuThu = ref.read(phieuThuProvider.notifier);
     final user = ref.read(userInfoProvider);
 
+    final qlXBC =
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlXBC).giaTri == 1; //Nếu bằng 1 thi xem bc truoc khi in
+    final qlKPC =
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlKPC).giaTri == 1;
     return Scaffold(
       backgroundColor: context.theme.colorScheme.border,
       headers: [
@@ -55,6 +62,9 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
           leading: [
             iconAdd(
               onPressed: () {
+                if (qlKPC && !wPhieuThu!.khoa) {
+                  rPhieuThu.updatePhieuThu(PhieuThuString.khoa, 1, wPhieuThu.phieu);
+                }
                 rPhieuThu.addPhieuThu(user!, ref);
               },
             ),
@@ -67,7 +77,31 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                 }
               },
             ),
-            iconPrinter(onPressed: () {}),
+            iconPrinter(
+              onPressed: () async {
+                if (!wPhieuThu!.khoa) {
+                  rPhieuThu.updatePhieuThu(PhieuThuString.khoa, 1, wPhieuThu.phieu);
+                }
+                final sqlRepository = SqlRepository(tableName: TableName.ttdn);
+                final diaChiCTY = await sqlRepository.getCellValue(field: TTDNString.noiDung, where: "${TTDNString.ma} = 'DC'") ?? '';
+                final tenCTY = await sqlRepository.getCellValue(field: TTDNString.noiDung, where: "${TTDNString.ma} = 'TCT'") ?? '';
+                if (qlXBC) {
+                  showViewPrinter(
+                    context,
+                    PdfPhieuThuView(diaChi: diaChiCTY, tenCTY: tenCTY, phieuThu: wPhieuThu),
+                  );
+                } else {
+                  PdfWidget().onPrint(
+                    onLayout: pdfPhieuThu(
+                      dateNow: Helper.dateNowDMY(),
+                      tenCTy: tenCTY,
+                      diaChi: diaChiCTY,
+                      phieuThu: wPhieuThu,
+                    ),
+                  );
+                }
+              },
+            ),
           ],
           trailing: [
             SizedBox(
@@ -151,6 +185,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                                   onChanged: (val, o) {
                                     rPhieuThu.updatePhieuThu(PhieuThuString.maTC, o, wPhieuThu.phieu);
                                   },
+                                  // isChangeEmpty: false,
                                   enabled: !wPhieuThu.khoa,
                                   selected:
                                       lstMaNghiepVu.value!
@@ -268,7 +303,6 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                                 child: LabelCombobox(
                                   enabled: !wPhieuThu.khoa,
                                   selected: wPhieuThu.tkCo,
-
                                   columnWidth: [65, 270],
                                   menuWidth: 350,
                                   items:
@@ -334,23 +368,29 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                     Row(
                       spacing: 5,
                       children: [
-                        GroupButtonNumberPage(text: "${wPhieuThu.stt}/${wPhieuThu.countRow}", first: (){
-                          if (wPhieuThu.stt != 1) {
-                            rPhieuThu.onMovePhieuThu(1, ref: ref);
-                          }
-                        }, last: (){
-                          if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
-                            rPhieuThu.getLastPhieuThu(ref: ref);
-                          }
-                        }, back: (){
-                          if (wPhieuThu.stt != 1) {
-                            rPhieuThu.onMovePhieuThu(wPhieuThu.stt! - 1, ref: ref);
-                          }
-                        }, next: (){
-                          if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
-                            rPhieuThu.onMovePhieuThu(wPhieuThu.stt! + 1, ref: ref);
-                          }
-                        }),
+                        GroupButtonNumberPage(
+                          text: "${wPhieuThu.stt}/${wPhieuThu.countRow}",
+                          first: () {
+                            if (wPhieuThu.stt != 1) {
+                              rPhieuThu.onMovePhieuThu(1, ref: ref);
+                            }
+                          },
+                          last: () {
+                            if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
+                              rPhieuThu.getLastPhieuThu(ref: ref);
+                            }
+                          },
+                          back: () {
+                            if (wPhieuThu.stt != 1) {
+                              rPhieuThu.onMovePhieuThu(wPhieuThu.stt! - 1, ref: ref);
+                            }
+                          },
+                          next: () {
+                            if (wPhieuThu.stt.toString() != wPhieuThu.countRow) {
+                              rPhieuThu.onMovePhieuThu(wPhieuThu.stt! + 1, ref: ref);
+                            }
+                          },
+                        ),
 
                         Spacer(),
                         TextButton(size: ButtonSize(.8), onPressed: () {}, child: Text('Hiện chi tiết')),

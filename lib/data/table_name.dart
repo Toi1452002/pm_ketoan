@@ -20,6 +20,7 @@ abstract class TableName{
   static const phieuXuatCT = "TNX_PhieuXuatCT";
   static const phieuNhap = "TNX_PhieuNhap";
   static const phieuNhapCT = "TNX_PhieuNhapCT";
+  static const tuyChon = "T00_TuyChon";
 }
 
 class ViewName {
@@ -28,4 +29,9 @@ class ViewName {
   static const phieuChi = "V_PhieuChi";
   static const phieuXuat = "V_PhieuXuat";
   static const phieuXuatCT = "V_PhieuXuatCT";
+  static const phieuNhap = "V_PhieuNhap";
+  static const phieuNhapCT = "V_PhieuNhapCT";
+  static const vbcPhieuNhap = "VBC_PhieuNhap";
+  static const vbcPhieuXuat = "VBC_PhieuXuat";
+
 }

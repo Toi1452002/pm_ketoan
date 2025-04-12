@@ -97,7 +97,6 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
       int id = await ref.read(khachHangProvider.notifier).addKhach(khach);
       if(id!=0){
         clear();
-        // ref.read(khachHangProvider.notifier).getAll(ref: ref,filter: ref.read(khachHangFilterProvider));
         ref.read(khachHangProvider.notifier).getAll(theoDoi: ref.read(khachHangTheoDoiProvider).valueOther);
       }
     }else{//Update
@@ -105,7 +104,6 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
       int result = await ref.read(khachHangProvider.notifier).updateKhach(khach, widget.khach!.maKhach);
       if(result!=0){
         ref.read(khachHangProvider.notifier).getAll(theoDoi: ref.read(khachHangTheoDoiProvider).valueOther);
-        // ref.read(khachHangFilterProvider.notifier).clearFilter();
         if(mounted) Navigator.pop(context);
       }
     }

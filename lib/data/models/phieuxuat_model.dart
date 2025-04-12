@@ -6,7 +6,7 @@ class PhieuXuatModel{
   String dienGiai;
   double  congTien;
   double thueSuat;
-  double tienThua;
+  double tienThue;
   bool khoa;
   String? createdAt;
   String? createdBy;
@@ -33,7 +33,7 @@ class PhieuXuatModel{
     required this.dienGiai,
     required this.congTien,
     required this.thueSuat,
-    required this.tienThua,
+    required this.tienThue,
     required this.khoa,
     this.createdAt,
     this.createdBy,
@@ -62,7 +62,7 @@ class PhieuXuatModel{
       PhieuXuatString.dienGiai: dienGiai,
       PhieuXuatString.congTien: congTien,
       PhieuXuatString.thueSuat: thueSuat,
-      PhieuXuatString.tienThua: tienThua,
+      PhieuXuatString.tienThue: tienThue,
       PhieuXuatString.khoa: khoa?1:0,
       PhieuXuatString.createdAt: createdAt,
       PhieuXuatString.createdBy: createdBy,
@@ -89,7 +89,7 @@ class PhieuXuatModel{
       dienGiai: map[PhieuXuatString.dienGiai] ,
       congTien: double.parse(map[PhieuXuatString.congTien].toString()) ,
       thueSuat: double.parse(map[PhieuXuatString.thueSuat].toString()) ,
-      tienThua: double.parse(map[PhieuXuatString.tienThua].toString()) ,
+      tienThue: double.parse(map[PhieuXuatString.tienThue].toString()) ,
       khoa: map[PhieuXuatString.khoa]==1?true:false ,
       createdAt: map[PhieuXuatString.createdAt] ,
       createdBy: map[PhieuXuatString.createdBy] ,
@@ -117,7 +117,7 @@ class PhieuXuatModel{
     String? dienGiai,
     double? congTien,
     double? thueSuat,
-    double? tienThua,
+    double? tienThue,
     bool? khoa,
     String? createdAt,
     String? createdBy,
@@ -144,7 +144,7 @@ class PhieuXuatModel{
       dienGiai: dienGiai ?? this.dienGiai,
       congTien: congTien ?? this.congTien,
       thueSuat: thueSuat ?? this.thueSuat,
-      tienThua: tienThua ?? this.tienThua,
+      tienThue: tienThue ?? this.tienThue,
       khoa: khoa ?? this.khoa,
       createdAt: createdAt ?? this.createdAt,
       createdBy: createdBy ?? this.createdBy,
@@ -175,7 +175,7 @@ abstract class PhieuXuatString{
   static const dienGiai = "DienGiai";
   static const congTien = "CongTien";
   static const thueSuat = "ThueSuat";
-  static const tienThua = "TienThua";
+  static const tienThue = "TienThue";
   static const khoa = "Khoa";
   static const createdAt = "CreatedAt";
   static const createdBy = "CreatedBy";
@@ -301,7 +301,45 @@ abstract class PhieuXuatCTString{
   static const donGia = "DonGia";
   static const thanhTien = "ThanhTien";
   static const tkGV = "TKgv";
-  static const tkKho = "TKKho";
+  static const tkKho = "TKkho";
+}
 
+class VBCPhieuXuatModel{
+  int stt;
+  String kyHieu;
+  String soHD;
+  String ngayCT;
+  String tenKH;
+  String mst;
+  double congTien;
+  double tienThue;
+  String dienGiai;
+
+  VBCPhieuXuatModel({
+    required this.stt,
+    required this.kyHieu,
+    required this.soHD,
+    required this.ngayCT,
+    required this.tenKH,
+    required this.mst,
+    required this.congTien,
+    required this.tienThue,
+    required this.dienGiai,
+  });
+
+
+  factory VBCPhieuXuatModel.fromMap(Map<String, dynamic> map) {
+    return VBCPhieuXuatModel(
+      stt: map['STT'] ,
+      kyHieu: map[PhieuXuatString.kyHieu] ??'',
+      soHD: map[PhieuXuatString.soHD] ??'',
+      ngayCT: map[PhieuXuatString.ngayCT] ??'',
+      tenKH: map['TenKH'] ??'',
+      mst: map['MST'] ??'',
+      congTien: double.parse(map[PhieuXuatString.congTien].toString())  ,
+      tienThue: double.parse(map[PhieuXuatString.tienThue].toString())  ,
+      dienGiai: map[PhieuXuatString.dienGiai] ??'',
+    );
+  }
 
 }
