@@ -201,7 +201,7 @@ class _ThongTinHangHoaState extends ConsumerState<ThongTinHangHoaView> {
                                         : [],
                                 onChanged: (val, o) {
                                   setState(() {
-                                    _selectDonViTinh = ComboboxItem(value: val!, title: [], valueOther: o);
+                                    _selectDonViTinh = ComboboxItem(value: val??'', title: [], valueOther: o);
                                   });
                                 },
                                 label: 'Đơn vị tính',
@@ -262,7 +262,7 @@ class _ThongTinHangHoaState extends ConsumerState<ThongTinHangHoaView> {
                                 : [],
                         onChanged: (val, o) {
                           setState(() {
-                            _selectNhaCung = val!;
+                            _selectNhaCung = val??'';
                           });
                         },
                         label: 'Nhà cung',
@@ -282,7 +282,7 @@ class _ThongTinHangHoaState extends ConsumerState<ThongTinHangHoaView> {
                                   : [],
                           onChanged: (val, o) {
                             setState(() {
-                              _selectKhoNgamDinh = val!;
+                              _selectKhoNgamDinh = val??'';
                             });
                           },
                           label: 'Kho ngầm định',

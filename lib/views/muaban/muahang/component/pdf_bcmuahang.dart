@@ -36,7 +36,7 @@ class _PdfBCMuaHangState extends State<PdfBCMuaHang> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
           leading: [
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 Printer print = const Printer(url: 'Microsoft Print to PDF');
                 await Printing.directPrintPdf(onLayout: (e) => x, format: pdfFormat, printer: print);
@@ -108,16 +108,7 @@ Future<Uint8List> pdfBCMuaHang({
   pdf.addPage(
     pw.MultiPage(
       footer:
-          (context) => pw.Row(
-            children: [
-              pw.Align(
-                child: pw.Text(dateNow, style: pw.TextStyle(font: fontItalic)),
-                alignment: pw.Alignment.centerLeft,
-              ),
-              pw.Spacer(),
-              pw.Align(child: pw.Text(context.pageLabel), alignment: pw.Alignment.centerRight),
-            ],
-          ),
+          (context) => pdfWidget.footer(dateNow, context, fontItalic,isPortrait: false),
       pageTheme: pdfWidget.pageTheme(format: pdfWidget.pdfFormatLandscape, font: fontData),
       build: (context) {
         return [

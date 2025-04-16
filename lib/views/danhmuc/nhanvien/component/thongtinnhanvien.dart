@@ -9,6 +9,7 @@ import 'package:trina_grid/trina_grid.dart';
 
 import '../../../../application/application.dart';
 import '../../../../core/core.dart';
+import '../../../../widgets/widgets.dart';
 
 class ThongTinNhanVienView extends ConsumerStatefulWidget {
   final NhanVienModel? nhanVien;
@@ -314,7 +315,10 @@ class _ThongTinNhanVienViewState extends ConsumerState<ThongTinNhanVienView> {
                             _txtLuongCB.text = Helper.numFormat(_txtLuongCB.text)!;
                           }
                         },
-                        child: SizedBox(width: 300,child: LabelTextfield(label: 'Lương cơ bản', controller: _txtLuongCB, isNumber: true)),
+                        child: SizedBox(
+                          width: 300,
+                          child: LabelTextfield(label: 'Lương cơ bản', controller: _txtLuongCB, isNumber: true),
+                        ),
                       ),
                       Expanded(
                         child: DataGrid(
@@ -323,7 +327,6 @@ class _ThongTinNhanVienViewState extends ConsumerState<ThongTinNhanVienView> {
                           },
                           onLoaded: (event) {
                             _stateManager = event.stateManager;
-                            event.stateManager.columnFooterHeight = 25;
                           },
                           rows: [],
                           columns: [
@@ -333,13 +336,20 @@ class _ThongTinNhanVienViewState extends ConsumerState<ThongTinNhanVienView> {
                               type: TrinaColumnType.text(),
                               width: 20,
                               renderer: (re) => const DataGridContainer(),
+                              titleRenderer: (re) => DataGridTitle(title: ''),
                               cellPadding: EdgeInsets.zero,
                             ),
-                            DataGridColumn(title: 'Mô tả', field: MoTaPCGTTLString.moTa, type: TrinaColumnType.text()),
+                            DataGridColumn(
+                              title: 'Mô tả',
+                              titleRenderer: (re) => DataGridTitle(title: re.column.title),
+                              field: MoTaPCGTTLString.moTa,
+                              type: TrinaColumnType.text(),
+                            ),
                             DataGridColumn(
                               title: 'Tiêu chuẩn',
                               textAlign: TrinaColumnTextAlign.end,
                               field: PCvaGTString.soTieuChuan,
+                              titleRenderer: (re) => DataGridTitle(title: re.column.title),
                               type: TrinaColumnType.number(),
                               enableEditingMode: true,
                               footerRenderer: (e) {
@@ -358,19 +368,23 @@ class _ThongTinNhanVienViewState extends ConsumerState<ThongTinNhanVienView> {
                 ),
               ],
             ).sized(height: 400),
-           Gap(10),
-           Row(
-             children: [
-               const Gap(280),
-               PrimaryButton(onPressed: onSave,child: Text(widget.nhanVien==null? 'Thêm mới' : 'Cập nhật'),),
-               const Spacer(),
-               Checkbox(state: _theoDoi? CheckboxState.checked: CheckboxState.unchecked,onChanged: (val){
-                 setState(() {
-                   _theoDoi = val.index == 0;
-                 });
-               },leading: Text('Đang làm việc'),)
-             ],
-           )
+            Gap(10),
+            Row(
+              children: [
+                const Gap(280),
+                PrimaryButton(onPressed: onSave, child: Text(widget.nhanVien == null ? 'Thêm mới' : 'Cập nhật')),
+                const Spacer(),
+                Checkbox(
+                  state: _theoDoi ? CheckboxState.checked : CheckboxState.unchecked,
+                  onChanged: (val) {
+                    setState(() {
+                      _theoDoi = val.index == 0;
+                    });
+                  },
+                  leading: Text('Đang làm việc'),
+                ),
+              ],
+            ),
           ],
         ),
       ),

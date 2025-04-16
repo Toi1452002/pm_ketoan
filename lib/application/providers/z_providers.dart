@@ -10,3 +10,4 @@ export 'manghiepvu_provider.dart';
 export 'phieuxuat_provider.dart';
 export 'phieunhap_provider.dart';
 export 'tuychon_provider.dart';
+export 'khohang_provider.dart';

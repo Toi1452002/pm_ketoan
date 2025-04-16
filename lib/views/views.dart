@@ -4,3 +4,4 @@ export 'danhmuc/danhmuc.dart';
 export 'hethong/hethong.dart';
 export 'thuchi/thuchi.dart';
 export 'muaban/muaban.dart';
+export 'khohang/khohang.dart';

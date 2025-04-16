@@ -1,5 +1,11 @@
+import 'package:app_ketoan/application/application.dart';
 import 'package:app_ketoan/data/data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final bangTaiKhoanProvider = StateNotifierProvider.autoDispose<BangTaiKhoanNotifier, List<BangTaiKhoanModel>>((ref) {
+  return BangTaiKhoanNotifier();
+});
+
 
 final lstBangTaiKhoan15Provider = FutureProvider.autoDispose<List<BangTaiKhoanModel>>((ref) async {
   final sqlRepository = SqlRepository(tableName: TableName.bangTaiKhoan);

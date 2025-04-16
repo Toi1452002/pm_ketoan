@@ -54,6 +54,17 @@ void showMaNghiepVu(BuildContext context) {
   );
 }
 
+void showBangTaiKhoan(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.bangTaiKhoan,
+    width: 970,
+    height: 600,
+    child: BangTaiKhoanView(),
+    onClose: () {},
+  );
+}
+
 //HỆ THỐNG
 void showThongTinDoanhNghiep(BuildContext context) {
   showCustomDialog(
@@ -76,15 +87,9 @@ void showDSNguoiDung(BuildContext context) {
     onClose: () {},
   );
 }
+
 void showTuyChon(BuildContext context) {
-  showCustomDialog(
-    context,
-    title: MenuString.tuyChon,
-    width: 500,
-    height: 390,
-    child: TuyChonView(),
-    onClose: () {},
-  );
+  showCustomDialog(context, title: MenuString.tuyChon, width: 500, height: 390, child: TuyChonView(), onClose: () {});
 }
 
 //MUA BAN
@@ -178,5 +183,34 @@ void showBangKePhieuChi(BuildContext context) {
 }
 
 void showViewPrinter(BuildContext context, Widget widget, {bool isPortrait = true}) {
-  showCustomDialog(context, title: 'PRINT', width: isPortrait ? 600 : 900, height: 700,barrierDismissible: true, child: widget, onClose: () {});
+  showCustomDialog(
+    context,
+    title: 'PRINT',
+    width: isPortrait ? 600 : 900,
+    height: 700,
+    barrierDismissible: true,
+    child: widget,
+    onClose: () {},
+  );
+}
+//KHO HANG
+void showBangKeHangNhap(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.bangKeHangNhap,
+    width: 1050,
+    height: 600,
+    child: BangKeHangNhapView(),
+    onClose: () {},
+  );
+}
+void showBangKeHangXuat(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.bangKeHangXuat,
+    width: 1050,
+    height: 600,
+    child: BangKeHangXuatView(),
+    onClose: () {},
+  );
 }

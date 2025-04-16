@@ -3,3 +3,4 @@ export 'helper.dart';
 export 'show_view.dart';
 export 'check.dart';
 export 'function.dart';
+export 'trinagrid_function.dart';

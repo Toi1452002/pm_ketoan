@@ -7,6 +7,7 @@ import 'package:trina_grid/trina_grid.dart';
 
 import '../../../../application/application.dart';
 import '../../../../data/data.dart';
+import '../../../../widgets/widgets.dart';
 
 
 class NhomHangView extends ConsumerStatefulWidget {
@@ -79,13 +80,15 @@ class _NhomHangViewState extends ConsumerState<NhomHangView> {
         cellPadding: EdgeInsets.zero,
         type: TrinaColumnType.text(),
         renderer: (re) => DataGridContainer(),
+        titleRenderer: (re)=>DataGridTitle(title: ''),
       ),
           DataGridColumn(
         title: '',
         field: 'delete',
-        width: 30,
+        width: 25,
         type: TrinaColumnType.text(),
         renderer: (re) => DataGridDelete(onTap: ()=>_onDelete(re),),
+            titleRenderer: (re)=>DataGridTitle(title: ''),
       ),
           DataGridColumn(
         title: 'Nhóm hàng',
@@ -93,6 +96,7 @@ class _NhomHangViewState extends ConsumerState<NhomHangView> {
         enableEditingMode: true,
         field: NhomHangString.nhomHang,
         type: TrinaColumnType.text(),
+            titleRenderer: (re)=>DataGridTitle(title: re.column.title),
       ),
     ]);
   }

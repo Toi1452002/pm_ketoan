@@ -1,11 +1,11 @@
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 
-IconButton iconAdd({void Function()? onPressed, bool enabled = true}) {
+IconButton IconAdd({required void Function()? onPressed, bool enabled = true}) {
   return IconButton.outline(icon: Icon(PhosphorIcons.filePlus()), onPressed: onPressed, enabled: enabled);
 }
 
-IconButton iconDelete({void Function()? onPressed, bool enabled = true}) {
+IconButton IconDelete({required void Function()? onPressed, bool enabled = true}) {
   return IconButton.outline(
     icon: Icon(PhosphorIcons.trash(), color: Colors.red),
     onPressed: onPressed,
@@ -13,17 +13,25 @@ IconButton iconDelete({void Function()? onPressed, bool enabled = true}) {
   );
 }
 
-IconButton iconPrinter({void Function()? onPressed, bool enabled = true}) {
+IconButton IconPrinter({required void Function()? onPressed, bool enabled = true}) {
   return IconButton.outline(
-    icon: Icon(PhosphorIcons.printer(PhosphorIconsStyle.fill), color: Colors.blue),
+    icon: Icon(PhosphorIcons.printer(PhosphorIconsStyle.fill), color: Colors.blue.shade800),
     onPressed: onPressed,
     enabled: enabled,
   );
 }
 
-IconButton iconExcel({required void Function()? onPressed, bool enabled = true}) {
+IconButton IconExcel({required void Function()? onPressed, bool enabled = true}) {
   return IconButton.outline(
-    icon: Icon(PhosphorIcons.microsoftExcelLogo(PhosphorIconsStyle.fill), color: Colors.green),
+    icon: Icon(PhosphorIcons.microsoftExcelLogo(PhosphorIconsStyle.fill), color: Colors.green.shade700),
+    onPressed: onPressed,
+    enabled: enabled,
+  );
+}
+
+IconButton IconFilter({required void Function()? onPressed, bool enabled = true, bool isFilter = false}) {
+  return IconButton.outline(
+    icon: Icon(PhosphorIcons.funnel(isFilter ? PhosphorIconsStyle.fill : PhosphorIconsStyle.regular), color:isFilter ?Colors.yellow.shade600: Colors.gray),
     onPressed: onPressed,
     enabled: enabled,
   );

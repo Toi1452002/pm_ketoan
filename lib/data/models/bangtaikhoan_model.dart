@@ -20,7 +20,7 @@ class BangTaiKhoanModel{
     return BangTaiKhoanModel(
       maTK: map[BangTaiKhoanString.maTK]??'',
       tenTK: map[BangTaiKhoanString.tenTK]??'',
-      maXL: map[BangTaiKhoanString.maXL]==1?true: false,
+      maXL: map[BangTaiKhoanString.maXL]==1? true: false,
       tinhChat: map[BangTaiKhoanString.tinhChat]??'',
       maLK: map[BangTaiKhoanString.maLK]??'',
       ghiChu: map[BangTaiKhoanString.ghiChu]??'',
@@ -31,7 +31,7 @@ class BangTaiKhoanModel{
 abstract class BangTaiKhoanString{
   static const maTK = "MaTK";
   static const tenTK = "TenTK";
-  static const maXL = "MaXL";
+  static const maXL = "MAXL";
   static const tinhChat = "TinhChat";
   static const maLK = "MaLK";
   static const ghiChu = "GhiChu";

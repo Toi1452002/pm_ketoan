@@ -52,7 +52,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
           leading: [
-            iconAdd(
+            IconAdd(
               onPressed: () {
                 if (qlKPC && !wPhieuNhap!.khoa) {
                   rPhieuNhap.updatePhieuNhap(PhieuXuatString.khoa, 1, wPhieuNhap.phieu, userName: userName);
@@ -60,7 +60,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                 rPhieuNhap.addPhieuNhap(userName, ref);
               },
             ),
-            iconDelete(
+            IconDelete(
               enabled: !(wPhieuNhap == null || wPhieuNhap.khoa),
               onPressed: () async {
                 final btn = await CustomAlert().warning(AppString.delete, title: 'PHIẾU NHẬP');
@@ -69,7 +69,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                 }
               },
             ),
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 if (!wPhieuNhap!.khoa) {
                   rPhieuNhap.updatePhieuNhap(PhieuXuatString.khoa, 1, wPhieuNhap.phieu, userName: userName);

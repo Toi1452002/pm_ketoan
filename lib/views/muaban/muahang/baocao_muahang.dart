@@ -23,6 +23,8 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
   String quy = Helper.getQuarterNow();
   String thang = DateTime.now().month.toString();
   final txtNam = TextEditingController(text: DateTime.now().year.toString());
+    final TrinaGridFuntion trinaGridFuntion = TrinaGridFuntion();
+    bool enabelFilter = false;
 
   Map<String, String> _mapThucHien = {
     'Select': 'Quý',
@@ -41,19 +43,6 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
     PhieuNhapString.dienGiai: [],
   };
 
-  // Lấy giá trị duy nhất từ cột dựa trên dữ liệu đã lọc
-
-  List<dynamic> _getUniqueValues(String field, List<TrinaRow> currentRows, {bool isNgay = false}) {
-    final data = currentRows.map((row) => row.cells[field]!.value).toSet().toList();
-
-    if (isNgay) {
-      List<DateTime?> dateList = data.map((e) => Helper.stringToDate(e)).toList();
-      dateList.sort();
-      return dateList.map((e) => Helper.dateFormatDMY(e!)).toList();
-    }
-    data.sort();
-    return data;
-  }
 
   // Áp dụng bộ lọc cho tất cả cột
   void _applyFilters() {
@@ -86,37 +75,29 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
     });
     setState(() {});
   }
-
-  void onShowFilter(String field, {String titleFiler = '', bool isNumber = false, bool isNgay = false}) {
-    final List<TrinaRow> filteredRows =
-        _stateManager.filterRows.isNotEmpty ? _stateManager.filterRows : _stateManager.rows;
-
-    List<dynamic> availableValues = _getUniqueValues(field, filteredRows, isNgay: isNgay);
-    Map<String, bool> filterOptions = {
-      for (var value in availableValues) value.toString(): filters[field]!.contains(value),
-    };
-    showCustomDialog(
-      context,
-      title: "FILTER $titleFiler",
-      width: 250,
-      height: 400,
-      barrierDismissible: true,
-      child: FilterWidget(
-        isNumber: isNumber,
-        items: filterOptions,
-        onChanged: (val) {
-          filters[field] =
-              val.entries
-                  .where((e) => e.value)
-                  .map((e) => availableValues.firstWhere((v) => v.toString() == e.key))
-                  .toList();
-          _applyFilters();
-        },
-      ),
-      onClose: () {},
+  Widget _buildTitle(TrinaColumnTitleRendererContext render, {bool isNgay = false, bool isNummber = false}) {
+    return trinaGridFuntion.builTitle(
+      render,
+      filters,
+      _applyFilters,
+      isNgay: isNgay,
+      isNummber: isNummber,
+      enabelFilter: enabelFilter,
     );
   }
-
+  void clearFilter() {
+    filters = {
+      PhieuNhapString.kyHieu: [],
+      PhieuNhapString.ngayCT: [],
+      PhieuNhapString.soCT: [],
+      KhachHangString.tenKH: [],
+      KhachHangString.mst: [],
+      PhieuNhapString.congTien: [],
+      PhieuNhapString.tienThue: [],
+      PhieuNhapString.dienGiai: [],
+    };
+    _applyFilters();
+  }
   @override
   Widget build(BuildContext context) {
     final qlXBC =
@@ -146,7 +127,7 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
           leading: [
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 if (qlXBC) {
                   showViewPrinter(context, PdfBCMuaHang(
@@ -166,10 +147,20 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
                 }
               },
             ),
-            iconExcel(
+            IconExcel(
               onPressed: () {
                 excelBCMuaHang(_stateManager);
               },
+            ),
+            IconFilter(
+              onPressed: () {
+                enabelFilter = !enabelFilter;
+                if (!enabelFilter) {
+                  clearFilter();
+                }
+                setState(() {});
+              },
+              isFilter: enabelFilter,
             ),
             Gap(30),
             SizedBox(
@@ -256,7 +247,6 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
             }
           },
           onLoaded: (e) {
-            e.stateManager.columnFooterHeight = 25;
             _stateManager = e.stateManager;
           },
           rows: [],
@@ -266,8 +256,10 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
               field: 'null',
               titleRenderer: (re) => DataGridTitle(title: ''),
               type: TrinaColumnTypeText(),
-              width: 20,
-              renderer: (re) => DataGridContainer(),
+              width: 25,
+              renderer: (re) {
+                return DataGridContainer(text: "${re.rowIdx+1}",);
+              },
               cellPadding: EdgeInsets.zero,
             ),
             DataGridColumn(
@@ -275,40 +267,14 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
               width: 80,
               field: PhieuNhapString.kyHieu,
               type: TrinaColumnTypeText(),
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[PhieuNhapString.kyHieu]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(PhieuNhapString.kyHieu, titleFiler: 'KY HIEU'),
-                );
-              },
-              footerRenderer: (re) {
-                return TrinaAggregateColumnFooter(
-                  rendererContext: re,
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  type: TrinaAggregateColumnType.count,
-                  titleSpanBuilder: (text) {
-                    return [
-                      TextSpan(text: 'Record: ', style: TextStyle(fontSize: 12)),
-                      TextSpan(text: text, style: TextStyle(fontSize: 12)),
-                    ];
-                  },
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re)
             ),
             DataGridColumn(
               title: 'Số HD',
               width: 80,
               field: PhieuNhapString.soCT,
               type: TrinaColumnTypeText(),
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[PhieuNhapString.soCT]!.isNotEmpty,
-
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(PhieuNhapString.soCT, titleFiler: 'SO HD'),
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re),
               renderer: (re) {
                 return Text(re.cell.value, style: TextStyle(color: Colors.red));
               },
@@ -318,37 +284,19 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
               width: 100,
               field: PhieuNhapString.ngayCT,
               type: TrinaColumnType.date(format: 'dd/MM/yyyy'),
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[PhieuNhapString.ngayCT]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(PhieuNhapString.ngayCT, titleFiler: 'NGAY HD', isNgay: true),
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re,isNgay: true),
             ),
             DataGridColumn(
               title: 'Tên khách hàng',
               width: 300,
               field: KhachHangString.tenKH,
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[KhachHangString.tenKH]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(KhachHangString.tenKH, titleFiler: 'TEN KH'),
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re),
               type: TrinaColumnTypeText(),
             ),
             DataGridColumn(
               title: 'Mã số thuế',
               width: 120,
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[KhachHangString.mst]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(KhachHangString.mst, titleFiler: 'MST'),
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re),
               field: KhachHangString.mst,
               type: TrinaColumnTypeText(),
             ),
@@ -357,13 +305,7 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
               width: 120,
               field: PhieuNhapString.congTien,
               textAlign: TrinaColumnTextAlign.end,
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[PhieuNhapString.congTien]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(PhieuNhapString.congTien, titleFiler: 'TIEN CHUA VAT', isNumber: true),
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re),
               footerRenderer: (re) {
                 return TrinaAggregateColumnFooter(
                   rendererContext: re,
@@ -381,13 +323,7 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
             DataGridColumn(
               title: 'Tiền thuế',
               width: 120,
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[PhieuNhapString.tienThue]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(PhieuNhapString.tienThue, titleFiler: 'TIEN THUE', isNumber: true),
-                );
-              },
+              titleRenderer: (re)=>_buildTitle(re),
               textAlign: TrinaColumnTextAlign.end,
               footerRenderer: (re) {
                 return TrinaAggregateColumnFooter(
@@ -406,14 +342,8 @@ class _BaoCaoMuaHangViewState extends ConsumerState<BaoCaoMuaHangView> {
             ),
             DataGridColumn(
               title: 'Ghi chú',
-              titleRenderer: (re) {
-                return DataGridTitleFilter(
-                  isFilter: filters[PhieuNhapString.dienGiai]!.isNotEmpty,
-                  title: re.column.title,
-                  onPressed: () => onShowFilter(PhieuNhapString.dienGiai, titleFiler: 'GHI CHU'),
-                );
-              },
-              width: 250,
+              titleRenderer: (re)=>_buildTitle(re),
+              width: 245,
               field: PhieuNhapString.dienGiai,
               type: TrinaColumnTypeText(),
             ),

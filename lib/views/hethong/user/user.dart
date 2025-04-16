@@ -100,7 +100,7 @@ class UserView extends ConsumerWidget {
       headers: [
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
-          leading: [iconAdd(onPressed: () => _showThongTinUser(context), enabled: ref.read(userInfoProvider)?.id == 1)],
+          leading: [IconAdd(onPressed: () => _showThongTinUser(context), enabled: ref.read(userInfoProvider)?.id == 1)],
         ),
       ],
       child: Padding(

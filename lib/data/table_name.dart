@@ -33,5 +33,8 @@ class ViewName {
   static const phieuNhapCT = "V_PhieuNhapCT";
   static const vbcPhieuNhap = "VBC_PhieuNhap";
   static const vbcPhieuXuat = "VBC_PhieuXuat";
+  static const vbcBangKeHangNhap = "VBC_BangKeHangNhap";
+  static const vbcBangKeHangXuat = "VBC_BangKeHangXuat";
+
 
 }

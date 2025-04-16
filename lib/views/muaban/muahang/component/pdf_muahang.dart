@@ -55,7 +55,7 @@ class _PdfMuaHangState extends State<PdfMuaHang> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
           leading: [
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 pdfWidget.onPrint(onLayout: x, format: pdfWidget.pdfFormatPortrait);
               },

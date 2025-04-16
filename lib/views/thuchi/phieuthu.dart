@@ -60,7 +60,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
           leading: [
-            iconAdd(
+            IconAdd(
               onPressed: () {
                 if (qlKPC && !wPhieuThu!.khoa) {
                   rPhieuThu.updatePhieuThu(PhieuThuString.khoa, 1, wPhieuThu.phieu);
@@ -68,7 +68,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                 rPhieuThu.addPhieuThu(user!, ref);
               },
             ),
-            iconDelete(
+            IconDelete(
               enabled: !(wPhieuThu == null || wPhieuThu.khoa),
               onPressed: () async {
                 final btn = await CustomAlert().warning(AppString.delete, title: 'PHIẾU THU');
@@ -77,7 +77,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                 }
               },
             ),
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 if (!wPhieuThu!.khoa) {
                   rPhieuThu.updatePhieuThu(PhieuThuString.khoa, 1, wPhieuThu.phieu);

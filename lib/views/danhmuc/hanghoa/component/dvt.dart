@@ -7,6 +7,7 @@ import 'package:trina_grid/trina_grid.dart';
 
 import '../../../../application/application.dart';
 import '../../../../data/data.dart';
+import '../../../../widgets/widgets.dart';
 
 
 class DVTView extends ConsumerStatefulWidget {
@@ -79,6 +80,7 @@ class _DVTViewState extends ConsumerState<DVTView> {
             field: 'null',
             width: 20,
             cellPadding: EdgeInsets.zero,
+            titleRenderer: (re)=>DataGridTitle(title: ''),
             type: TrinaColumnType.text(),
             renderer: (re) => const DataGridContainer(),
           ),
@@ -87,6 +89,7 @@ class _DVTViewState extends ConsumerState<DVTView> {
             field: 'delete',
             width: 30,
             type: TrinaColumnType.text(),
+            titleRenderer: (re)=>DataGridTitle(title: ''),
             renderer: (re) => DataGridDelete(onTap: ()=>_onDelete(re),),
           ),
           DataGridColumn(
@@ -94,6 +97,7 @@ class _DVTViewState extends ConsumerState<DVTView> {
             width: 225,
             enableEditingMode: true,
             field: DVTString.dvt,
+            titleRenderer: (re)=>DataGridTitle(title: re.column.title),
             type: TrinaColumnType.text(),
           ),
         ]);

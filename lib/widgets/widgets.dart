@@ -5,5 +5,6 @@ export 'combobox/combobox.dart';
 export 'date_textbox.dart';
 export 'icon_button.dart';
 export 'group_button_number_page.dart';
-export 'filter_widget.dart';
+export 'custom_title_datagrid/filter_widget.dart';
 export 'pdf_widget.dart';
+export 'custom_title_datagrid/datagrid_title.dart';

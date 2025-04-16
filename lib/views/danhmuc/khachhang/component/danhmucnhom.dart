@@ -82,6 +82,7 @@ class _DanhMucNhomState extends ConsumerState<DanhMucNhomView> {
         type: TrinaColumnType.text(),
         cellPadding: EdgeInsets.zero,
         width: 20,
+        titleRenderer: (re)=>DataGridTitle(title: ''),
         renderer: (re) => const DataGridContainer(),
       ),
       DataGridColumn(
@@ -89,6 +90,7 @@ class _DanhMucNhomState extends ConsumerState<DanhMucNhomView> {
           field: 'delete',
           type: TrinaColumnType.text(),
           width: 30,
+          titleRenderer: (re)=>DataGridTitle(title: ''),
           renderer: (re) {
             return DataGridDelete(
               onTap: () => _onDelete(re),
@@ -99,12 +101,14 @@ class _DanhMucNhomState extends ConsumerState<DanhMucNhomView> {
         title: 'Mã nhóm',
         field: NhomKhachString.maNhom,
         width: 100,
+        titleRenderer: (re)=>DataGridTitle(title: re.column.title),
         type: TrinaColumnType.text(),
       ),
       DataGridColumn(
         enableEditingMode: true,
         title: 'Mô tả nhóm khách',
         field: NhomKhachString.tenNhom,
+        titleRenderer: (re)=>DataGridTitle(title: re.column.title),
         width: 245,
         type: TrinaColumnType.text(),
       ),

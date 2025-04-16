@@ -53,7 +53,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
           leading: [
-            iconAdd(
+            IconAdd(
               onPressed: () {
                 if (qlKPC && !wPhieuXuat!.khoa) {
                   rPhieuXuat.updatePhieuXuat(PhieuXuatString.khoa, 1, wPhieuXuat.phieu, userName: userName);
@@ -61,7 +61,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                 rPhieuXuat.addPhieuXuat(userName, ref);
               },
             ),
-            iconDelete(
+            IconDelete(
               enabled: !(wPhieuXuat == null || wPhieuXuat.khoa),
               onPressed: () async {
                 final btn = await CustomAlert().warning(AppString.delete, title: 'PHIẾU XUẤT');
@@ -70,7 +70,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                 }
               },
             ),
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 if (!wPhieuXuat!.khoa) {
                   rPhieuXuat.updatePhieuXuat(PhieuXuatString.khoa, 1, wPhieuXuat.phieu, userName: userName);

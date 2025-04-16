@@ -64,7 +64,7 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
           leading: [
-            iconAdd(
+            IconAdd(
               onPressed: () {
                 final user = ref.read(userInfoProvider);
                 if (qlKPC && !wPhieuChi!.khoa) {
@@ -73,7 +73,7 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
                 rPhieuChi.addPhieuChi(user!, ref);
               },
             ),
-            iconDelete(
+            IconDelete(
               enabled: !(wPhieuChi == null || wPhieuChi.khoa),
               onPressed: () async {
                 final btn = await CustomAlert().warning(AppString.delete, title: 'PHIẾU CHI');
@@ -82,7 +82,7 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
                 }
               },
             ),
-            iconPrinter(onPressed: ()  async{
+            IconPrinter(onPressed: ()  async{
 
               if (!wPhieuChi!.khoa) {
                 rPhieuChi.updatePhieuChi(PhieuThuString.khoa, 1, wPhieuChi.phieu);

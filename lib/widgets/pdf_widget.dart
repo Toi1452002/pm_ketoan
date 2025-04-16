@@ -93,29 +93,29 @@ class PdfWidget {
       headerStyle: pw.TextStyle(font: fontHeader),
 
 
-      cellHeight: 17,
+      cellHeight: 5,
       cellPadding: const pw.EdgeInsets.symmetric(horizontal: 3, vertical: 2),
       cellAlignments: cellAlignments,
       cellDecoration: cellDecoration,
       columnWidths: columnWidths,
     );
   }
-  pw.Row footer(String dateNow, pw.Context context, pw.Font? fontItalic){
+  pw.Row footer(String dateNow, pw.Context context, pw.Font? fontItalic, {bool isPortrait = true}){
     return  pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.center,
       mainAxisAlignment: pw.MainAxisAlignment.center,
       children: [
         pw.Align(
-          child: pw.Text(dateNow, style: pw.TextStyle(font: fontItalic)),
+          child: pw.Text(dateNow, style: pw.TextStyle(font: fontItalic,color: PdfColors.grey800)),
           alignment: pw.Alignment.centerLeft,
         ),
-        pw.SizedBox(width: 110),
+        pw.SizedBox(width:isPortrait ? 110 : 230),
         pw.Align(
-          child: pw.Text('In từ phầm mềm www.rgb.com.vn', style: pw.TextStyle(font: fontItalic)),
+          child: pw.Text('In từ phầm mềm www.rgb.com.vn', style: pw.TextStyle(font: fontItalic,color: PdfColors.grey800)),
           alignment: pw.Alignment.center,
         ),
         pw.Spacer(),
-        pw.Align(child: pw.Text(context.pageLabel), alignment: pw.Alignment.centerRight),
+        pw.Align(child: pw.Text(context.pageLabel,style: pw.TextStyle(color: PdfColors.grey800)), alignment: pw.Alignment.centerRight),
       ],
     );
   }

@@ -6,7 +6,7 @@ abstract class AppString {
   static const delete = "Có chắc muốn xóa?";
 }
 
-abstract class MaTuyChon{
+abstract class MaTuyChon {
   static const qlXBC = "qlXBC";
   static const qlKPC = "qlKPC";
 }
@@ -31,8 +31,9 @@ abstract class MenuString {
   static const bangKeHoaDonMuaVao = 'Bảng kê hóa đơn mua vào';
   static const bangKeHoaDonBanRa = 'Bảng kê hóa đơn bán ra';
   static const bangKeHangBan = 'Bảng kê hàng bán';
+
   ///*************************
-  static const thuChi  = "THU CHI";
+  static const thuChi = "THU CHI";
   static const phieuThu = "Phiếu thu";
   static const phieuChi = "Phiếu chi";
   static const bangkePhieuThu = "Bảng kê phiếu thu";
@@ -40,10 +41,15 @@ abstract class MenuString {
   static const soTienMat = "Số tiền mặt";
   static const soTienGui = "Số tiền gửi";
 
+  ///*************************
+  static const khoHang = 'KHO HÀNG';
+  static const bangKeHangNhap = "Bảng kê hàng nhập";
+  static const bangKeHangXuat = "Bảng kê hàng xuất";
+  static const nhapXuatTonKho = "Nhập xuất tồn kho";
 
   ///*************************
-   static const heThong = 'HỆ THỐNG';
-   static const thongTinDoanhNghiep = 'Thông tin doanh nghiệp';
-   static const danhSachNguoiDung = 'Danh sách người dùng';
-   static const tuyChon = 'Tùy chọn';
+  static const heThong = 'HỆ THỐNG';
+  static const thongTinDoanhNghiep = 'Thông tin doanh nghiệp';
+  static const danhSachNguoiDung = 'Danh sách người dùng';
+  static const tuyChon = 'Tùy chọn';
 }

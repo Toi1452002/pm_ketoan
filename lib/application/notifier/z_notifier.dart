@@ -9,3 +9,5 @@ export 'phieuchi_notifier.dart';
 export 'phieuxuat_notifier.dart';
 export 'phieunhap_notifier.dart';
 export 'tuychon_notifier.dart';
+export 'bangtaikhoan_notifier.dart';
+export 'khohang_notifier.dart';

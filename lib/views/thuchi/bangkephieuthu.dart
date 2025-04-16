@@ -21,7 +21,8 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
   DateTime denNgay = DateTime.now();
   String strTuNgay = Helper.dateFormatDMY(DateTime.now().copyWith(day: 1));
   String strDenNgay = Helper.dateFormatDMY(DateTime.now());
-
+  final TrinaGridFuntion trinaGridFuntion = TrinaGridFuntion();
+  bool enabelFilter = false;
   Map<String, List<dynamic>> filters = {
     PhieuThuString.ngay: [],
     PhieuThuString.phieu: [],
@@ -35,18 +36,31 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
     PhieuThuString.tkCo: [],
   };
 
-  // Lấy giá trị duy nhất từ cột dựa trên dữ liệu đã lọc
+  Widget _buildTitle(TrinaColumnTitleRendererContext render, {bool isNgay = false, bool isNummber = false}) {
+    return trinaGridFuntion.builTitle(
+      render,
+      filters,
+      _applyFilters,
+      isNgay: isNgay,
+      isNummber: isNummber,
+      enabelFilter: enabelFilter,
+    );
+  }
 
-  List<dynamic> _getUniqueValues(String field, List<TrinaRow> currentRows, {bool isNgay = false}) {
-    final data = currentRows.map((row) => row.cells[field]!.value).toSet().toList();
-
-    if (isNgay) {
-      List<DateTime?> dateList = data.map((e) => Helper.stringToDate(e)).toList();
-      dateList.sort();
-      return dateList.map((e) => Helper.dateFormatDMY(e!)).toList();
-    }
-    data.sort();
-    return data;
+  void clearFilter() {
+    filters = {
+      PhieuThuString.ngay: [],
+      PhieuThuString.phieu: [],
+      PhieuThuString.maTC: [],
+      PhieuThuString.maKhach: [],
+      PhieuThuString.tenKhach: [],
+      PhieuThuString.pttt: [],
+      PhieuThuString.noiDung: [],
+      PhieuThuString.soTien: [],
+      PhieuThuString.tkNo: [],
+      PhieuThuString.tkCo: [],
+    };
+    _applyFilters();
   }
 
   // Áp dụng bộ lọc cho tất cả cột
@@ -88,36 +102,6 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
     setState(() {});
   }
 
-  void onShowFilter(String field, {String titleFiler = '', bool isNumber = false, bool isNgay = false}) {
-    final List<TrinaRow> filteredRows =
-        _stateManager.filterRows.isNotEmpty ? _stateManager.filterRows : _stateManager.rows;
-
-    List<dynamic> availableValues = _getUniqueValues(field, filteredRows, isNgay: isNgay);
-    Map<String, bool> filterOptions = {
-      for (var value in availableValues) value.toString(): filters[field]!.contains(value),
-    };
-    showCustomDialog(
-      context,
-      title: "FILTER $titleFiler",
-      width: 250,
-      height: 400,
-      barrierDismissible: true,
-      child: FilterWidget(
-        isNumber: isNumber,
-        items: filterOptions,
-        onChanged: (val) {
-          filters[field] =
-              val.entries
-                  .where((e) => e.value)
-                  .map((e) => availableValues.firstWhere((v) => v.toString() == e.key))
-                  .toList();
-          _applyFilters();
-        },
-      ),
-      onClose: () {},
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     ref.listen(bangKePhieuThuProvider, (context, state) {
@@ -151,7 +135,7 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5),
           leading: [
-            iconPrinter(
+            IconPrinter(
               onPressed: () {
                 final qlXBC =
                     ref.read(tuyChonProvider).firstWhere((e) => e.nhom == 'qlXBC').giaTri ==
@@ -174,8 +158,21 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
                 }
               },
             ),
-            iconExcel(onPressed: () {excelBangKePhieuThu(_stateManager);
-            }),
+            IconExcel(
+              onPressed: () {
+                excelBangKePhieuThu(_stateManager);
+              },
+            ),
+              IconFilter(
+                onPressed: () {
+                  enabelFilter = !enabelFilter;
+                  if (!enabelFilter) {
+                    clearFilter();
+                  }
+                  setState(() {});
+                },
+                isFilter: enabelFilter,
+              ),
             Gap(40),
             SizedBox(
               width: 150,
@@ -247,52 +244,25 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
             DataGridColumn(
               title: '',
               field: 'null',
-              width: 20,
+              width: 25,
               cellPadding: EdgeInsets.zero,
-              renderer: (re) => const DataGridContainer(),
+              renderer: (re) => DataGridContainer(text: "${re.rowIdx + 1}"),
               titleRenderer: (re) => DataGridTitle(title: ''),
               type: TrinaColumnType.text(),
             ),
             DataGridColumn(
               title: 'Ngày',
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[PhieuXuatString.ngay]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title, isNgay: true);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re,isNgay: true),
               field: PhieuThuString.ngay,
               type: TrinaColumnType.text(),
               width: 80,
-              footerRenderer: (re) {
-                return TrinaAggregateColumnFooter(
-                  rendererContext: re,
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  type: TrinaAggregateColumnType.count,
-                  titleSpanBuilder: (text) {
-                    return [
-                      TextSpan(text: 'Record: ', style: TextStyle(fontSize: 12)),
-                      TextSpan(text: text, style: TextStyle(fontSize: 12)),
-                    ];
-                  },
-                );
-              },
             ),
             DataGridColumn(
               title: 'Phiếu',
               field: PhieuThuString.phieu,
               type: TrinaColumnType.text(),
               width: 70,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               renderer: (re) => Text(re.cell.value, style: TextStyle(color: Colors.red, fontSize: 13.5)),
             ),
             DataGridColumn(
@@ -300,26 +270,12 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
               field: PhieuThuString.maTC,
               type: TrinaColumnType.text(),
               width: 90,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               textAlign: TrinaColumnTextAlign.center,
             ),
             DataGridColumn(
               title: 'Mã KH',
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               field: PhieuThuString.maKhach,
               type: TrinaColumnType.text(),
               width: 80,
@@ -327,14 +283,7 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
             DataGridColumn(
               title: 'Tên khách',
               field: PhieuThuString.tenKhach,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               type: TrinaColumnType.text(),
               width: 300,
             ),
@@ -343,28 +292,14 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
               field: PhieuThuString.pttt,
               type: TrinaColumnType.text(),
               width: 75,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               textAlign: TrinaColumnTextAlign.center,
             ),
             DataGridColumn(
               title: 'Lý do thu',
               field: PhieuThuString.noiDung,
               type: TrinaColumnType.text(),
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               width: 285,
             ),
             DataGridColumn(
@@ -372,14 +307,7 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
               field: PhieuThuString.soTien,
               type: TrinaColumnType.number(),
               width: 100,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title, isNumber: true);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re,isNummber: true),
               textAlign: TrinaColumnTextAlign.end,
               footerRenderer: (re) {
                 return TrinaAggregateColumnFooter(
@@ -395,14 +323,7 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
               field: PhieuThuString.tkNo,
               type: TrinaColumnType.text(),
               width: 75,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               textAlign: TrinaColumnTextAlign.center,
             ),
             DataGridColumn(
@@ -410,14 +331,7 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
               field: PhieuThuString.tkCo,
               type: TrinaColumnType.text(),
               width: 75,
-              titleRenderer:
-                  (re) => DataGridTitleFilter(
-                    isFilter: filters[re.column.field]!.isNotEmpty,
-                    title: re.column.title,
-                    onPressed: () {
-                      onShowFilter(re.column.field, titleFiler: re.column.title);
-                    },
-                  ),
+              titleRenderer: (re)=>_buildTitle(re),
               textAlign: TrinaColumnTextAlign.center,
             ),
           ],

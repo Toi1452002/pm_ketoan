@@ -44,7 +44,7 @@ class _ThongTinDoanhNghiepViewState extends ConsumerState<ThongTinDoanhNghiepVie
       }
     });
     return  DataGrid(onLoaded: (e)=>_stateManager = e.stateManager,onChanged: (e) => _onChanged(e, ref),rows: [], columns: [
-      DataGridColumn(title: '', field: 'null',titleRenderer: (re)=>DataGridTitle(title:''),width: 25, type: TrinaColumnTypeText(),cellPadding: EdgeInsets.zero),
+      DataGridColumn(title: '', field: 'null',titleRenderer: (re)=>DataGridTitle(title:''),width: 20, type: TrinaColumnTypeText(),cellPadding: EdgeInsets.zero),
       DataGridColumn(title: 'Tiêu đề',titleRenderer: (re)=>DataGridTitle(title:re.column.title ), field: 'TieuDe', type: TrinaColumnTypeText(),width: 300),
       DataGridColumn(title: 'Nội dung',titleRenderer: (re)=>DataGridTitle(title:re.column.title ), field: 'NoiDung', type: TrinaColumnTypeText(),enableEditingMode: true,width: 700),
     ]);

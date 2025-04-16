@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../application/application.dart';
 import '../../data/data.dart';
+import '../../widgets/widgets.dart';
 
 
 class MaNghiepVuView extends ConsumerStatefulWidget {
@@ -81,6 +82,7 @@ class _MaNghiepVuViewState extends ConsumerState<MaNghiepVuView> {
         type: TrinaColumnType.text(),
         width: 20,
         renderer: (re) => const DataGridContainer(),
+        titleRenderer: (re)=>DataGridTitle(title: ''),
         cellPadding: EdgeInsets.zero,
       ),
       DataGridColumn(
@@ -88,6 +90,8 @@ class _MaNghiepVuViewState extends ConsumerState<MaNghiepVuView> {
         field: 'delete',
         type: TrinaColumnType.text(),
         width: 25,
+        titleRenderer: (re)=>DataGridTitle(title: re.column.title),
+
         renderer: (re) => DataGridDelete(
           onTap: ()=>_onDelete(re),
         ),
@@ -97,7 +101,9 @@ class _MaNghiepVuViewState extends ConsumerState<MaNghiepVuView> {
         field: MaNghiepVuString.maNV,
         type: TrinaColumnType.text(),
         enableEditingMode: true,
-        width: 100
+          titleRenderer: (re)=>DataGridTitle(title: re.column.title),
+
+          width: 100
       ),
       DataGridColumn(
         title: 'Mô tả',
@@ -105,6 +111,8 @@ class _MaNghiepVuViewState extends ConsumerState<MaNghiepVuView> {
         width: 200,
         type: TrinaColumnType.text(),
         enableEditingMode: true,
+        titleRenderer: (re)=>DataGridTitle(title: re.column.title),
+
       ),
     ]);
   }

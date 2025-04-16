@@ -59,11 +59,6 @@ class LoginViewState extends ConsumerState<LoginView> {
       child: Container(
         decoration: BoxDecoration(
           color: Colors.slate[600]
-          // gradient: LinearGradient(
-          //   colors: [context.theme.colorScheme.secondaryForeground, Colors.white],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomRight,
-          // ),
         ),
         child: Center(
           child: Container(
@@ -82,7 +77,7 @@ class LoginViewState extends ConsumerState<LoginView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       children: [
                         TextSpan(
                           text: 'R',
@@ -90,11 +85,11 @@ class LoginViewState extends ConsumerState<LoginView> {
                         ),
                         TextSpan(
                           text: 'G',
-                          style: TextStyle(fontSize: 40, color: Colors.green, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 40, color: Colors.green.shade700, fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
                           text: 'B',
-                          style: TextStyle(fontSize: 40, color: Colors.blue, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 40, color: Colors.blue.shade700, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -137,7 +132,7 @@ class LoginViewState extends ConsumerState<LoginView> {
                           child: SelectableText(
                             GetStorage().read(GetKeyStorage.dataPath) ?? '',
                             style: TextStyle(
-                              color: context.theme.colorScheme.primary
+                              color: Colors.blue.shade900
                             ),
                             ),
                           ),

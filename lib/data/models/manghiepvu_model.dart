@@ -14,7 +14,7 @@ class MaNghiepVuModel{
     return MaNghiepVuModel(
       id: map[MaNghiepVuString.id],
       maNghiepVu: map[MaNghiepVuString.maNV],
-      moTa: map[MaNghiepVuString.moTa],
+      moTa: map[MaNghiepVuString.moTa]??'',
     );
   }
 }

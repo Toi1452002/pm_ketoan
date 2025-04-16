@@ -36,7 +36,7 @@ class _PdfBCBanHangState extends State<PdfBCBanHang> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
           leading: [
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 pdfWidget.onPrint(onLayout: x, format: pdfWidget.pdfFormatLandscape);
                 // Printer print = const Printer(url: 'Microsoft Print to PDF');
@@ -109,16 +109,7 @@ Future<Uint8List> pdfBCBanHang({
   pdf.addPage(
     pw.MultiPage(
       footer:
-          (context) => pw.Row(
-            children: [
-              pw.Align(
-                child: pw.Text(dateNow, style: pw.TextStyle(font: fontItalic)),
-                alignment: pw.Alignment.centerLeft,
-              ),
-              pw.Spacer(),
-              pw.Align(child: pw.Text(context.pageLabel), alignment: pw.Alignment.centerRight),
-            ],
-          ),
+          (context) => pdfWidget.footer(dateNow, context, fontItalic,isPortrait: false),
       pageTheme: pdfWidget.pageTheme(font: fontData, format: pdfWidget.pdfFormatLandscape),
       build: (context) {
         return [

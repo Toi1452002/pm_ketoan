@@ -14,8 +14,10 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> {
+
+
   List<TreeNode<String>> treeItems = [
-    TreeItem(
+     TreeItem(
       data: MenuString.danhMuc,
       children: [
         TreeItem(data: MenuString.hangHoa),
@@ -65,6 +67,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
         ),
       ],
     ),
+    TreeItem(data: MenuString.khoHang,children: [
+     TreeItem(data: MenuString.bangKeHangNhap),
+     TreeItem(data: MenuString.bangKeHangXuat),
+     TreeItem(data: MenuString.nhapXuatTonKho),
+    ]),
+    
     TreeItem(
       data: MenuString.heThong,
       children: [
@@ -107,7 +115,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     onPressed: () {
                       switch (node.data) {
                         //DANH MUC
-                        case MenuString.hangHoa:
+                         case MenuString.hangHoa:
                           showHangHoa(context);
                           break;
                         case MenuString.khachHang:
@@ -119,7 +127,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.maNghiepVu:
                           showMaNghiepVu(context);
                           break;
-
+                        case MenuString.bangTaiKhoan:
+                          showBangTaiKhoan(context);
+                          break;
                         ///************************************
                         //MUA BAN
                         case MenuString.muaHang:
@@ -149,7 +159,14 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.bangkePhieuChi:
                           showBangKePhieuChi(context);
                           break;
-
+                        ///************************************
+                        //KHO HÀNG
+                        case MenuString.bangKeHangNhap:
+                          showBangKeHangNhap(context);
+                          break;
+                        case MenuString.bangKeHangXuat:
+                          showBangKeHangXuat(context);
+                          break;
                         ///************************************
                         //HỆ THỐNG
                         case MenuString.thongTinDoanhNghiep:

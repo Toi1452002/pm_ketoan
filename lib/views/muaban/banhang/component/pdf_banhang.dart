@@ -1,7 +1,6 @@
 import 'package:app_ketoan/core/core.dart';
 import 'package:app_ketoan/data/data.dart';
 import 'package:flutter/services.dart';
-import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -54,7 +53,7 @@ class _PdfBanHangState extends State<PdfBanHang> {
         AppBar(
           padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
           leading: [
-            iconPrinter(
+            IconPrinter(
               onPressed: () async {
                 pdfWidget.onPrint(onLayout: x, format: pdfWidget.pdfFormatPortrait);
               },
@@ -73,7 +72,7 @@ class _PdfBanHangState extends State<PdfBanHang> {
   }
 }
 
-Future<Uint8List> pdfBanHang({
+  Future<Uint8List> pdfBanHang({
   required String dateNow,
   required DateTime date,
   required String tenKH,
