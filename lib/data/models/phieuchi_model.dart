@@ -178,6 +178,50 @@ abstract class PhieuChiString{
   static const tkNo =  'TKNo';
   static const tkCo =  'TKCo';
   static const soCT = 'SoCT';
+}
 
 
+
+class PhieuChiCTModel{
+  final int? id;
+  final int? maID;
+  final String? dienGiai;
+  final double soTien;
+  final String? ctBan;
+
+  const PhieuChiCTModel({
+    this.id,
+    this.maID,
+    this.dienGiai,
+    required this.soTien,
+    this.ctBan,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'maID': maID,
+      'dienGiai': dienGiai,
+      'soTien': soTien,
+      'ctBan': ctBan,
+    };
+  }
+
+  factory PhieuChiCTModel.fromMap(Map<String, dynamic> map) {
+    return PhieuChiCTModel(
+      id: map[PhieuChiCTString.id] ,
+      maID: map[PhieuChiCTString.maID] ,
+      dienGiai: map[PhieuChiCTString.dienGiai] ??'',
+      soTien: double.parse(map[PhieuChiCTString.soTien].toString()) ,
+      // ctBan: map[PhieuChiCTString.ctBan] ,
+    );
+  }
+}
+
+abstract class PhieuChiCTString{
+  static const id = "ID";
+  static const maID = "MaID";
+  static const dienGiai = "DienGiai";
+  static const soTien = "SoTien";
+  static const ctBan = "CTBan";
 }

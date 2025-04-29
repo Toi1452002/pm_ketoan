@@ -2,6 +2,7 @@ import 'package:app_ketoan/application/application.dart';
 import 'package:app_ketoan/data/data.dart';
 import 'package:app_ketoan/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:trina_grid/trina_grid.dart';
 
@@ -17,6 +18,15 @@ class BangTaiKhoanView extends ConsumerStatefulWidget {
 class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
   late TrinaGridStateManager _stateManager;
   final TrinaGridFuntion trinaGridFuntion = TrinaGridFuntion();
+  late BangTaiKhoanNotifier _bangTaiKhoanNotifier;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _bangTaiKhoanNotifier = ref.read(bangTaiKhoanProvider.notifier);
+    super.initState();
+  }
+
   Map<String, List<dynamic>> filters = {
     BangTaiKhoanString.maTK: [],
     BangTaiKhoanString.tenTK: [],
@@ -24,49 +34,6 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
     BangTaiKhoanString.ghiChu: [],
     BangTaiKhoanString.maXL: [],
   };
-
-  // Lấy giá trị duy nhất từ cột dựa trên dữ liệu đã lọc
-  // List<dynamic> _getUniqueValues(String field, List<TrinaRow> currentRows, {bool isNgay = false}) {
-  //   final data = currentRows.map((row) => row.cells[field]!.value).toSet().toList();
-  //
-  //   if (isNgay) {
-  //     List<DateTime?> dateList = data.map((e) => Helper.stringToDate(e)).toList();
-  //     dateList.sort();
-  //     return dateList.map((e) => Helper.dateFormatDMY(e!)).toList();
-  //   }
-  //   data.sort();
-  //   return data;
-  // }
-  //
-  // void onShowFilter(String field, {String titleFiler = '', bool isNumber = false, bool isNgay = false}) {
-  //   final List<TrinaRow> filteredRows =
-  //       _stateManager.filterRows.isNotEmpty ? _stateManager.filterRows : _stateManager.rows;
-  //
-  //   List<dynamic> availableValues = _getUniqueValues(field, filteredRows, isNgay: isNgay);
-  //   Map<String, bool> filterOptions = {
-  //     for (var value in availableValues) value.toString(): filters[field]!.contains(value),
-  //   };
-  //   showCustomDialog(
-  //     context,
-  //     title: "Filter $titleFiler",
-  //     width: 250,
-  //     height: 400,
-  //     barrierDismissible: true,
-  //     child: FilterWidget(
-  //       isNumber: isNumber,
-  //       items: filterOptions,
-  //       onChanged: (val) {
-  //         filters[field] =
-  //             val.entries
-  //                 .where((e) => e.value)
-  //                 .map((e) => availableValues.firstWhere((v) => v.toString() == e.key))
-  //                 .toList();
-  //         _applyFilters();
-  //       },
-  //     ),
-  //     onClose: () {},
-  //   );
-  // }
 
   void _applyFilters() {
     _stateManager.setFilter((row) {
@@ -84,7 +51,7 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
           filters[BangTaiKhoanString.ghiChu]!.contains(row.cells[BangTaiKhoanString.ghiChu]!.value);
       bool nhom =
           filters[BangTaiKhoanString.maXL]!.isEmpty ||
-          filters[BangTaiKhoanString.maXL]!.contains(row.cells[BangTaiKhoanString.maXL]!.value);
+          filters[BangTaiKhoanString.maXL]!.contains(row.cells[BangTaiKhoanString.maXL]!.value.toString());
       return maTk && tenTk && tC && ghiChu && nhom;
     });
     setState(() {});
@@ -101,6 +68,39 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
     );
   }
 
+  void _onChange(TrinaGridOnChangedEvent e) async {
+    final id = e.row.cells['null']!.value;
+    final field = e.column.field;
+    if (id == '') {
+      ///Insert
+
+      int id = await _bangTaiKhoanNotifier.add(field: field, value: e.value).catchError((e, t) => 0);
+      if (id != 0) {
+        _stateManager.rows[e.rowIdx].cells['null']!.value = id; //set id when insert
+        _stateManager.appendRows([
+          TrinaRow(
+            cells: {
+              'null': TrinaCell(value: ''),
+              BangTaiKhoanString.maTK: TrinaCell(value: ''),
+              BangTaiKhoanString.tenTK: TrinaCell(value: ''),
+              BangTaiKhoanString.tinhChat: TrinaCell(value: ''),
+              BangTaiKhoanString.ghiChu: TrinaCell(value: ''),
+              BangTaiKhoanString.maXL: TrinaCell(value: 0),
+            },
+          )
+        ]);
+      } else {
+        _stateManager.rows[e.rowIdx].cells[field]!.value = ''; // set null if error
+      }
+    } else {
+      ///Update
+      int result = await _bangTaiKhoanNotifier.update(value: e.value, id: id, field: field);
+      if (result == 0) {
+        _stateManager.rows[e.rowIdx].cells[field]!.value = e.oldValue;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(bangTaiKhoanProvider, (context, state) {
@@ -110,17 +110,29 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
             .map(
               (e) => TrinaRow(
                 cells: {
-                  'null': TrinaCell(value: ''),
+                  'null': TrinaCell(value: e.id),
                   BangTaiKhoanString.maTK: TrinaCell(value: e.maTK),
                   BangTaiKhoanString.tenTK: TrinaCell(value: e.tenTK),
                   BangTaiKhoanString.tinhChat: TrinaCell(value: e.tinhChat),
                   BangTaiKhoanString.ghiChu: TrinaCell(value: e.ghiChu),
-                  BangTaiKhoanString.maXL: TrinaCell(value: e.maXL ? 'Me' : 'Con'),
+                  BangTaiKhoanString.maXL: TrinaCell(value: e.maXL ? 1 : 0),
                 },
               ),
             )
             .toList(),
       );
+      _stateManager.appendRows([
+        TrinaRow(
+          cells: {
+            'null': TrinaCell(value: ''),
+            BangTaiKhoanString.maTK: TrinaCell(value: ''),
+            BangTaiKhoanString.tenTK: TrinaCell(value: ''),
+            BangTaiKhoanString.tinhChat: TrinaCell(value: ''),
+            BangTaiKhoanString.ghiChu: TrinaCell(value: ''),
+            BangTaiKhoanString.maXL: TrinaCell(value: 0),
+          },
+        )
+      ]);
       _stateManager.notifyListeners();
     });
     return Scaffold(
@@ -138,10 +150,31 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
             ),
             Expanded(
               child: DataGrid(
+                // createFooter: (re) {
+                //   return Padding(
+                //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 5),
+                //     child: Row(
+                //       spacing: 5,
+                //       children: [
+                //         iconFirst(
+                //           onPressed: () {
+                //             re.moveScrollByRow(TrinaMoveDirection.up, 0);
+                //           },
+                //         ),
+                //         iconLast(
+                //           onPressed: () {
+                //             re.moveScrollByRow(TrinaMoveDirection.down, re.rows.length);
+                //           },
+                //         ),
+                //       ],
+                //     ),
+                //   );
+                // },
                 onLoaded: (e) => _stateManager = e.stateManager,
+                onChanged: (e) => _onChange(e),
                 rows: [],
                 rowColorCallback: (re) {
-                  if (re.row.cells[BangTaiKhoanString.maXL]!.value == 'Me') {
+                  if (re.row.cells[BangTaiKhoanString.maXL]!.value == 1) {
                     return Colors.gray.shade300;
                   }
                   return Colors.white;
@@ -162,6 +195,7 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
                     titleRenderer: (re) => _buildTitle(re),
                     field: BangTaiKhoanString.maTK,
                     type: TrinaColumnType.text(),
+                    enableEditingMode: true,
                   ),
                   DataGridColumn(
                     title: 'Mô tả',
@@ -169,6 +203,7 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
                     width: 350,
                     field: BangTaiKhoanString.tenTK,
                     type: TrinaColumnType.text(),
+                    enableEditingMode: true,
                   ),
                   DataGridColumn(
                     title: 'TC',
@@ -177,6 +212,7 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
                     width: 70,
                     field: BangTaiKhoanString.tinhChat,
                     type: TrinaColumnType.text(),
+                    enableEditingMode: true,
                   ),
                   DataGridColumn(
                     title: 'Ghi chú',
@@ -184,19 +220,25 @@ class _BangTaiKhoanViewState extends ConsumerState<BangTaiKhoanView> {
                     titleRenderer: (re) => _buildTitle(re),
                     field: BangTaiKhoanString.ghiChu,
                     type: TrinaColumnType.text(),
+                    enableEditingMode: true,
                   ),
                   DataGridColumn(
                     title: 'Nhóm',
-                    titleRenderer: (re) => _buildTitle(re),
+                    titleRenderer: (re) => _buildTitle(re, isNummber: true),
                     width: 100,
                     textAlign: TrinaColumnTextAlign.center,
                     field: BangTaiKhoanString.maXL,
                     type: TrinaColumnType.text(),
+                    enableEditingMode: true,
                     renderer: (re) {
                       return Center(
                         child: Text(
-                          re.cell.value,
-                          style: TextStyle(color: re.cell.value == 'Me' ? Colors.red : Colors.blue.shade900),
+                          re.cell.value == ''
+                              ? ''
+                              : re.cell.value == 1
+                              ? "Me"
+                              : 'Con',
+                          style: TextStyle(color: re.cell.value == 1 ? Colors.red : Colors.blue.shade900),
                         ),
                       );
                     },

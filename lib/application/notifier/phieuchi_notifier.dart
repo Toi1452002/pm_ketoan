@@ -2,6 +2,7 @@ import 'package:app_ketoan/data/data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
+import '../application.dart';
 import '../providers/tuychon_provider.dart';
 class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
   PhieuchiNotifier() : super(null);
@@ -17,9 +18,9 @@ class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
         PhieuChiModel phieuChi = PhieuChiModel.fromMap(data.first);
         phieuChi = phieuChi.copyWith(countRow: rowCount.first['count'].toString());
         state = phieuChi;
-        // if (ref != null) {
-        //   ref.read(phieuChiCTProvider.notifier).getPhieuChiCT(phieuChi.id!);
-        // }
+        if (ref != null) {
+          ref.read(phieuChiCTProvider.notifier).getPhieuChiCT(phieuChi.id!);
+        }
       }else{
         state = null;
       }
@@ -35,9 +36,9 @@ class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
         PhieuChiModel phieuChi = PhieuChiModel.fromMap(data.first);
         phieuChi = phieuChi.copyWith(countRow: rowCount.first['count'].toString());
         state = phieuChi;
-        // if (ref != null) {
-        //   ref.read(phieuChiCTProvider.notifier).getPhieuChiCT(phieuChi.id!);
-        // }
+        if (ref != null) {
+          ref.read(phieuChiCTProvider.notifier).getPhieuChiCT(phieuChi.id!);
+        }
       }
     } catch (e) {
       errorSql(e);
@@ -183,6 +184,49 @@ class BangKePhieuChiNotifier extends StateNotifier<List<PhieuChiModel>> {
       state = data.map((e) => PhieuChiModel.fromMap(e)).toList();
     } catch (e) {
       errorSql(e);
+    }
+  }
+}
+class PhieuChiCTNotifier extends StateNotifier<List<PhieuChiCTModel>> {
+  PhieuChiCTNotifier() : super([]);
+
+  final _sqlRepository = const SqlRepository(tableName: TableName.phieuChiCT);
+
+  Future<void> getPhieuChiCT(int maID) async {
+    try {
+      final data = await _sqlRepository.getData(where: "${PhieuChiCTString.maID} = ?", whereArgs: [maID]);
+      state = data.map((e) => PhieuChiCTModel.fromMap(e)).toList();
+    } catch (e) {
+      errorSql(e);
+    }
+  }
+
+  Future<int> addPhieuChiCT(String field, dynamic value, int maID) async {
+    try {
+      final id = await _sqlRepository.addRow({PhieuChiCTString.maID: maID, field: value});
+      return id;
+    } catch (e) {
+      errorSql(e);
+      return 0;
+    }
+  }
+
+  Future<int> updatePhieuChiCT(String field, dynamic value, int id) async {
+    try {
+      final result = await _sqlRepository.updateCell(field: field, value: value, where: "ID = ?", whereArgs: [id]);
+      return result;
+    } catch (e) {
+      errorSql(e);
+      return 0;
+    }
+  }
+
+  Future<int> deletePhieuChiCT(int id) async {
+    try {
+      return await _sqlRepository.delete(where: 'ID = $id');
+    } catch (e) {
+      errorSql(e);
+      return 0;
     }
   }
 }

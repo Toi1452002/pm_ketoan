@@ -2,6 +2,7 @@ import 'package:app_ketoan/data/data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
+import '../providers/phieuthu_provider.dart';
 import '../providers/tuychon_provider.dart';
 
 class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
@@ -17,9 +18,9 @@ class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
         PhieuThuModel phieuThu = PhieuThuModel.fromMap(data.first);
         phieuThu = phieuThu.copyWith(countRow: rowCount.first['count'].toString());
         state = phieuThu;
-        // if (ref != null) {
-        //   ref.read(phieuThuCTProvider.notifier).getPhieuThuCT(phieuThu.id!);
-        // }
+        if (ref != null) {
+          ref.read(phieuThuCTProvider.notifier).getPhieuThuCT(phieuThu.id!);
+        }
       }else{
         state = null;
       }
@@ -78,9 +79,9 @@ class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
         PhieuThuModel phieuThu = PhieuThuModel.fromMap(data.first);
         phieuThu = phieuThu.copyWith(countRow: rowCount.first['count'].toString());
         state = phieuThu;
-        // if (ref != null) {
-        //   ref.read(phieuThuCTProvider.notifier).getPhieuThuCT(phieuThu.id!);
-        // }
+        if (ref != null) {
+          ref.read(phieuThuCTProvider.notifier).getPhieuThuCT(phieuThu.id!);
+        }
       }
     } catch (e) {
       errorSql(e);
@@ -132,6 +133,49 @@ class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
 
   void formatSoTien(dynamic value) {
     state = state!.copyWith(soTien: value);
+  }
+}
+class PhieuThuCTNotifier extends StateNotifier<List<PhieuThuChiTietModel>> {
+  PhieuThuCTNotifier() : super([]);
+
+  final _sqlRepository = const SqlRepository(tableName: TableName.phieuThuCT);
+
+  Future<void> getPhieuThuCT(int maID) async {
+    try {
+      final data = await _sqlRepository.getData(where: "${PhieuThuCTString.maID} = ?", whereArgs: [maID]);
+      state = data.map((e) => PhieuThuChiTietModel.fromMap(e)).toList();
+    } catch (e) {
+      errorSql(e);
+    }
+  }
+
+  Future<int> addPhieuThuCT(String field, dynamic value, int maID) async {
+    try {
+      final id = await _sqlRepository.addRow({PhieuThuCTString.maID: maID, field: value});
+      return id;
+    } catch (e) {
+      errorSql(e);
+      return 0;
+    }
+  }
+
+  Future<int> updatePhieuThuCT(String field, dynamic value, int id) async {
+    try {
+      final result = await _sqlRepository.updateCell(field: field, value: value, where: "ID = ?", whereArgs: [id]);
+      return result;
+    } catch (e) {
+      errorSql(e);
+      return 0;
+    }
+  }
+
+  Future<int> deletePhieuThuCT(int id) async {
+    try {
+      return await _sqlRepository.delete(where: 'ID = $id');
+    } catch (e) {
+      errorSql(e);
+      return 0;
+    }
   }
 }
 

@@ -89,7 +89,7 @@ class BangKePhieuChiViewState extends ConsumerState<BangKePhieuChiView> {
           filters[PhieuChiString.noiDung]!.contains(row.cells[PhieuChiString.noiDung]!.value);
       bool soTien =
           filters[PhieuChiString.soTien]!.isEmpty ||
-          filters[PhieuChiString.soTien]!.contains(row.cells[PhieuChiString.soTien]!.value);
+          filters[PhieuChiString.soTien]!.contains(row.cells[PhieuChiString.soTien]!.value.toString());
       bool tkNo =
           filters[PhieuChiString.tkNo]!.isEmpty ||
           filters[PhieuChiString.tkNo]!.contains(row.cells[PhieuChiString.tkNo]!.value);
@@ -305,14 +305,7 @@ class BangKePhieuChiViewState extends ConsumerState<BangKePhieuChiView> {
               width: 100,
               textAlign: TrinaColumnTextAlign.end,
               titleRenderer: (re)=>_buildTitle(re,isNummber: true),
-              footerRenderer: (re) {
-                return TrinaAggregateColumnFooter(
-                  rendererContext: re,
-                  type: TrinaAggregateColumnType.sum,
-                  padding: EdgeInsets.symmetric(horizontal: 3),
-                  alignment: Alignment.centerRight,
-                );
-              },
+              footerRenderer: (re) =>DataGridFooter(re),
             ),
             DataGridColumn(
               title: 'TK nợ',

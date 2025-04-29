@@ -89,13 +89,13 @@ class _BangKeHangNhapViewState extends ConsumerState<BangKeHangNhapView> {
           filters[PhieuNhapCTString.dvt]!.contains(row.cells[PhieuNhapCTString.dvt]!.value);
       bool soLg =
           filters[PhieuNhapCTString.soLg]!.isEmpty ||
-          filters[PhieuNhapCTString.soLg]!.contains(row.cells[PhieuNhapCTString.soLg]!.value);
+          filters[PhieuNhapCTString.soLg]!.contains(row.cells[PhieuNhapCTString.soLg]!.value.toString());
       bool donGia =
           filters[PhieuNhapCTString.donGia]!.isEmpty ||
-          filters[PhieuNhapCTString.donGia]!.contains(row.cells[PhieuNhapCTString.donGia]!.value);
+          filters[PhieuNhapCTString.donGia]!.contains(row.cells[PhieuNhapCTString.donGia]!.value.toString());
       bool thanhTien =
           filters[PhieuNhapCTString.thanhTien]!.isEmpty ||
-          filters[PhieuNhapCTString.thanhTien]!.contains(row.cells[PhieuNhapCTString.thanhTien]!.value);
+          filters[PhieuNhapCTString.thanhTien]!.contains(row.cells[PhieuNhapCTString.thanhTien]!.value.toString());
       return ngay && phieu && kieu && maKH && maHH && tenHH && dvt && soLg && donGia && thanhTien;
     });
     setState(() {});
@@ -227,6 +227,11 @@ class _BangKeHangNhapViewState extends ConsumerState<BangKeHangNhapView> {
         padding: EdgeInsets.all(5),
         child: DataGrid(
           onLoaded: (e) => _stateManager = e.stateManager,
+          onRowDoubleTap: (event) {
+            if (event.cell.column.field == PhieuNhapString.phieu) {
+              showMuaHang(context, stt: event.row.cells['null']!.value);
+            }
+          },
           rows: [],
           columns: [
             DataGridColumn(
@@ -252,6 +257,7 @@ class _BangKeHangNhapViewState extends ConsumerState<BangKeHangNhapView> {
               type: TrinaColumnType.text(),
               width: 80,
               titleRenderer: (re) => _buildTitle(re),
+              renderer: (re) => Text(re.cell.value, style: TextStyle(color: Colors.red)),
             ),
             DataGridColumn(
               title: 'Kiểu',
@@ -293,15 +299,8 @@ class _BangKeHangNhapViewState extends ConsumerState<BangKeHangNhapView> {
               type: TrinaColumnType.number(allowFirstDot: true, format: '#,###.##'),
               width: 80,
               textAlign: TrinaColumnTextAlign.end,
-              titleRenderer: (re) => _buildTitle(re,isNummber: true),
-              footerRenderer:
-                  (re) => TrinaAggregateColumnFooter(
-                    rendererContext: re,
-                    type: TrinaAggregateColumnType.sum,
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    alignment: Alignment.centerRight,
-                    format: '#,###.##',
-                  ),
+              titleRenderer: (re) => _buildTitle(re, isNummber: true),
+              footerRenderer: (re) => DataGridFooter(re),
             ),
             DataGridColumn(
               title: 'Đơn giá',
@@ -309,14 +308,8 @@ class _BangKeHangNhapViewState extends ConsumerState<BangKeHangNhapView> {
               type: TrinaColumnType.number(),
               width: 100,
               textAlign: TrinaColumnTextAlign.end,
-              titleRenderer: (re) => _buildTitle(re,isNummber: true),
-              footerRenderer:
-                  (re) => TrinaAggregateColumnFooter(
-                    rendererContext: re,
-                    type: TrinaAggregateColumnType.sum,
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    alignment: Alignment.centerRight,
-                  ),
+              titleRenderer: (re) => _buildTitle(re, isNummber: true),
+              footerRenderer: (re) => DataGridFooter(re),
             ),
             DataGridColumn(
               title: 'Thành tiền',
@@ -324,14 +317,8 @@ class _BangKeHangNhapViewState extends ConsumerState<BangKeHangNhapView> {
               type: TrinaColumnType.number(),
               width: 100,
               textAlign: TrinaColumnTextAlign.end,
-              titleRenderer: (re) => _buildTitle(re,isNummber: true),
-              footerRenderer:
-                  (re) => TrinaAggregateColumnFooter(
-                    rendererContext: re,
-                    type: TrinaAggregateColumnType.sum,
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    alignment: Alignment.centerRight,
-                  ),
+              titleRenderer: (re) => _buildTitle(re, isNummber: true),
+              footerRenderer: (re) => DataGridFooter(re),
             ),
           ],
         ),

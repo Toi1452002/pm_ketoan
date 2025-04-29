@@ -18,7 +18,7 @@ class CustomAlert{
     );
   }
 
-  Future<AlertButton> success(String text, {String title = 'Success'}) async {
+  Future<AlertButton> success(String text, {String title = ''}) async {
     return await FlutterPlatformAlert.showAlert(
       options: PlatformAlertOptions(
           windows: WindowsAlertOptions(
@@ -43,6 +43,19 @@ class CustomAlert{
       text: text,
       alertStyle: AlertButtonStyle.okCancel,
       iconStyle: IconStyle.warning,
+    );
+  }
+  Future<AlertButton> question(String text, {String title = ''}) async {
+    return await FlutterPlatformAlert.showAlert(
+      options: PlatformAlertOptions(
+          windows: WindowsAlertOptions(
+              preferMessageBox: true
+          )
+      ),
+      windowTitle: title,
+      text: text,
+      alertStyle: AlertButtonStyle.okCancel,
+      iconStyle: IconStyle.question,
     );
   }
 }

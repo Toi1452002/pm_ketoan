@@ -12,3 +12,4 @@ export 'phieuxuat_model.dart';
 export 'phieunhap_model.dart';
 export 'tuychon_model.dart';
 export 'khohang_model.dart';
+export 'dauky_model.dart';

@@ -1,3 +1,4 @@
+import 'package:app_ketoan/core/constants/constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:app_ketoan/data/data.dart';
 
@@ -11,7 +12,7 @@ class UserNotifier extends StateNotifier<List<UserModel>> {
 
   Future<void> getUsers() async{
     try{
-      final data = await _sqlRepository.getData();
+      final data = await _sqlRepository.getData(orderBy: UserString.userName);
       state = data.map((e)=>UserModel.fromMap(e)).toList();
     }catch(e){
       errorSql(e);
@@ -23,6 +24,26 @@ class UserNotifier extends StateNotifier<List<UserModel>> {
       final id = await _sqlRepository.addRow(user.toMap());
       if(id!=0){
         getUsers();
+        await Future.wait([
+          _sqlRepository.addRows(getMaHangMuc().map((e){
+            return {
+              UserString.userName: user.userName,
+              'TenForm': e
+            };
+          }).toList(),tableNameOther: TableName.hangMuc),
+          _sqlRepository.addRows(getMaNhomC1().map((e){
+            return {
+              UserString.userName: user.userName,
+              'MaC1': e
+            };
+          }).toList(),tableNameOther: TableName.nhomMC1),
+          _sqlRepository.addRows(getMaNhomC2().map((e){
+            return {
+              UserString.userName: user.userName,
+              'MaC2': e
+            };
+          }).toList(),tableNameOther: TableName.nhomMC2)
+        ]);
       }
       return id;
     }catch(e){

@@ -11,3 +11,7 @@ final bangKePhieuChiProvider = StateNotifierProvider.autoDispose<BangKePhieuChiN
 final phieuChiProvider = StateNotifierProvider.autoDispose<PhieuchiNotifier, PhieuChiModel?>((ref) {
   return PhieuchiNotifier();
 });
+
+final phieuChiCTProvider = StateNotifierProvider<PhieuChiCTNotifier, List<PhieuChiCTModel>>((ref) {
+  return PhieuChiCTNotifier();
+});

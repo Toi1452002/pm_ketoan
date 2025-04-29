@@ -170,6 +170,12 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                                       wPhieuNhap.phieu,
                                       userName: userName,
                                     );
+                                    rPhieuNhap.updatePhieuNhap(
+                                      PhieuNhapString.ngayCT,
+                                      Helper.dateFormatYMD(val),
+                                      wPhieuNhap.phieu,
+                                      userName: userName,
+                                    );
                                   },
                                   label: 'Ngày xuất',
                                   initialDate: Helper.stringToDate(wPhieuNhap.ngay),

@@ -3,3 +3,4 @@ export 'khachhang/khachhang.dart';
 export 'manghiepvu.dart';
 export 'nhanvien/nhanvien.dart';
 export 'bangtaikhoan.dart';
+export 'dauky/dauky.dart';

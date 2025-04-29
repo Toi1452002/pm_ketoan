@@ -40,9 +40,10 @@ class SqlRepository {
     required dynamic value,
     String? where,
     List<Object?>? whereArgs,
+    String? tableNameOther
   }) async {
     final cnn = await connectData();
-    return await cnn!.update(tableName, {field: value}, where: where, whereArgs: whereArgs);
+    return await cnn!.update(tableNameOther??tableName, {field: value}, where: where, whereArgs: whereArgs);
   }
 
   Future<int> delete({String? where, String? tableNameOther}) async {
@@ -50,9 +51,9 @@ class SqlRepository {
     return await cnn!.delete(tableNameOther ?? tableName, where: where);
   }
 
-  Future<String?> getCellValue({required String field, required String where}) async {
+  Future<String?> getCellValue({required String field, required String where, String? tableNameOther}) async {
     final cnn = await connectData();
-    final data = await cnn!.rawQuery("SELECT $field FROM $tableName WHERE $where");
+    final data = await cnn!.rawQuery("SELECT $field FROM ${tableNameOther??tableName} WHERE $where");
     return data.isEmpty ? null : data.first[field].toString();
   }
 
@@ -72,7 +73,11 @@ errorSql(Object e) {
     try {
       final a = e.toString().indexOf('SqliteException(');
       int b = e.toString().indexOf('Causing ');
-      CustomAlert().error(e.toString().substring(a, b));
+      String title = e.toString().substring(a, b);
+
+      if(title.contains('FOREIGN KEY')) title = "Không thể xóa do đang có phát sinh";
+      
+      CustomAlert().error(title);
     } catch (err) {
       CustomAlert().error(e.toString());
     }

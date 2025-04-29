@@ -1,5 +1,8 @@
 abstract class TableName{
   static const ttdn = "T00_TTDN";
+  static const nhomMC1 = "T00_NhomMC1";
+  static const nhomMC2 = "T00_NhomMC2";
+  static const hangMuc = "T00_HangMuc";
   static const nhomKhach = "TDM_NhomKhach";
   static const khachHang = "TDM_KhachHang";
   static const user = "T00_User";
@@ -21,6 +24,7 @@ abstract class TableName{
   static const phieuNhap = "TNX_PhieuNhap";
   static const phieuNhapCT = "TNX_PhieuNhapCT";
   static const tuyChon = "T00_TuyChon";
+  static const dauKyHangHoa = "TDM_DKyHangHoa";
 }
 
 class ViewName {
@@ -35,6 +39,6 @@ class ViewName {
   static const vbcPhieuXuat = "VBC_PhieuXuat";
   static const vbcBangKeHangNhap = "VBC_BangKeHangNhap";
   static const vbcBangKeHangXuat = "VBC_BangKeHangXuat";
-
+  static const vdmDauKyHangHoa = "VDM_TonDauKy";
 
 }

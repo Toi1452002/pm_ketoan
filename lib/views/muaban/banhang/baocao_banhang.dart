@@ -65,10 +65,10 @@ class _BaoCaoBanHangViewState extends ConsumerState<BaoCaoBanHangView> {
           filters[KhachHangString.mst]!.contains(row.cells[KhachHangString.mst]!.value);
       bool congTien =
           filters[PhieuXuatString.congTien]!.isEmpty ||
-          filters[PhieuXuatString.congTien]!.contains(row.cells[PhieuXuatString.congTien]!.value);
+          filters[PhieuXuatString.congTien]!.contains(row.cells[PhieuXuatString.congTien]!.value.toString());
       bool tienThue =
           filters[PhieuXuatString.tienThue]!.isEmpty ||
-          filters[PhieuXuatString.tienThue]!.contains(row.cells[PhieuXuatString.tienThue]!.value);
+          filters[PhieuXuatString.tienThue]!.contains(row.cells[PhieuXuatString.tienThue]!.value.toString());
       bool ghiChu =
           filters[PhieuXuatString.dienGiai]!.isEmpty ||
           filters[PhieuXuatString.dienGiai]!.contains(row.cells[PhieuXuatString.dienGiai]!.value);
@@ -304,18 +304,7 @@ class _BaoCaoBanHangViewState extends ConsumerState<BaoCaoBanHangView> {
               field: PhieuXuatString.congTien,
               textAlign: TrinaColumnTextAlign.end,
                 titleRenderer: (re)=>_buildTitle(re,isNummber: true),
-              footerRenderer: (re) {
-                return TrinaAggregateColumnFooter(
-                  rendererContext: re,
-                  type: TrinaAggregateColumnType.sum,
-                  alignment: Alignment.centerRight,
-                  titleSpanBuilder: (text) {
-                    return [
-                      TextSpan(text: text, style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.bold)),
-                    ];
-                  },
-                );
-              },
+              footerRenderer: (re) =>DataGridFooter(re),
               type: TrinaColumnType.number(),
             ),
             DataGridColumn(
@@ -323,18 +312,7 @@ class _BaoCaoBanHangViewState extends ConsumerState<BaoCaoBanHangView> {
               width: 120,
               field: PhieuXuatString.tienThue,
               textAlign: TrinaColumnTextAlign.end,
-              footerRenderer: (re) {
-                return TrinaAggregateColumnFooter(
-                  rendererContext: re,
-                  type: TrinaAggregateColumnType.sum,
-                  alignment: Alignment.centerRight,
-                  titleSpanBuilder: (text) {
-                    return [
-                      TextSpan(text: text, style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.bold)),
-                    ];
-                  },
-                );
-              },
+              footerRenderer: (re) =>DataGridFooter(re),
               titleRenderer: (re)=>_buildTitle(re,isNummber: true),
               type: TrinaColumnType.number(),
             ),

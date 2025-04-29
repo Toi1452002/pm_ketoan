@@ -45,17 +45,17 @@ class _DataGridTitleState extends State<DataGridTitle> {
               child: CompositedTransformFollower(
                 link: _layerLink,
                 showWhenUnlinked: false,
-                offset: Offset(-80, size.height-5),
+                offset: Offset(-80, size.height - 5),
                 child: Container(
                   height: 300,
                   width: 180,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(3),
-                    boxShadow: [BoxShadow(color: Colors.gray, blurRadius: 5,offset: Offset(0, 4))],
+                    boxShadow: [BoxShadow(color: Colors.gray, blurRadius: 5, offset: Offset(0, 4))],
                   ),
                   child: FilterWidget(
-                    items: widget.items??{},
+                    items: widget.items ?? {},
                     onChanged: widget.onChanged,
                     overlayEntry: _overlayEntry,
                     isNumber: widget.isNumber,

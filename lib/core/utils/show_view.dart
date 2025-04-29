@@ -59,10 +59,17 @@ void showBangTaiKhoan(BuildContext context) {
     context,
     title: MenuString.bangTaiKhoan,
     width: 970,
-    height: 600,
+    height: 700,
     child: BangTaiKhoanView(),
     onClose: () {},
   );
+}
+
+void showNoDauKy(BuildContext context) {
+  showCustomDialog(context, title: MenuString.noDauKy, width: 700, height: 600, child: NoDauKyView(), onClose: () {});
+}
+void showTonDauKy(BuildContext context) {
+  showCustomDialog(context, title: 'Đầu kỳ hàng hóa', width: 720, height: 600, child: TonDauKyView(), onClose: () {});
 }
 
 //HỆ THỐNG
@@ -73,6 +80,17 @@ void showThongTinDoanhNghiep(BuildContext context) {
     width: 1040,
     height: 700,
     child: ThongTinDoanhNghiepView(),
+    onClose: () {},
+  );
+}
+
+void showPQNG(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.phanQuyenNguoiDung,
+    width: 600,
+    height: 600,
+    child: PhanQuyenNguoiDungView(),
     onClose: () {},
   );
 }
@@ -143,7 +161,7 @@ void showPhieuThu(BuildContext context, {int? stt}) {
     context,
     title: MenuString.phieuThu,
     width: 550,
-    height: 490,
+    height: 650,
     child: PhieuThuView(stt: stt),
     onClose: () {},
   );
@@ -154,7 +172,7 @@ void showPhieuChi(BuildContext context, {int? stt}) {
     context,
     title: MenuString.phieuChi,
     width: 550,
-    height: 490,
+    height: 650,
     child: PhieuChiView(stt: stt),
     onClose: () {},
   );
@@ -193,6 +211,7 @@ void showViewPrinter(BuildContext context, Widget widget, {bool isPortrait = tru
     onClose: () {},
   );
 }
+
 //KHO HANG
 void showBangKeHangNhap(BuildContext context) {
   showCustomDialog(
@@ -204,6 +223,7 @@ void showBangKeHangNhap(BuildContext context) {
     onClose: () {},
   );
 }
+
 void showBangKeHangXuat(BuildContext context) {
   showCustomDialog(
     context,

@@ -90,18 +90,17 @@ class _BangKeHangXuatViewState extends ConsumerState<BangKeHangXuatView> {
           filters[PhieuXuatCTString.dvt]!.contains(row.cells[PhieuXuatCTString.dvt]!.value);
       bool soLg =
           filters[PhieuXuatCTString.soLg]!.isEmpty ||
-          filters[PhieuXuatCTString.soLg]!.contains(row.cells[PhieuXuatCTString.soLg]!.value);
+          filters[PhieuXuatCTString.soLg]!.contains(row.cells[PhieuXuatCTString.soLg]!.value.toString());
       bool donGia =
           filters[PhieuXuatCTString.donGia]!.isEmpty ||
-          filters[PhieuXuatCTString.donGia]!.contains(row.cells[PhieuXuatCTString.donGia]!.value);
+          filters[PhieuXuatCTString.donGia]!.contains(row.cells[PhieuXuatCTString.donGia]!.value.toString());
       bool thanhTien =
           filters[PhieuXuatCTString.thanhTien]!.isEmpty ||
-          filters[PhieuXuatCTString.thanhTien]!.contains(row.cells[PhieuXuatCTString.thanhTien]!.value);
+          filters[PhieuXuatCTString.thanhTien]!.contains(row.cells[PhieuXuatCTString.thanhTien]!.value.toString());
       return ngay && phieu && kieu && maKH && maHH && tenHH && dvt && soLg && donGia && thanhTien;
     });
     setState(() {});
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -230,6 +229,11 @@ class _BangKeHangXuatViewState extends ConsumerState<BangKeHangXuatView> {
         child: DataGrid(
           onLoaded: (e) => _stateManager = e.stateManager,
           rows: [],
+          onRowDoubleTap: (event) {
+            if (event.cell.column.field == PhieuXuatString.phieu) {
+              showBanHang(context, stt: event.row.cells['null']!.value);
+            }
+          },
           columns: [
             DataGridColumn(
               title: '',
@@ -246,48 +250,50 @@ class _BangKeHangXuatViewState extends ConsumerState<BangKeHangXuatView> {
               field: PhieuXuatString.ngay,
               type: TrinaColumnType.text(),
               width: 80,
-              titleRenderer: (re)=>_buildTitle(re,isNgay: true),
+              titleRenderer: (re) => _buildTitle(re, isNgay: true),
             ),
             DataGridColumn(
               title: 'Phiếu',
               field: PhieuXuatString.phieu,
               type: TrinaColumnType.text(),
               width: 80,
-              titleRenderer: (re)=>_buildTitle(re),
+
+              renderer: (re) => Text(re.cell.value, style: TextStyle(color: Colors.red)),
+              titleRenderer: (re) => _buildTitle(re),
             ),
             DataGridColumn(
               title: 'Kiểu',
               field: PhieuXuatString.maNX,
               type: TrinaColumnType.text(),
               width: 70,
-              titleRenderer: (re)=>_buildTitle(re),
+              titleRenderer: (re) => _buildTitle(re),
             ),
             DataGridColumn(
               title: 'Mã khách',
               field: PhieuXuatString.maKhach,
               type: TrinaColumnType.text(),
               width: 100,
-              titleRenderer: (re)=>_buildTitle(re),
+              titleRenderer: (re) => _buildTitle(re),
             ),
             DataGridColumn(
               title: 'Mã hàng',
               field: HangHoaString.maHH,
               type: TrinaColumnType.text(),
               width: 120,
-              titleRenderer: (re)=>_buildTitle(re),
+              titleRenderer: (re) => _buildTitle(re),
             ),
             DataGridColumn(
               title: 'Tên hàng',
               field: PhieuXuatCTString.tenHH,
               type: TrinaColumnType.text(),
-              titleRenderer: (re)=>_buildTitle(re),
+              titleRenderer: (re) => _buildTitle(re),
             ),
             DataGridColumn(
               title: 'ĐVT',
               field: PhieuXuatCTString.dvt,
               type: TrinaColumnType.text(),
               width: 70,
-              titleRenderer: (re)=>_buildTitle(re),
+              titleRenderer: (re) => _buildTitle(re),
             ),
             DataGridColumn(
               title: 'SoLg',
@@ -296,15 +302,8 @@ class _BangKeHangXuatViewState extends ConsumerState<BangKeHangXuatView> {
               width: 80,
               textAlign: TrinaColumnTextAlign.end,
 
-              titleRenderer: (re)=>_buildTitle(re,isNummber: true),
-              footerRenderer:
-                  (re) => TrinaAggregateColumnFooter(
-                    rendererContext: re,
-                    type: TrinaAggregateColumnType.sum,
-                    padding: EdgeInsets.symmetric(horizontal: 3),
-                    alignment: Alignment.centerRight,
-                    format: '#,###.##',
-                  ),
+              titleRenderer: (re) => _buildTitle(re, isNummber: true),
+              footerRenderer: (re) => DataGridFooter(re),
             ),
             DataGridColumn(
               title: 'Đơn giá',
@@ -312,14 +311,8 @@ class _BangKeHangXuatViewState extends ConsumerState<BangKeHangXuatView> {
               type: TrinaColumnType.number(),
               width: 100,
               textAlign: TrinaColumnTextAlign.end,
-              titleRenderer: (re)=>_buildTitle(re,isNummber: true),
-              footerRenderer:
-                  (re) => TrinaAggregateColumnFooter(
-                rendererContext: re,
-                type: TrinaAggregateColumnType.sum,
-                padding: EdgeInsets.symmetric(horizontal: 3),
-                alignment: Alignment.centerRight,
-              ),
+              titleRenderer: (re) => _buildTitle(re, isNummber: true),
+              footerRenderer: (re) => DataGridFooter(re),
             ),
             DataGridColumn(
               title: 'Thành tiền',
@@ -327,14 +320,8 @@ class _BangKeHangXuatViewState extends ConsumerState<BangKeHangXuatView> {
               type: TrinaColumnType.number(),
               width: 100,
               textAlign: TrinaColumnTextAlign.end,
-              titleRenderer: (re)=>_buildTitle(re,isNummber: true),
-              footerRenderer:
-                  (re) => TrinaAggregateColumnFooter(
-                rendererContext: re,
-                type: TrinaAggregateColumnType.sum,
-                padding: EdgeInsets.symmetric(horizontal: 3),
-                alignment: Alignment.centerRight,
-              ),
+              titleRenderer: (re) => _buildTitle(re, isNummber: true),
+              footerRenderer: (re) => DataGridFooter(re),
             ),
           ],
         ),

@@ -89,14 +89,13 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
           filters[PhieuThuString.noiDung]!.contains(row.cells[PhieuThuString.noiDung]!.value);
       bool soTien =
           filters[PhieuThuString.soTien]!.isEmpty ||
-          filters[PhieuThuString.soTien]!.contains(row.cells[PhieuThuString.soTien]!.value);
+          filters[PhieuThuString.soTien]!.contains(row.cells[PhieuThuString.soTien]!.value.toString());
       bool tkNo =
           filters[PhieuThuString.tkNo]!.isEmpty ||
           filters[PhieuThuString.tkNo]!.contains(row.cells[PhieuThuString.tkNo]!.value);
       bool tkCo =
           filters[PhieuThuString.tkCo]!.isEmpty ||
           filters[PhieuThuString.tkCo]!.contains(row.cells[PhieuThuString.tkCo]!.value);
-
       return ngay && phieu && maTC && maKH && tenKH && pttt && noiDung && soTien && tkNo && tkCo;
     });
     setState(() {});
@@ -309,14 +308,7 @@ class BangKePhieuThuViewState extends ConsumerState<BangKePhieuThuView> {
               width: 100,
               titleRenderer: (re)=>_buildTitle(re,isNummber: true),
               textAlign: TrinaColumnTextAlign.end,
-              footerRenderer: (re) {
-                return TrinaAggregateColumnFooter(
-                  rendererContext: re,
-                  type: TrinaAggregateColumnType.sum,
-                  padding: EdgeInsets.symmetric(horizontal: 3),
-                  alignment: Alignment.centerRight,
-                );
-              },
+              footerRenderer: (re) =>DataGridFooter(re),
             ),
             DataGridColumn(
               title: 'TK nợ',

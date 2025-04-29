@@ -170,6 +170,12 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                       wPhieuXuat.phieu,
                                       userName: userName,
                                     );
+                                    rPhieuXuat.updatePhieuXuat(
+                                      PhieuXuatString.ngayCT,
+                                      Helper.dateFormatYMD(val),
+                                      wPhieuXuat.phieu,
+                                      userName: userName,
+                                    );
                                   },
                                   initialDate: Helper.stringToDate(wPhieuXuat.ngay),
                                   label: 'Ngày xuất',

@@ -180,3 +180,53 @@ abstract class PhieuThuString{
   static const tkNo = "TKNo";
   static const tkCo = "TKCo";
 }
+
+
+class PhieuThuChiTietModel{
+  final int? id;
+  final int? maID;
+  final String dienGiai;
+  final double soTien;
+
+  const PhieuThuChiTietModel({
+    this.id,
+    this.maID,
+    required this.dienGiai,
+    required this.soTien,
+  });
+
+
+
+  PhieuThuChiTietModel copyWith({
+    int? id,
+    int? maID,
+    String? dienGiai,
+    double? soTien,
+  }) {
+    return PhieuThuChiTietModel(
+      id: id ?? this.id,
+      maID: maID ?? this.maID,
+      dienGiai: dienGiai ?? this.dienGiai,
+      soTien: soTien ?? this.soTien,
+    );
+  }
+
+
+  factory PhieuThuChiTietModel.fromMap(Map<String, dynamic> map) {
+    return PhieuThuChiTietModel(
+      id: map[PhieuThuCTString.id] ,
+      maID: map[PhieuThuCTString.maID] ,
+      dienGiai: map[PhieuThuCTString.dienGiai]??'',
+      soTien: double.parse(map[PhieuThuCTString.soTien].toString()),
+    );
+  }
+}
+
+abstract class PhieuThuCTString{
+  static const id = "ID";
+  static const maID = "MaID";
+  static const dienGiai = "DienGiai";
+  static const soTien = "SoTien";
+  static const ctBan = "CTBan";
+  static const ngay = "Ngay";
+}

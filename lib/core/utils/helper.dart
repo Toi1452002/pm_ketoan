@@ -1,3 +1,4 @@
+import 'package:app_ketoan/core/core.dart';
 import 'package:intl/intl.dart';
 
 class Helper{
@@ -6,11 +7,15 @@ class Helper{
       return null;
     } else{
       try{
+          // if(Check().isInteger(number)){
+          String strNum = number.toString();
+          if(strNum.contains(',')) strNum = strNum.replaceAll(',', '');
+          final num = double.parse(strNum);
+          return NumberFormat('#,###.##',"en_US").format(num);
+        // }else{
+        //   return number.toString();
+        // }
 
-        String strNum = number.toString();
-        if(strNum.contains(',')) strNum = strNum.replaceAll(',', '');
-        final num = double.parse(strNum);
-        return NumberFormat('#,###').format(num);
       }catch(e){
         return number;
       }
@@ -94,5 +99,13 @@ class Helper{
 
   static String formatMonth(dynamic month){
     return month.toString().length==1? "0$month": month;
+  }
+
+  static double convertDouble(dynamic value){
+    try{
+      return double.parse(value.toString());
+    }catch(e){
+      return 0;
+    }
   }
 }

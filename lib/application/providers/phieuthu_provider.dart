@@ -11,3 +11,7 @@ final phieuThuProvider = StateNotifierProvider.autoDispose<PhieuThuNotifier, Phi
   return PhieuThuNotifier();
 });
 
+
+final phieuThuCTProvider = StateNotifierProvider<PhieuThuCTNotifier, List<PhieuThuChiTietModel>>((ref) {
+  return PhieuThuCTNotifier();
+});

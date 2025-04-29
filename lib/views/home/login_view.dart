@@ -31,8 +31,10 @@ class LoginViewState extends ConsumerState<LoginView> {
           if(data.isNotEmpty){
             final user = UserModel.fromMap(data.first);
             ref.read(userInfoProvider.notifier).state = user;
-
             ref.read(tuyChonProvider.notifier).getListTuyChon();
+            ref.read(nhomMaC1Provider.notifier).getList(txtTaiKhoan.text);
+            ref.read(nhomMaC2Provider.notifier).getList(txtTaiKhoan.text);
+            ref.read(hangMucProvider.notifier).getList(txtTaiKhoan.text);
           }else{
             CustomAlert().warning('Đăng nhập thất bại', title: 'Login');
 

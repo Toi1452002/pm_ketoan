@@ -61,7 +61,7 @@ class DataGrid extends StatelessWidget {
           // rowHoveredColor: context.theme.colorScheme.border,
           columnHeight: 25,
           activatedColor: context.theme.colorScheme.primary.withValues(alpha: .1),
-          rowHeight: 25,
+          rowHeight: 27,
           columnTextStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.black),
           rowColor: context.theme.colorScheme.popover,
 
@@ -103,7 +103,7 @@ TrinaColumn DataGridColumn({
   return TrinaColumn(
     title: title,
     field: field,
-  hide: hide,
+    hide: hide,
     titleRenderer: titleRenderer,
     // backgroundColor: Colors.white,
     type: type,
@@ -128,6 +128,7 @@ TrinaColumn DataGridColumn({
 
 class DataGridContainer extends StatelessWidget {
   final String? text;
+
   const DataGridContainer({super.key, this.text});
 
   @override
@@ -139,7 +140,7 @@ class DataGridContainer extends StatelessWidget {
         color: Colors.blueGrey.shade400.withValues(alpha: .3),
         border: Border(right: BorderSide(color: context.theme.colorScheme.mutedForeground)),
       ),
-      child: Text(text ?? '', style: TextStyle(fontSize: 12,color: Colors.grey.shade800,fontWeight: FontWeight.w500)),
+      child: Text(text ?? '', style: TextStyle(fontSize: 12, color: Colors.grey.shade800, fontWeight: FontWeight.w500)),
     );
   }
 }
@@ -206,48 +207,15 @@ class DataGridShowSelect extends StatelessWidget {
   }
 }
 
-class DataGridTitleFilter extends StatelessWidget {
-  final String title;
-  final void Function()? onPressed;
-  final bool isFilter;
-
-  const DataGridTitleFilter({super.key, required this.title, this.onPressed, this.isFilter = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2),
-      decoration: BoxDecoration(
-        color: isFilter ? Colors.green.shade100 : Colors.blue.shade100,
-        border: Border(right: BorderSide(width: .5)),
-      ),
-      child: Row(
-        children: [
-          sh.Text(title, style: TextStyle(fontWeight: sh.FontWeight.w500, fontSize: 13)),
-          Spacer(),
-          sh.IconButton.text(
-            size: sh.ButtonSize.small,
-            onPressed: onPressed,
-            icon: Icon(PhosphorIcons.funnel(), color: isFilter ? sh.Colors.green.shade500 : null),
-          ),
-        ],
-      ),
-    );
-  }
+TrinaAggregateColumnFooter DataGridFooter(TrinaColumnFooterRendererContext rendererContext) {
+  return TrinaAggregateColumnFooter(
+    rendererContext: rendererContext,
+    type: TrinaAggregateColumnType.sum,
+    alignment: Alignment.centerRight,
+    padding: EdgeInsets.symmetric(horizontal: 3),
+    format: '#,###.##',
+    titleSpanBuilder: (text) {
+      return [TextSpan(text: text, style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.bold))];
+    },
+  );
 }
-
-// class DataGridTitle extends StatelessWidget {
-//   final String title;
-//
-//   const DataGridTitle({super.key, required this.title});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       alignment: Alignment.center,
-//       padding: EdgeInsets.symmetric(horizontal: 2),
-//       decoration: BoxDecoration(color: Colors.blue.shade100, border: Border(right: BorderSide(width: .5))),
-//       child: sh.Text(title, style: TextStyle(fontWeight: sh.FontWeight.w500, fontSize: 13)),
-//     );
-//   }
-// }

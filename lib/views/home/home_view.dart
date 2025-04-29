@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shadcn_flutter/shadcn_flutter.dart';
 import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 
+import '../../data/data.dart';
+
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
 
@@ -14,82 +16,12 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> {
-
-
-  List<TreeNode<String>> treeItems = [
-     TreeItem(
-      data: MenuString.danhMuc,
-      children: [
-        TreeItem(data: MenuString.hangHoa),
-        TreeItem(data: MenuString.khachHang),
-        TreeItem(data: MenuString.nhanVien),
-        TreeItem(data: MenuString.maNghiepVu),
-        TreeItem(data: MenuString.bangTaiKhoan),
-        TreeItem(
-          data: MenuString.dauKy,
-          children: [
-            TreeItem(data: MenuString.noDauKy),
-            TreeItem(data: MenuString.tonDauKy),
-            TreeItem(data: MenuString.dauKyTaiKhoan),
-          ],
-        ),
-      ],
-    ),
-
-    TreeItem(
-      data: MenuString.muaBan,
-      children: [
-        TreeItem(data: MenuString.muaHang),
-        TreeItem(data: MenuString.banHang),
-        TreeItem(
-          data: MenuString.baoCao,
-          children: [
-            TreeItem(data: MenuString.bangKeHoaDonMuaVao),
-            TreeItem(data: MenuString.bangKeHoaDonBanRa),
-            TreeItem(data: MenuString.bangKeHangBan),
-          ],
-        ),
-      ],
-    ),
-    TreeItem(
-      data: MenuString.thuChi,
-      children: [
-        TreeItem(data: MenuString.phieuThu),
-        TreeItem(data: MenuString.phieuChi),
-        TreeItem(
-          data: MenuString.baoCao,
-          children: [
-            TreeItem(data: MenuString.bangkePhieuThu),
-            TreeItem(data: MenuString.bangkePhieuChi),
-            TreeItem(data: MenuString.soTienMat),
-            TreeItem(data: MenuString.soTienGui),
-          ],
-        ),
-      ],
-    ),
-    TreeItem(data: MenuString.khoHang,children: [
-     TreeItem(data: MenuString.bangKeHangNhap),
-     TreeItem(data: MenuString.bangKeHangXuat),
-     TreeItem(data: MenuString.nhapXuatTonKho),
-    ]),
-    
-    TreeItem(
-      data: MenuString.heThong,
-      children: [
-        TreeItem(data: MenuString.thongTinDoanhNghiep),
-        TreeItem(data: MenuString.danhSachNguoiDung),
-        TreeItem(data: MenuString.tuyChon),
-      ],
-    ),
-    // Tree Root acts as a parent node with no data,
-    // it will flatten the children into the parent node
-  ];
-
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userInfoProvider);
     final tenCTY = ref.watch(ttdnTenCTyProvider);
     final diaChiCTY = ref.watch(ttdnDiaChiProvider);
+    final listMenu  = ref.watch(listMenuProvider);
     return Scaffold(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,10 +36,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 expandIcon: true,
                 shrinkWrap: true,
                 recursiveSelection: true,
-                nodes: treeItems,
-                onSelectionChanged: TreeView.defaultSelectionHandler(treeItems, (value) {
+                nodes: listMenu,
+                onSelectionChanged: TreeView.defaultSelectionHandler(listMenu, (value) {
                   setState(() {
-                    treeItems = value;
+                    ref.read(listMenuProvider.notifier).state = value;
+                    // treeItems = value;
                   });
                 }),
                 builder: (context, node) {
@@ -129,6 +62,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                           break;
                         case MenuString.bangTaiKhoan:
                           showBangTaiKhoan(context);
+                          break;
+                        case MenuString.noDauKy:
+                          showNoDauKy(context);
+                          break;
+                        case MenuString.tonDauKy:
+                          showTonDauKy(context);
                           break;
                         ///************************************
                         //MUA BAN
@@ -175,14 +114,18 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.danhSachNguoiDung:
                           showDSNguoiDung(context);
                           break;
+                        case MenuString.phanQuyenNguoiDung:
+                          showPQNG(context);
+                          break;
                         case MenuString.tuyChon:
                           showTuyChon(context);
                           break;
                       }
                     },
-                    onExpand: TreeView.defaultItemExpandHandler(treeItems, node, (value) {
+                    onExpand: TreeView.defaultItemExpandHandler(listMenu, node, (value) {
                       setState(() {
-                        treeItems = value;
+                        ref.read(listMenuProvider.notifier).state = value;
+                        // treeItems = value;
                       });
                     }),
                     child: Text(node.data),

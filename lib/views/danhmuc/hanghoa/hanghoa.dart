@@ -66,42 +66,42 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
     _stateManager.setFilter((row) {
       bool maHH =
           filters[HangHoaString.maHH]!.isEmpty ||
-          filters[HangHoaString.maHH]!.contains(row.cells[HangHoaString.maHH]!.value);
+              filters[HangHoaString.maHH]!.contains(row.cells[HangHoaString.maHH]!.value);
       bool tenHH =
           filters[HangHoaString.tenHH]!.isEmpty ||
-          filters[HangHoaString.tenHH]!.contains(row.cells[HangHoaString.tenHH]!.value);
+              filters[HangHoaString.tenHH]!.contains(row.cells[HangHoaString.tenHH]!.value);
       bool dvt = filters[DVTString.dvt]!.isEmpty || filters[DVTString.dvt]!.contains(row.cells[DVTString.dvt]!.value);
       bool giaMua =
           filters[HangHoaString.giaMua]!.isEmpty ||
-          filters[HangHoaString.giaMua]!.contains(row.cells[HangHoaString.giaMua]!.value);
+              filters[HangHoaString.giaMua]!.contains(row.cells[HangHoaString.giaMua]!.value.toString());
       bool giaBan =
           filters[HangHoaString.giaBan]!.isEmpty ||
-          filters[HangHoaString.giaBan]!.contains(row.cells[HangHoaString.giaBan]!.value);
+              filters[HangHoaString.giaBan]!.contains(row.cells[HangHoaString.giaBan]!.value.toString());
       bool loaiHang =
           filters[LoaiHangString.loaiHang]!.isEmpty ||
-          filters[LoaiHangString.loaiHang]!.contains(row.cells[LoaiHangString.loaiHang]!.value);
+              filters[LoaiHangString.loaiHang]!.contains(row.cells[LoaiHangString.loaiHang]!.value);
       bool nhomHang =
           filters[NhomHangString.nhomHang]!.isEmpty ||
-          filters[NhomHangString.nhomHang]!.contains(row.cells[NhomHangString.nhomHang]!.value);
+              filters[NhomHangString.nhomHang]!.contains(row.cells[NhomHangString.nhomHang]!.value);
       bool maNC =
           filters[HangHoaString.maNC]!.isEmpty ||
-          filters[HangHoaString.maNC]!.contains(row.cells[HangHoaString.maNC]!.value);
+              filters[HangHoaString.maNC]!.contains(row.cells[HangHoaString.maNC]!.value);
 
       return maHH && tenHH && dvt && giaMua && giaBan && loaiHang && nhomHang && maNC;
     });
     setState(() {});
   }
 
-    Widget _buildTitle(TrinaColumnTitleRendererContext render, {bool isNgay = false, bool isNummber = false}) {
-      return trinaGridFuntion.builTitle(
-        render,
-        filters,
-        _applyFilters,
-        isNgay: isNgay,
-        isNummber: isNummber,
-        enabelFilter: enabelFilter,
-      );
-    }
+  Widget _buildTitle(TrinaColumnTitleRendererContext render, {bool isNgay = false, bool isNummber = false}) {
+    return trinaGridFuntion.builTitle(
+      render,
+      filters,
+      _applyFilters,
+      isNgay: isNgay,
+      isNummber: isNummber,
+      enabelFilter: enabelFilter,
+    );
+  }
 
   void clearFilter() {
     filters = {
@@ -148,7 +148,10 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
       _stateManager.notifyListeners();
     });
 
-    final qlXBC = ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlXBC).giaTri == 1;
+    final qlXBC = ref
+        .read(tuyChonProvider)
+        .firstWhere((e) => e.nhom == MaTuyChon.qlXBC)
+        .giaTri == 1;
 
     return Scaffold(
       headers: [
@@ -185,7 +188,9 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
             SizedBox(
               width: 300,
               child: Combobox(
-                selected: ref.watch(hangHoaTheoiDoiProvider).value,
+                selected: ref
+                    .watch(hangHoaTheoiDoiProvider)
+                    .value,
                 isChangeEmpty: false,
                 items: [
                   ComboboxItem(
@@ -201,7 +206,9 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
                   ComboboxItem(value: 'Tất cả', title: ['Tất cả'], valueOther: 2),
                 ],
                 onChanged: (val, o) {
-                  ref.read(hangHoaTheoiDoiProvider.notifier).state = ComboboxItem(
+                  ref
+                      .read(hangHoaTheoiDoiProvider.notifier)
+                      .state = ComboboxItem(
                     value: val!,
                     title: [],
                     valueOther: o,
@@ -222,7 +229,7 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
           onLoaded: (e) => _stateManager = e.stateManager,
           onRowDoubleTap: (event) {
             if (event.cell.column.field == HangHoaString.maHH) {
-              final hh = lstHangHoa.firstWhere((e) => e.maHH == event.cell.value);
+              final hh = ref.watch(hangHoaProvider).firstWhere((e) => e.maHH == event.cell.value);
               _showThongTinHangHoa(context, hangHoa: hh);
             }
           },
@@ -245,7 +252,8 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
               titleRenderer: (re) => DataGridTitle(title: ''),
               width: 25,
               renderer:
-                  (re) => DataGridDelete(
+                  (re) =>
+                  DataGridDelete(
                     onTap: () {
                       _onDelete(re, ref);
                     },
@@ -270,6 +278,7 @@ class HangHoaViewState extends ConsumerState<HangHoaView> {
               titleRenderer: (re) => _buildTitle(re),
               field: DVTString.dvt,
               type: TrinaColumnTypeText(),
+              textAlign: TrinaColumnTextAlign.center,
               width: 100,
             ),
             DataGridColumn(

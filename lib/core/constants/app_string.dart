@@ -36,10 +36,17 @@ abstract class MenuString {
   static const thuChi = "THU CHI";
   static const phieuThu = "Phiếu thu";
   static const phieuChi = "Phiếu chi";
+  static const baoCaoThuChi = 'Báo cáo TC';
   static const bangkePhieuThu = "Bảng kê phiếu thu";
   static const bangkePhieuChi = "Bảng kê phiếu chi";
   static const soTienMat = "Số tiền mặt";
   static const soTienGui = "Số tiền gửi";
+
+  ///*************************
+  static const congNO = "CÔNG NỢ";
+  static const soMuaHang = "Sổ mua hàng";
+  static const soBanHang = "Sổ bán hàng";
+  static const tongHopCongNo = "Tổng hợp công nợ";
 
   ///*************************
   static const khoHang = 'KHO HÀNG';
@@ -48,8 +55,51 @@ abstract class MenuString {
   static const nhapXuatTonKho = "Nhập xuất tồn kho";
 
   ///*************************
+  static const giaThanh = 'GIÁ THÀNH';
+  static const tinhToanGiaVon = 'Tính toán giá vốn';
+  static const dinhMucSanXuat = 'Định mức sản xuất';
+  static const bangTinhGiaThanh = 'Bảng tính giá thành';
+  static const theTinhGiaThanh = 'Thẻ tính giá thành';
+  static const soChiPhiSXKD = 'Sổ chi phí SXKD';
+
+  ///*************************
+  static const tienLuong = "TIỀN LƯƠNG";
+  static const bangChamCong = "Bảng chấm công";
+  static const bangThanhToanLuong = "Bảng thanh toán lương";
+
+  ///*************************
+  static const taiSan = "TÀI SẢN";
+  static const bangKhauHaoTSCD = "Bảng khấu hao TSCĐ";
+  static const bangPhanBoCDCC = "Bảng phân bổ CCDC";
+
+  ///*************************
+  static const soKeToan = "SỔ KẾ TOÁN";
+  static const nhatKy = "Nhật ký";
+  static const soNhatKyChung = "Sổ nhật ký chung";
+  static const soCaiTaiKhoan = "Sổ cái tài khoản";
+  static const soChiTietTaiKhoan = "Sổ chi tiết tài khoản";
+
+  static const baoCaoTaiChinh = "Báo cáo tài chính";
+  static const bangCanDoiPhatSinh = "Bảng cân đối phát sinh";
+  static const bangCanDoiKeToan = "Bảng cân đối kế toán";
+  static const baoCaoKQKD = "Báo cáo KQKD";
+  static const baoCaoLCTT = "Báo cáo LCTT";
+  static const thuyetMinhBCTC = "Thuyết minh BCTC";
+
+
+  static const baoCaoThue = "Báo cáo thuế";
+  static const thueTamTinh = "Thuế tạm tính";
+  static const chuyenLo = "Chuyển lỗ";
+  static const thueTNDN = "Thuế TNDN";
+  static const thueTNCN = "Thuế TNCN";
+  static const soThue = "Sổ thuế";
+
+
+
+  ///*************************
   static const heThong = 'HỆ THỐNG';
   static const thongTinDoanhNghiep = 'Thông tin doanh nghiệp';
   static const danhSachNguoiDung = 'Danh sách người dùng';
+  static const phanQuyenNguoiDung = 'Phân quyền người dùng';
   static const tuyChon = 'Tùy chọn';
 }
