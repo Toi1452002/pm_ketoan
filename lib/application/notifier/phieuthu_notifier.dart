@@ -59,7 +59,7 @@ class PhieuThuNotifier extends StateNotifier<PhieuThuModel?> {
           updatedAt: null,
           updatedBy: null,
           createdBy: user.userName,
-          soCT: '',
+          soCT: null,
           tkNo: pTN,
           tkCo: pTC)
           .toMap())
@@ -201,4 +201,32 @@ class BangKePhieuThuNotifier extends StateNotifier<List<PhieuThuModel>> {
       errorSql(e);
     }
   }
+}
+
+
+class SoTienGuiNotifier extends StateNotifier<List<SoTienModel>> {
+  SoTienGuiNotifier() : super([]){
+    getSoTienGui();
+  }
+
+  final _sqlRepository = const SqlRepository(tableName: ViewName.vtcSoTienGui);
+
+  Future<void> getSoTienGui({String? tN, String? dN})async{
+    String tuNgay = Helper.dateFormatYMD(DateTime.now().copyWith(day: 1));
+    String denNgay = Helper.sqlDateTimeNow();
+
+    if(tN!=null && dN!=null){
+      tuNgay = tN;
+      denNgay = dN;
+    }
+    try{
+      final data = await _sqlRepository.getData(where: "${SoTienString.ngay} BETWEEN ? AND ? ",whereArgs: [tuNgay,denNgay]);
+      state = data.map((e) => SoTienModel.fromMap(e)).toList();
+    }catch(e){
+      errorSql(e);
+    }
+  }
+
+
+
 }

@@ -1,3 +1,5 @@
+import 'hanghoa_model.dart';
+
 class PhieuNhapModel{
   int? id;
   String ngay;
@@ -14,7 +16,7 @@ class PhieuNhapModel{
   String? updatedAt;
   String? updatedBy;
   String kyHieu;
-  String soCT;
+  String? soCT;
   String ngayCT;
   String? tkNo;
   String? tkCo;
@@ -337,3 +339,5 @@ class VBCPhieuNhapModel{
   }
 
 }
+
+

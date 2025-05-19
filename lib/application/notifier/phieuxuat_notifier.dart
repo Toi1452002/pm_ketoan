@@ -59,7 +59,7 @@ class PhieuXuatNotifier extends StateNotifier<PhieuXuatModel?> {
               tienThue: 0,
               khoa: false,
               kyHieu: '',
-              soHD: '',
+              soHD: null,
               kChiuThue: thueSuat==0 ?true: false,
               createdBy: userName,
               createdAt: Helper.sqlDateTimeNow(hasTime: true),
@@ -282,18 +282,18 @@ class BCPhieuXuatNotifier extends StateNotifier<List<VBCPhieuXuatModel>> {
       String where = "";
 
       if (thang == null && quy == null) {
-        where = "strftime('%Y', ${PhieuXuatString.ngayCT}) = '$nam'";
+        where = "strftime('%Y', ${PhieuXuatString.ngay}) = '$nam'";
       }
 
       if (quy != null) {
-        where = '''strftime('%Y', ${PhieuXuatString.ngayCT}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngayCT}) 
+        where = '''strftime('%Y', ${PhieuXuatString.ngay}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngay}) 
         BETWEEN '${mQuy[quy]?.first}' AND '${mQuy[quy]?.last}'
         ''';
       }
       if (thang != null) {
         if (thang.length == 1) thang = "0$thang";
         where =
-            "strftime('%Y', ${PhieuXuatString.ngayCT}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngayCT}) = '$thang'";
+            "strftime('%Y', ${PhieuXuatString.ngay}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngay}) = '$thang'";
       }
       final data = await _sqlRepository.getData(where: where);
       state = data.map((e) => VBCPhieuXuatModel.fromMap(e)).toList();
@@ -301,4 +301,40 @@ class BCPhieuXuatNotifier extends StateNotifier<List<VBCPhieuXuatModel>> {
       errorSql(e);
     }
   }
+}
+
+
+class BangKeHangBanNotifier extends StateNotifier<List<VNXBangKeHangBanModel>> {
+  BangKeHangBanNotifier() : super([]){
+    getBanKeHangBan(quy: Helper.getQuarterNow(), nam: DateTime.now().year.toString());
+
+  }
+  final _sqlRepository = SqlRepository(tableName: ViewName.vnxBangKeHangBan);
+
+  Future<void> getBanKeHangBan({String? thang, String? quy, String? nam}) async{
+    try{
+      String where = "";
+
+      if (thang == null && quy == null) {
+        where = "strftime('%Y', ${PhieuXuatString.ngay}) = '$nam'";
+      }
+
+      if (quy != null) {
+        where = '''strftime('%Y', ${PhieuXuatString.ngay}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngay}) 
+        BETWEEN '${mQuy[quy]?.first}' AND '${mQuy[quy]?.last}'
+        ''';
+      }
+      if (thang != null) {
+        if (thang.length == 1) thang = "0$thang";
+        where =
+        "strftime('%Y', ${PhieuXuatString.ngay}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngay}) = '$thang'";
+      }
+      final data = await _sqlRepository.getData(where: where);
+      state = data.map((e)=>VNXBangKeHangBanModel.fromMap(e)).toList();
+    }catch(e){
+      errorSql(e);
+    }
+  }
+
+
 }

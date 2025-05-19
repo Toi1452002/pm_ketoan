@@ -429,19 +429,19 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                                   ),
                                 ),
                                 Gap(20),
-                                Checkbox(
-                                  enabled: !wPhieuNhap.khoa,
-                                  state: wPhieuNhap.kChiuThue ? CheckboxState.checked : CheckboxState.unchecked,
-                                  onChanged: (val) {
-                                    rPhieuNhap.updatePhieuNhap(
-                                      PhieuNhapString.kChiuThue,
-                                      val.index == 0 ? 1 : 0,
-                                      wPhieuNhap.phieu,
-                                      userName: userName,
-                                    );
-                                  },
-                                  trailing: Text('Không chịu thuế').medium(),
-                                ),
+                                // Checkbox(
+                                //   enabled: !wPhieuNhap.khoa,
+                                //   state: wPhieuNhap.kChiuThue ? CheckboxState.checked : CheckboxState.unchecked,
+                                //   onChanged: (val) {
+                                //     rPhieuNhap.updatePhieuNhap(
+                                //       PhieuNhapString.kChiuThue,
+                                //       val.index == 0 ? 1 : 0,
+                                //       wPhieuNhap.phieu,
+                                //       userName: userName,
+                                //     );
+                                //   },
+                                //   trailing: Text('Không chịu thuế').medium(),
+                                // ),
                                 Spacer(),
                                 SizedBox(
                                   width: 226,
@@ -450,6 +450,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                                     controller: TextEditingController(text: Helper.numFormat(wPhieuNhap.congTien)),
                                     readOnly: true,
                                     isNumber: true,
+                                    textAlign: TextAlign.end,
                                   ),
                                 ),
                               ],
@@ -538,6 +539,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                                             },
                                             child: LabelTextfield(
                                               label: 'Thuế suất(%)',
+                                              textAlign: TextAlign.end,
                                               controller: TextEditingController(text: wPhieuNhap.thueSuat.toString()),
                                               onChanged: (val) {
                                                 rPhieuNhap.updatePhieuNhap(
@@ -570,6 +572,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                                       enabled: !wPhieuNhap.khoa && !wPhieuNhap.kChiuThue,
                                       label: 'Tiền thuế GTGT',
                                       controller: TextEditingController(text: Helper.numFormat(wPhieuNhap.tienThue)),
+                                      textAlign: TextAlign.end,
                                       onChanged: (val) {
                                         rPhieuNhap.updateTienThueGTGT(
                                           Helper.numFormatToDouble(val),
@@ -594,6 +597,7 @@ class _MuaHangViewState extends ConsumerState<MuaHangView> {
                                   child: LabelTextfield(
                                     isNumber: true,
                                     label: 'Tổng tiền thanh toán',
+                                    textAlign: TextAlign.end,
                                     controller: TextEditingController(
                                       text: Helper.numFormat(wPhieuNhap.congTien + wPhieuNhap.tienThue),
                                     ),

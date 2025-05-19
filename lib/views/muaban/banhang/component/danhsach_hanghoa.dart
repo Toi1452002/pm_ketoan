@@ -9,9 +9,10 @@ import '../../../../data/data.dart';
 
 class DanhsachHanghoa extends ConsumerWidget {
   final String? maHH;
+  final bool isMuaHang;
   final void Function(HangHoaModel? value)? onChanged;
 
-  DanhsachHanghoa({super.key, required this.maHH, this.onChanged});
+  DanhsachHanghoa({super.key, required this.maHH, this.onChanged, this.isMuaHang = false});
 
   late TrinaGridStateManager _stateManager;
 
@@ -29,7 +30,9 @@ class DanhsachHanghoa extends ConsumerWidget {
               HangHoaString.maHH: TrinaCell(value: e.maHH),
               HangHoaString.tenHH: TrinaCell(value: e.tenHH),
               DVTString.dvt: TrinaCell(value: e.donViTinh),
-              HangHoaString.giaBan: TrinaCell(value: e.giaBan),
+              isMuaHang ? HangHoaString.giaMua : HangHoaString.giaBan: TrinaCell(
+                value: isMuaHang ? e.giaMua : e.giaBan,
+              ),
             },
           );
         }).toList(),
@@ -103,9 +106,9 @@ class DanhsachHanghoa extends ConsumerWidget {
           width: 100,
         ),
         DataGridColumn(
-          title: 'Giá bán',
-          titleRenderer: (re)=>DataGridTitle(title:re.column.title),
-          field: HangHoaString.giaBan,
+          title: isMuaHang ? 'Giá mua' : 'Giá bán',
+          titleRenderer: (re) => DataGridTitle(title: re.column.title),
+          field:isMuaHang?HangHoaString.giaMua: HangHoaString.giaBan,
           type: TrinaColumnType.number(),
           textAlign: TrinaColumnTextAlign.end,
           enableSorting: true,

@@ -20,6 +20,9 @@ class LabelTextfield extends StatelessWidget {
   final Widget? trailing;
   final FocusNode? focusNode;
   final bool isDouble;
+  final int? maxLength;
+  final TextStyle? style;
+  final Color? color;
   const LabelTextfield({
     super.key,
     this.label,
@@ -35,7 +38,7 @@ class LabelTextfield extends StatelessWidget {
     this.obscureText = false,
     this.onSubmitted,this.hintText,
     this.focusNode,
-    this.textAlign = TextAlign.start, this.readOnly = false, this.onTap, this.trailing
+    this.textAlign = TextAlign.start, this.readOnly = false, this.onTap, this.trailing, this.maxLength, this.style, this.color
   });
 
   @override
@@ -46,7 +49,9 @@ class LabelTextfield extends StatelessWidget {
         if (label != null) Text(label ?? '', style: TextStyle(fontSize: 13,color: !enabled?Colors.gray.shade400:null)).medium(),
         Expanded(
           child: TextField(
+            maxLength: maxLength,
             readOnly: readOnly,
+            decoration: color!=null? BoxDecoration(color: color,border: Border.all(color: Colors.blue.shade900,width: .5),borderRadius: BorderRadius.circular(3)) : null,
             placeholder: Text(hintText??''),
             enabled: enabled,
             maxLines: maxLines,
@@ -57,8 +62,9 @@ class LabelTextfield extends StatelessWidget {
             focusNode: focusNode,
             onTap: onTap,
             trailing: trailing,
-            textAlign: isNumber || isDouble ? TextAlign.end : textAlign,
+            textAlign: textAlign,
             autofocus: autofocus,
+            style: style,
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             inputFormatters: [
               if(isUpperCase)TextInputFormatters.toUpperCase,

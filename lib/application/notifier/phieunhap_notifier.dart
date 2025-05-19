@@ -1,6 +1,5 @@
 import 'package:app_ketoan/application/application.dart';
 import 'package:app_ketoan/data/data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
@@ -33,7 +32,7 @@ class PhieuNhapNotifier extends StateNotifier<PhieuNhapModel?> {
 
   Future<void> addPhieuNhap(String userName, WidgetRef ref) async {
     try {
-      String phieu = 'X000000';
+      String phieu = 'N000000';
       final lastPhieu = await _sqlRepository.getCellValue(
         field: 'Phieu',
         where: '''ID = (SELECT MAX(ID) FROM ${TableName.phieuNhap})''',
@@ -60,7 +59,7 @@ class PhieuNhapNotifier extends StateNotifier<PhieuNhapModel?> {
               tienThue: 0,
               khoa: false,
               kyHieu: '',
-              kChiuThue: thueSuat==0 ?true: false,
+              kChiuThue: false,
               createdBy: userName,
               createdAt: Helper.sqlDateTimeNow(hasTime: true),
               pttt: 'TM/CK',
@@ -69,7 +68,7 @@ class PhieuNhapNotifier extends StateNotifier<PhieuNhapModel?> {
               tkCo: pNN,
               tkVatNo: tNN,
               tkVatCo: tNC,
-              soCT: '',
+              soCT: null,
             ).toMap(),
           )
           .whenComplete(() {
@@ -286,18 +285,18 @@ class BCPhieuNhapNotifier extends StateNotifier<List<VBCPhieuNhapModel>> {
       String where = "";
 
       if (thang == null && quy == null) {
-        where = "strftime('%Y', ${PhieuXuatString.ngayCT}) = '$nam'";
+        where = "strftime('%Y', ${PhieuXuatString.ngay}) = '$nam'";
       }
 
       if (quy != null) {
-        where = '''strftime('%Y', ${PhieuXuatString.ngayCT}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngayCT}) 
+        where = '''strftime('%Y', ${PhieuXuatString.ngay}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngay}) 
         BETWEEN '${mQuy[quy]?.first}' AND '${mQuy[quy]?.last}'
         ''';
       }
       if (thang != null) {
         if (thang.length == 1) thang = "0$thang";
         where =
-        "strftime('%Y', ${PhieuXuatString.ngayCT}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngayCT}) = '$thang'";
+        "strftime('%Y', ${PhieuXuatString.ngay}) = '$nam' AND strftime('%m', ${PhieuXuatString.ngay}) = '$thang'";
       }
       final data = await sqlRepository.getData(where: where);
       state = data.map((e)=>VBCPhieuNhapModel.fromMap(e)).toList();

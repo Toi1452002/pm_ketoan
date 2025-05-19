@@ -24,7 +24,7 @@ class MuaHangCT extends ConsumerStatefulWidget {
 class _MuaHangCTState extends ConsumerState<MuaHangCT> {
   late TrinaGridStateManager _stateManager;
   late PhieuNhapCTNotifier _phieuNhapCTNotifier;
-  TrinaGridMode mode = TrinaGridMode.normal; // Mặc định là chế độ nhập liệu
+  TrinaGridMode mode = TrinaGridMode.readOnly; // Mặc định là chế độ read
 
   @override
   void initState() {
@@ -182,6 +182,8 @@ class _MuaHangCTState extends ConsumerState<MuaHangCT> {
     final wPhieuNhapCT = ref.watch(phieuNhapCTProvider);
     ref.listen(phieuNhapCTProvider, (context, state) {
       _stateManager.removeAllRows();
+      _stateManager.setGridMode(widget.phieuNhap.khoa ? TrinaGridMode.readOnly : TrinaGridMode.normal);
+
       _stateManager.appendRows(
         List.generate(state.length, (index) {
           final x = state[index];
@@ -202,11 +204,14 @@ class _MuaHangCTState extends ConsumerState<MuaHangCT> {
       );
 
       _stateManager.appendNewRows();
+      _stateManager.notifyListeners();
+
     });
 
     ref.listen(phieuNhapProvider, (context, state) {
       if (state != null) {
         mode = state.khoa ? TrinaGridMode.readOnly : TrinaGridMode.normal;
+
       }
     });
     return DataGrid(
@@ -235,6 +240,7 @@ class _MuaHangCTState extends ConsumerState<MuaHangCT> {
         );
 
         _stateManager.appendNewRows();
+        _stateManager.notifyListeners();
       },
       onChanged: (e) {
         _onChange(e);
@@ -286,13 +292,14 @@ class _MuaHangCTState extends ConsumerState<MuaHangCT> {
                   width: 740,
                   height: 420,
                   child: DanhsachHanghoa(
+                    isMuaHang: true,
                     maHH: re.cell.value,
                     onChanged: (val) {
                       onChangeMaHang(onChangeEvent(re, val!.id), hangHoa: val);
                       onSetValueTable(re.rowIdx, PhieuNhapCTString.itemID, val.maHH);
                       onSetValueTable(re.rowIdx, PhieuNhapCTString.tenHH, val.tenHH);
                       onSetValueTable(re.rowIdx, PhieuNhapCTString.dvt, val.donViTinh);
-                      onSetValueTable(re.rowIdx, PhieuNhapCTString.donGia, val.giaBan);
+                      onSetValueTable(re.rowIdx, PhieuNhapCTString.donGia, val.giaMua);
                       _stateManager.notifyListeners();
                     },
                   ),

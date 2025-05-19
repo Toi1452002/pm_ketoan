@@ -5,3 +5,4 @@ export 'hethong/hethong.dart';
 export 'thuchi/thuchi.dart';
 export 'muaban/muaban.dart';
 export 'khohang/khohang.dart';
+export 'congno/congno.dart';

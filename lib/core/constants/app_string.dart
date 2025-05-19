@@ -39,8 +39,8 @@ abstract class MenuString {
   static const baoCaoThuChi = 'Báo cáo TC';
   static const bangkePhieuThu = "Bảng kê phiếu thu";
   static const bangkePhieuChi = "Bảng kê phiếu chi";
-  static const soTienMat = "Số tiền mặt";
-  static const soTienGui = "Số tiền gửi";
+  static const soTienMat = "Sổ tiền mặt";
+  static const soTienGui = "Sổ tiền gửi";
 
   ///*************************
   static const congNO = "CÔNG NỢ";

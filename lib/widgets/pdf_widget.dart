@@ -65,7 +65,7 @@ class PdfWidget {
       alignment: align,
       padding: pw.EdgeInsets.symmetric(horizontal: 3),
       decoration: pw.BoxDecoration(border: pw.Border.all(width: widthBorder)),
-      child: pw.Text(text, style: pw.TextStyle(font: font)),
+      child: pw.Text(text, style: pw.TextStyle(font: font,),textAlign: pw.TextAlign.center),
     );
   }
 

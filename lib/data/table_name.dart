@@ -25,6 +25,8 @@ abstract class TableName{
   static const phieuNhapCT = "TNX_PhieuNhapCT";
   static const tuyChon = "T00_TuyChon";
   static const dauKyHangHoa = "TDM_DKyHangHoa";
+  static const dauKyKhachHang = "TDM_DKyKhachHang";
+  static const dauKyTaiKhoan = "TDM_DKyTaiKhoan";
 }
 
 class ViewName {
@@ -37,8 +39,15 @@ class ViewName {
   static const phieuNhapCT = "V_PhieuNhapCT";
   static const vbcPhieuNhap = "VBC_PhieuNhap";
   static const vbcPhieuXuat = "VBC_PhieuXuat";
+  static const vbcSoMuaHang = "VBC_SoMuaHang";
+  static const vbcSoBanHang = "VBC_SoBanHang";
+  static const vnxBangKeHangBan = "VNX_BangKeHangBan";
   static const vbcBangKeHangNhap = "VBC_BangKeHangNhap";
   static const vbcBangKeHangXuat = "VBC_BangKeHangXuat";
-  static const vdmDauKyHangHoa = "VDM_TonDauKy";
+  static const vdmDauKyHangHoa = "VDM_DKyHangHoa";
+  static const vdmDauKyKhachHang = "VDM_DKyKhachHang";
+  static const vdmDauKyTaiKhoan = "VDM_DKyTaiKhoan";
+  static const vtcSoTienMat = "VTC_SoTienMat";
+  static const vtcSoTienGui = "VTC_SoTienGui";
 
 }

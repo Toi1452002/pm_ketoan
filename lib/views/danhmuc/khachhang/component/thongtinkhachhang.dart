@@ -36,15 +36,21 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
   final txtNganHang = TextEditingController();
   final txtGhiChu = TextEditingController();
 
-
   void _showDanhMucNhom() {
-    showCustomDialog(context, title: 'DANH MỤC NHÓM', width: 410, height: 600, child: const DanhMucNhomView(),
-        onClose: () async {
-          await Future.delayed(const Duration(milliseconds: 300), () {
-            ref.refresh(lstNhomKhachProvider);
-          });
+    showCustomDialog(
+      context,
+      title: 'DANH MỤC NHÓM',
+      width: 410,
+      height: 600,
+      child: const DanhMucNhomView(),
+      onClose: () async {
+        await Future.delayed(const Duration(milliseconds: 300), () {
+          ref.refresh(lstNhomKhachProvider);
         });
+      },
+    );
   }
+
   @override
   void initState() {
     if (widget.khach != null) {
@@ -71,7 +77,6 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
     super.initState();
   }
 
-
   void _onSave() async {
     final user = ref.read(userInfoProvider);
     KhachHangModel khach = KhachHangModel(
@@ -86,32 +91,30 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
       soTK: txtSoTK.text,
       nganHang: txtNganHang.text,
       ghiChu: txtGhiChu.text,
-      maNhom: _nhomSelect??'' ,
+      maNhom: _nhomSelect ?? '',
       loaiKH: _loaiKhachSelect,
       theoDoi: _theoDoi,
-
-
     );
-    if(widget.khach==null){//Insert
+    if (widget.khach == null) {
+      //Insert
       khach = khach.copyWith(createdBy: user!.userName);
       int id = await ref.read(khachHangProvider.notifier).addKhach(khach);
-      if(id!=0){
+      if (id != 0) {
         clear();
         ref.read(khachHangProvider.notifier).getAll(theoDoi: ref.read(khachHangTheoDoiProvider).valueOther);
       }
-    }else{//Update
-      khach =  khach.copyWith(updatedBy: user!.userName,updatedAt: Helper.sqlDateTimeNow());
+    } else {
+      //Update
+      khach = khach.copyWith(updatedBy: user!.userName, updatedAt: Helper.sqlDateTimeNow());
       int result = await ref.read(khachHangProvider.notifier).updateKhach(khach, widget.khach!.maKhach);
-      if(result!=0){
+      if (result != 0) {
         ref.read(khachHangProvider.notifier).getAll(theoDoi: ref.read(khachHangTheoDoiProvider).valueOther);
-        if(mounted) Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       }
     }
-
-
   }
 
-  void clear(){
+  void clear() {
     txtMaKH.clear();
     txtTenKH.clear();
     txtDiaChi.clear();
@@ -209,11 +212,12 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
                       children: [
                         Expanded(
                           child: LabelCombobox(
-                            items: !wNhomKhach.hasValue
-                                ? []
-                                : wNhomKhach.value!.map((e) {
-                              return ComboboxItem(value: e.maNhom, title: [e.maNhom, e.tenNhom]);
-                            }).toList(),
+                            items:
+                                !wNhomKhach.hasValue
+                                    ? []
+                                    : wNhomKhach.value!.map((e) {
+                                      return ComboboxItem(value: e.maNhom, title: [e.maNhom, e.tenNhom]);
+                                    }).toList(),
                             columnWidth: [60, 100],
 
                             selected: _nhomSelect,
@@ -226,7 +230,11 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
                             spacing: 50,
                           ),
                         ),
-                        IconButton.ghost(icon: Icon(Icons.play_arrow), onPressed: () =>_showDanhMucNhom(), size: ButtonSize.small),
+                        IconButton.ghost(
+                          icon: Icon(Icons.play_arrow),
+                          onPressed: () => _showDanhMucNhom(),
+                          size: ButtonSize.small,
+                        ),
                       ],
                     ),
                   ),
@@ -258,7 +266,7 @@ class _ThongTinKhachHangState extends ConsumerState<ThongTinKhachHangView> {
               ),
             ),
             Gap(2),
-            Button.primary(onPressed: _onSave, child: Text(widget.khach==null?'Thêm mới':'Cập nhật')),
+            Button.primary(onPressed: _onSave, child: Text(widget.khach == null ? 'Thêm mới' : 'Cập nhật')),
           ],
         ),
       ),

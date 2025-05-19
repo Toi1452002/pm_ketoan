@@ -300,7 +300,7 @@ class _ThongTinHangHoaState extends ConsumerState<ThongTinHangHoaView> {
                               txtGiaMua.text = Helper.numFormat(txtGiaMua.text)!;
                             }
                           },
-                          child: LabelTextfield(label: 'Giá mua', controller: txtGiaMua, spacing: 24, isNumber: true),
+                          child: LabelTextfield(label: 'Giá mua', controller: txtGiaMua,textAlign: TextAlign.end, spacing: 24, isNumber: true),
                         ),
                       ),
                       Expanded(
@@ -310,7 +310,7 @@ class _ThongTinHangHoaState extends ConsumerState<ThongTinHangHoaView> {
                               txtGiaBan.text = Helper.numFormat(txtGiaBan.text)!;
                             }
                           },
-                          child: LabelTextfield(label: 'Giá bán', controller: txtGiaBan, isNumber: true),
+                          child: LabelTextfield(label: 'Giá bán', controller: txtGiaBan,textAlign: TextAlign.end, isNumber: true),
                         ),
                       ),
                     ],

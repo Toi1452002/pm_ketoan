@@ -20,7 +20,7 @@ class PhieuThuModel {
   final String? createdBy;
   final String? updatedAt;
   final String? updatedBy;
-  String soCT;
+  String? soCT;
   final String tkNo;
   final String tkCo;
   final int? stt;

@@ -69,6 +69,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.tonDauKy:
                           showTonDauKy(context);
                           break;
+                        case MenuString.dauKyTaiKhoan:
+                          showDauKyTaiKhoan(context);
+                          break;
                         ///************************************
                         //MUA BAN
                         case MenuString.muaHang:
@@ -83,7 +86,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.bangKeHoaDonMuaVao:
                           showBaoCaoMuaHang(context);
                           break;
-
+                        case MenuString.bangKeHangBan:
+                          showBangKeHangBan(context);
+                          break;
                         ///************************************
                         //THU CHI
                         case MenuString.phieuThu:
@@ -98,6 +103,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.bangkePhieuChi:
                           showBangKePhieuChi(context);
                           break;
+                        case MenuString.soTienMat:
+                          showSoTienMat(context);
+                          break;
+                        case MenuString.soTienGui:
+                          showSoTienGui(context);
+                          break;
                         ///************************************
                         //KHO HÀNG
                         case MenuString.bangKeHangNhap:
@@ -106,6 +117,20 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         case MenuString.bangKeHangXuat:
                           showBangKeHangXuat(context);
                           break;
+                        ///************************************
+                        //CÔNG NỢ
+                        case MenuString.soMuaHang:
+                          showSoMuaHang(context);
+                          break;
+                        case MenuString.soBanHang:
+                          showSoBanHang(context);
+                          break;
+                        case MenuString.tongHopCongNo:
+                          showTongHopCongNo(context);
+                          break;
+
+
+
                         ///************************************
                         //HỆ THỐNG
                         case MenuString.thongTinDoanhNghiep:

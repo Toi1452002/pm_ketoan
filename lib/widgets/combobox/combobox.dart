@@ -136,7 +136,13 @@ class _ComboboxState extends State<Combobox> {
 
   void _onChangeText(String val) {
     if (val.isNotEmpty) {
-      int index = widget.items.indexWhere((e) => e.title.first.toLowerCase().contains(val.toLowerCase()));
+      int index = widget.items.indexWhere((e){
+        return e.title.first.toLowerCase() == val.toLowerCase();
+      });
+      if(index ==-1) {
+        index = widget.items.indexWhere((e) => e.title.first.toLowerCase().contains(val.toLowerCase()));
+      }
+
       if (index != -1) {
         if (index != _indexSearch) {
           _scrollController.jumpTo(index * 25);

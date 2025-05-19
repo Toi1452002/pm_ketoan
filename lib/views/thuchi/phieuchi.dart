@@ -295,6 +295,7 @@ class _PhieuChiViewState extends ConsumerState<PhieuChiView> {
                                       label: 'Số tiền',
                                       spacing: 68,
                                       isNumber: true,
+                                      textAlign: TextAlign.end,
                                       enabled: !wPhieuChi.khoa,
                                       controller: TextEditingController(text: Helper.numFormat(wPhieuChi.soTien)),
                                       onChanged: (val) {

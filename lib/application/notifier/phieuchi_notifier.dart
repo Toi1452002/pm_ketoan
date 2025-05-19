@@ -1,4 +1,5 @@
 import 'package:app_ketoan/data/data.dart';
+import 'package:app_ketoan/data/models/sotien_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/core.dart';
@@ -165,28 +166,7 @@ class PhieuchiNotifier extends StateNotifier<PhieuChiModel?> {
   }
 }
 
-class BangKePhieuChiNotifier extends StateNotifier<List<PhieuChiModel>> {
-  BangKePhieuChiNotifier() : super([]){
-    getBangKePhieuChi();
-  }
-  final _sqlRepository = const SqlRepository(tableName: ViewName.phieuChi);
 
-  Future<void> getBangKePhieuChi({String? tN, String? dN}) async {
-    try {
-      String tuNgay = Helper.dateFormatYMD(DateTime.now().copyWith(day: 1));
-      String denNgay = Helper.sqlDateTimeNow();
-
-      if(tN!=null && dN!=null){
-        tuNgay = tN;
-        denNgay = dN;
-      }
-      final data = await _sqlRepository.getData(where: "${PhieuThuString.ngay} BETWEEN ? AND ? ",whereArgs: [tuNgay,denNgay]);
-      state = data.map((e) => PhieuChiModel.fromMap(e)).toList();
-    } catch (e) {
-      errorSql(e);
-    }
-  }
-}
 class PhieuChiCTNotifier extends StateNotifier<List<PhieuChiCTModel>> {
   PhieuChiCTNotifier() : super([]);
 
@@ -229,4 +209,54 @@ class PhieuChiCTNotifier extends StateNotifier<List<PhieuChiCTModel>> {
       return 0;
     }
   }
+}
+
+class BangKePhieuChiNotifier extends StateNotifier<List<PhieuChiModel>> {
+  BangKePhieuChiNotifier() : super([]){
+    getBangKePhieuChi();
+  }
+  final _sqlRepository = const SqlRepository(tableName: ViewName.phieuChi);
+
+  Future<void> getBangKePhieuChi({String? tN, String? dN}) async {
+    try {
+      String tuNgay = Helper.dateFormatYMD(DateTime.now().copyWith(day: 1));
+      String denNgay = Helper.sqlDateTimeNow();
+
+      if(tN!=null && dN!=null){
+        tuNgay = tN;
+        denNgay = dN;
+      }
+      final data = await _sqlRepository.getData(where: "${PhieuThuString.ngay} BETWEEN ? AND ? ",whereArgs: [tuNgay,denNgay]);
+      state = data.map((e) => PhieuChiModel.fromMap(e)).toList();
+    } catch (e) {
+      errorSql(e);
+    }
+  }
+}
+
+class SoTienMatNotifier extends StateNotifier<List<SoTienModel>> {
+  SoTienMatNotifier() : super([]){
+    getSoTienMat();
+  }
+
+  final _sqlRepository = const SqlRepository(tableName: ViewName.vtcSoTienMat);
+
+  Future<void> getSoTienMat({String? tN, String? dN})async{
+    String tuNgay = Helper.dateFormatYMD(DateTime.now().copyWith(day: 1));
+    String denNgay = Helper.sqlDateTimeNow();
+
+    if(tN!=null && dN!=null){
+      tuNgay = tN;
+      denNgay = dN;
+    }
+    try{
+      final data = await _sqlRepository.getData(where: "${SoTienString.ngay} BETWEEN ? AND ? ",whereArgs: [tuNgay,denNgay]);
+      state = data.map((e) => SoTienModel.fromMap(e)).toList();
+    }catch(e){
+      errorSql(e);
+    }
+  }
+
+
+  
 }

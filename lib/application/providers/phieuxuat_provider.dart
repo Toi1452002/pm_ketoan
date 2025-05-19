@@ -18,3 +18,8 @@ final bcPhieuXuatProvider = StateNotifierProvider.autoDispose<BCPhieuXuatNotifie
 });
 
 
+final vnxBangKeHangBanProvider = StateNotifierProvider.autoDispose<BangKeHangBanNotifier, List<VNXBangKeHangBanModel> >((ref) {
+  return BangKeHangBanNotifier();
+});
+
+

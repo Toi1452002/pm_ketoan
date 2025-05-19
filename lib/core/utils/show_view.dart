@@ -66,10 +66,13 @@ void showBangTaiKhoan(BuildContext context) {
 }
 
 void showNoDauKy(BuildContext context) {
-  showCustomDialog(context, title: MenuString.noDauKy, width: 700, height: 600, child: NoDauKyView(), onClose: () {});
+  showCustomDialog(context, title: 'Đầu kỳ khách hàng', width: 700, height: 600, child: NoDauKyView(), onClose: () {});
 }
 void showTonDauKy(BuildContext context) {
   showCustomDialog(context, title: 'Đầu kỳ hàng hóa', width: 720, height: 600, child: TonDauKyView(), onClose: () {});
+}
+void showDauKyTaiKhoan(BuildContext context) {
+  showCustomDialog(context, title: MenuString.dauKyTaiKhoan, width: 720, height: 600, child: DauKyTaiKhoanView(), onClose: () {});
 }
 
 //HỆ THỐNG
@@ -154,6 +157,16 @@ void showBaoCaoBanHang(BuildContext context) {
     onClose: () {},
   );
 }
+void showBangKeHangBan(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.bangKeHangBan,
+    width: 1100,
+    height: 603,
+    child: BangKeHangBanView(),
+    onClose: () {},
+  );
+}
 
 //THU CHI
 void showPhieuThu(BuildContext context, {int? stt}) {
@@ -199,18 +212,27 @@ void showBangKePhieuChi(BuildContext context) {
     onClose: () {},
   );
 }
-
-void showViewPrinter(BuildContext context, Widget widget, {bool isPortrait = true}) {
+void showSoTienMat(BuildContext context) {
   showCustomDialog(
     context,
-    title: 'PRINT',
-    width: isPortrait ? 600 : 900,
-    height: 700,
-    barrierDismissible: true,
-    child: widget,
+    title: MenuString.soTienMat,
+    width: 1080,
+    height: 600,
+    child: SoTienMatView(),
     onClose: () {},
   );
 }
+void showSoTienGui(BuildContext context) {
+  showCustomDialog(
+    context,
+    title: MenuString.soTienGui,
+    width: 1080,
+    height: 600,
+    child: SoTienGuiView(),
+    onClose: () {},
+  );
+}
+
 
 //KHO HANG
 void showBangKeHangNhap(BuildContext context) {
@@ -231,6 +253,29 @@ void showBangKeHangXuat(BuildContext context) {
     width: 1050,
     height: 600,
     child: BangKeHangXuatView(),
+    onClose: () {},
+  );
+}
+
+//CONG NO
+void showSoMuaHang(BuildContext context){
+  showCustomDialog(context, title: MenuString.soMuaHang, width: 1000, height: 600, child: SoMuaHangView(), onClose: (){});
+}
+void showSoBanHang(BuildContext context){
+  showCustomDialog(context, title: MenuString.soBanHang, width: 1000, height: 600, child: SoBanHangView(), onClose: (){});
+}
+void showTongHopCongNo(BuildContext context){
+  showCustomDialog(context, title: MenuString.tongHopCongNo, width: 650, height: 700, child: TongHopCongNoView(), onClose: (){});
+}
+///PRINTT
+void showViewPrinter(BuildContext context, Widget widget, {bool isPortrait = true}) {
+  showCustomDialog(
+    context,
+    title: 'PRINT',
+    width: isPortrait ? 600 : 900,
+    height: 700,
+    barrierDismissible: true,
+    child: widget,
     onClose: () {},
   );
 }

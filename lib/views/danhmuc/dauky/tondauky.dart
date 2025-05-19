@@ -65,9 +65,11 @@ class TonDauKyViewState extends ConsumerState<TonDauKyView> {
     _stateManager.setCurrentCell(_stateManager.firstCell, 0);
     _stateManager.setKeepFocus(false);
     final x = _stateManager.rows.where((e) => e.cells[DauKyHangHoaString.soTon]!.value != 0);
-
+    // _stateManager.setFilter((row){
+    //   return row.cells[DauKyHangHoaString.soTon]!.value != 0;
+    // });
     final btn = await CustomAlert().question(
-      '${x.length} dòng sẽ được cập nhật vào SỔ ĐẦU KỲ',
+      'Danh sách trên sẽ được cập nhật vào SỔ ĐẦU KỲ',
       title: 'DAU KY HANG HOA',
     );
     if (btn == AlertButton.okButton && x.isNotEmpty) {
@@ -243,6 +245,7 @@ class TonDauKyViewState extends ConsumerState<TonDauKyView> {
               enableEditingMode: true,
               titleRenderer: (re) => _buildTitle(re, isNummber: true),
               textAlign: TrinaColumnTextAlign.end,
+              footerRenderer: (re)=>DataGridFooter(re)
             ),
           ],
         ),

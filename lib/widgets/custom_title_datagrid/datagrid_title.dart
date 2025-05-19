@@ -82,7 +82,7 @@ class _DataGridTitleState extends State<DataGridTitle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2),
+      padding: EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         color: widget.isFilter ? Colors.green.shade200 : Colors.blue.shade200,
         border: Border(right: BorderSide(width: .5)),

@@ -12,6 +12,7 @@ import 'package:shadcn_flutter/shadcn_flutter_extension.dart';
 import '../../../data/data.dart';
 
 export 'baocao_banhang.dart';
+export 'bangkehangban.dart';
 
 class BanHangView extends ConsumerStatefulWidget {
   final int? stt;
@@ -44,9 +45,9 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
     final userName = ref.read(userInfoProvider)!.userName;
 
     final qlXBC =
-        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlXBC).giaTri == 1; //Nếu bằng 1 thi xem bc truoc khi in
-    final qlKPC =
-        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlKPC).giaTri == 1;
+        ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlXBC).giaTri ==
+        1; //Nếu bằng 1 thi xem bc truoc khi in
+    final qlKPC = ref.read(tuyChonProvider).firstWhere((e) => e.nhom == MaTuyChon.qlKPC).giaTri == 1;
     return Scaffold(
       backgroundColor: context.theme.colorScheme.border,
       headers: [
@@ -87,16 +88,19 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                 final data = await sql.getData(where: "${PhieuXuatCTString.maID} = ?", whereArgs: [wPhieuXuat.id]);
                 final lst = data.map((e) => PhieuXuatCTModel.fromMap(e)).toList();
                 if (qlXBC) {
-                  showViewPrinter(context, PdfBanHang(
-                    dateNow: Helper.dateNowDMY(),
-                    congTien: Helper.numFormat(wPhieuXuat.congTien).toString(),
-                    diaChi: diaChi,
-                    lstPhieuXuatCT: lst,
-                    tenKH: tenKH,
-                    lyDo: wPhieuXuat.dienGiai,
-                    ngayBan: DateTime.parse(wPhieuXuat.ngay),
-                    soPhieu: wPhieuXuat.phieu,
-                  ));
+                  showViewPrinter(
+                    context,
+                    PdfBanHang(
+                      dateNow: Helper.dateNowDMY(),
+                      congTien: Helper.numFormat(wPhieuXuat.congTien).toString(),
+                      diaChi: diaChi,
+                      lstPhieuXuatCT: lst,
+                      tenKH: tenKH,
+                      lyDo: wPhieuXuat.dienGiai,
+                      ngayBan: DateTime.parse(wPhieuXuat.ngay),
+                      soPhieu: wPhieuXuat.phieu,
+                    ),
+                  );
                 } else {
                   PdfWidget().onPrint(
                     onLayout: pdfBanHang(
@@ -294,9 +298,14 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   readOnly: true,
                                   controller: TextEditingController(
                                     text:
-                                        wPhieuXuat.maKhach == null ||  wPhieuXuat.maKhach!.isEmpty
+                                        wPhieuXuat.maKhach == null || wPhieuXuat.maKhach!.isEmpty
                                             ? ''
-                                            : lstKhach.value!.firstWhere((e) => e.maKhach == wPhieuXuat.maKhach).tenKH,
+                                            : lstKhach.value!
+                                                .firstWhere(
+                                                  (e) => e.maKhach == wPhieuXuat.maKhach,
+                                                  orElse: () => KhachHangModel(maKhach: wPhieuXuat.maKhach!, tenKH: ''),
+                                                )
+                                                .tenKH,
                                   ),
                                 ),
                               ),
@@ -446,6 +455,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   width: 226,
                                   child: LabelTextfield(
                                     label: 'Cộng tiền hàng',
+                                    textAlign: TextAlign.end,
                                     controller: TextEditingController(text: Helper.numFormat(wPhieuXuat.congTien)),
                                     readOnly: true,
                                     isNumber: true,
@@ -537,6 +547,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                             },
                                             child: LabelTextfield(
                                               label: 'Thuế suất(%)',
+                                              textAlign: TextAlign.end,
                                               controller: TextEditingController(text: wPhieuXuat.thueSuat.toString()),
                                               onChanged: (val) {
                                                 rPhieuXuat.updatePhieuXuat(
@@ -568,6 +579,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                     child: LabelTextfield(
                                       enabled: !wPhieuXuat.khoa && !wPhieuXuat.kChiuThue,
                                       label: 'Tiền thuế GTGT',
+                                      textAlign: TextAlign.end,
                                       controller: TextEditingController(text: Helper.numFormat(wPhieuXuat.tienThue)),
                                       onChanged: (val) {
                                         rPhieuXuat.updateTienThueGTGT(
@@ -592,6 +604,7 @@ class _BanHangViewState extends ConsumerState<BanHangView> {
                                   width: 260,
                                   child: LabelTextfield(
                                     isNumber: true,
+                                    textAlign: TextAlign.end,
                                     label: 'Tổng tiền thanh toán',
                                     controller: TextEditingController(
                                       text: Helper.numFormat(wPhieuXuat.congTien + wPhieuXuat.tienThue),

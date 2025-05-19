@@ -274,6 +274,7 @@ class _PhieuThuViewState extends ConsumerState<PhieuThuView> {
                                     child: LabelTextfield(
                                       enabled: !wPhieuThu.khoa,
                                       label: 'Số tiền',
+                                      textAlign: TextAlign.end,
                                       controller: TextEditingController(text: Helper.numFormat(wPhieuThu.soTien)),
                                       isNumber: true,
                                       onChanged: (val) {

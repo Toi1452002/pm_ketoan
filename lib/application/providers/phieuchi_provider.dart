@@ -1,5 +1,6 @@
 import 'package:app_ketoan/application/application.dart';
 import 'package:app_ketoan/data/data.dart';
+import 'package:app_ketoan/data/models/sotien_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -14,4 +15,9 @@ final phieuChiProvider = StateNotifierProvider.autoDispose<PhieuchiNotifier, Phi
 
 final phieuChiCTProvider = StateNotifierProvider<PhieuChiCTNotifier, List<PhieuChiCTModel>>((ref) {
   return PhieuChiCTNotifier();
+});
+
+
+final soTienMatProvider = StateNotifierProvider.autoDispose<SoTienMatNotifier, List<SoTienModel>>((ref) {
+  return SoTienMatNotifier();
 });

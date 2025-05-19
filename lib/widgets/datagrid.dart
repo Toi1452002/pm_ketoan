@@ -14,7 +14,7 @@ class DataGrid extends StatelessWidget {
   final Color Function(TrinaRowColorContext)? rowColorCallback;
   final Widget Function(TrinaGridStateManager)? createFooter;
   final TrinaGridMode mode;
-
+  final List<TrinaColumnGroup>? columnGroups;
   const DataGrid({
     super.key,
     required this.rows,
@@ -24,12 +24,13 @@ class DataGrid extends StatelessWidget {
     this.onRowDoubleTap,
     this.rowColorCallback,
     this.createFooter,
-    this.mode = TrinaGridMode.normal,
+    this.mode = TrinaGridMode.normal,this.columnGroups
   });
 
   @override
   Widget build(BuildContext context) {
     return TrinaGrid(
+      columnGroups: columnGroups,
       columns: columns,
       rows: rows,
       onLoaded: onLoaded,
@@ -61,7 +62,7 @@ class DataGrid extends StatelessWidget {
           // rowHoveredColor: context.theme.colorScheme.border,
           columnHeight: 25,
           activatedColor: context.theme.colorScheme.primary.withValues(alpha: .1),
-          rowHeight: 27,
+          rowHeight: 25,
           columnTextStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: Colors.black),
           rowColor: context.theme.colorScheme.popover,
 
@@ -215,7 +216,7 @@ TrinaAggregateColumnFooter DataGridFooter(TrinaColumnFooterRendererContext rende
     padding: EdgeInsets.symmetric(horizontal: 3),
     format: '#,###.##',
     titleSpanBuilder: (text) {
-      return [TextSpan(text: text, style: TextStyle(color: Colors.blue.shade700, fontWeight: FontWeight.bold))];
+      return [TextSpan(text: text, style: TextStyle(color: Colors.blue.shade900,fontSize: 15, fontWeight: FontWeight.w600))];
     },
   );
 }

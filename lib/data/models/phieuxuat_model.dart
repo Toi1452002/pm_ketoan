@@ -1,3 +1,5 @@
+import 'hanghoa_model.dart';
+
 class PhieuXuatModel{
   int? id;
   String ngay;
@@ -13,7 +15,7 @@ class PhieuXuatModel{
   String? updatedAt;
   String? updatedBy;
   String kyHieu;
-  String soHD;
+  String? soHD;
   String ngayCT;
   String? tkNo;
   String? tkCo;
@@ -339,6 +341,43 @@ class VBCPhieuXuatModel{
       congTien: double.parse(map[PhieuXuatString.congTien].toString())  ,
       tienThue: double.parse(map[PhieuXuatString.tienThue].toString())  ,
       dienGiai: map[PhieuXuatString.dienGiai] ??'',
+    );
+  }
+
+}
+
+class VNXBangKeHangBanModel{
+  final String maHH;
+  final String tenHH;
+  final String dvt;
+  final double soLg;
+  final double tienChuaVat;
+  final double thue;
+  final double tienThue;
+  final double congTien;
+
+  const VNXBangKeHangBanModel({
+    required this.maHH,
+    required this.tenHH,
+    required this.dvt,
+    required this.soLg,
+    required this.tienChuaVat,
+    required this.thue,
+    required this.tienThue,
+    required this.congTien,
+  });
+
+
+  factory VNXBangKeHangBanModel.fromMap(Map<String, dynamic> map) {
+    return VNXBangKeHangBanModel(
+      maHH: map[HangHoaString.maHH] ,
+      tenHH: map[HangHoaString.tenHH] ,
+      dvt: map[PhieuXuatCTString.dvt],
+      soLg:double.parse( map[PhieuXuatCTString.soLg].toString()) ,
+      tienChuaVat: double.parse(map[PhieuXuatCTString.thanhTien].toString()),
+      thue: double.parse(map[PhieuXuatString.thueSuat].toString()) ,
+      tienThue: double.parse(map[PhieuXuatString.tienThue].toString()) ,
+      congTien: double.parse(map[PhieuXuatString.congTien].toString()),
     );
   }
 
